@@ -114,7 +114,7 @@ class Vision:
         # Detect the markers
         ffi.memmove(self.image.buf, img.tobytes(), total_length)
         results = lib.apriltag_detector_detect(self._detector, self.image)
-        tokens = self._parse_results(results)
+        tokens = list(self._parse_results(results))
         # Remove the array now we've got them
         lib.zarray_destroy(results)
         return tokens
