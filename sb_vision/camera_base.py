@@ -4,7 +4,10 @@ Base class and utilities for cameras.
 A camera is an arbitrary source of images.
 """
 
-class CameraBase:
+import abc
+
+
+class CameraBase(metaclass=abc.ABCMeta):
     def __init__(self):
         self.initialised = False
         self.cam_image_size = None
@@ -22,6 +25,7 @@ class CameraBase:
             )
         return self.cam_image_size
 
+    @abc.abstractmethod
     def capture_image(self):
         """
         :return: PIL Image captured
