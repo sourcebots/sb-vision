@@ -109,11 +109,14 @@ class Vision:
         :param results: cffi array of results
         :return: python iterable of individual token objects
         """
+        image_size = self.camera.get_image_size()
+
         for i in range(results.size):
             detection = lib.zarray_get_detection(results, i)
             yield Token.from_apriltag_detection(
                 detection,
                 self.token_sizes,
+                image_size,
                 self.camera.focal_length,
             )
             lib.destroy_detection(detection)
@@ -128,7 +131,7 @@ class Vision:
 
         # get the PIL image from the camera
         img = self.camera.capture_image()
-        return img.point(lambda x: 255 if x > 128 else 0)
+        return img.point(lambda x: 0 if x > 128 else 255)
 
     def process_image(self, img):
         """
@@ -191,10 +194,10 @@ if __name__ == "__main__":
         camera = FileCamera(f, 720)
     v = Vision(camera, (0.01, 0.01))
     while True:
-        img = v.snapshot()
+        img = v.capture_image()
         tokens = v.process_image(img)
         if args.show:
             img = display_tokens(tokens, img)
             img.show()
         if tokens:
-            print(tokens[0].pixel_centre)
+            print(tokens[0].bees)

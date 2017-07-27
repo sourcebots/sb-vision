@@ -153,7 +153,13 @@ class Token:
         self.certainty = certainty
 
     @classmethod
-    def from_apriltag_detection(cls, apriltag_detection, sizes, focal_length):
+    def from_apriltag_detection(
+        cls,
+        apriltag_detection,
+        sizes,
+        image_size,
+        focal_length
+    ):
         """Construct a Token from an April Tag detection."""
         # *************************************************************************
         # NOTE: IF YOU CHANGE THIS PLEASE ADD THEM IN THE ROBOT-API camera.py
@@ -171,6 +177,7 @@ class Token:
         instance.infer_location_from_homography_matrix(
             homography_matrix=homography,
             focal_length=focal_length,
+            image_size=image_size,
         )
         return instance
 
@@ -178,7 +185,8 @@ class Token:
         self,
         *,
         homography_matrix,
-        focal_length
+        focal_length,
+        image_size
     ):
         """Infer coordinate information from a homography matrix."""
         # pixel coordinates of the corners of the marker
@@ -195,6 +203,10 @@ class Token:
         # Polar Co-ordinates in the 3D World, relative to the front of the
         # camera
         self.polar = _cart_to_polar(self.cartesian)
+        self.bees = [
+            homography_matrix[0, 2] / homography_matrix[2, 2],
+            homography_matrix[1, 2] / homography_matrix[2, 2],
+        ]
 
     def __repr__(self):
         """General debug representation."""
