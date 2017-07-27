@@ -1,6 +1,7 @@
 from PIL import Image
 
 from sb_vision.cvcapture import CaptureDevice
+
 from .camera_base import CameraBase
 
 

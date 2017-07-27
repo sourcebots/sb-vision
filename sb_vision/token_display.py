@@ -1,6 +1,6 @@
+import numpy as np
 from PIL import Image, ImageDraw, ImageFont
 
-import numpy as np
 from .tokens import Token
 
 

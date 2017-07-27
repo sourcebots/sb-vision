@@ -3,6 +3,7 @@ import json
 import math
 
 import numpy as np
+
 from sb_vision.native.apriltag._apriltag import ffi
 
 

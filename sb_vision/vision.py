@@ -4,10 +4,11 @@ import numbers
 import collections
 
 from sb_vision.native.apriltag._apriltag import ffi, lib
+
 from .camera import Camera, FileCamera
+from .tokens import Token
 from .camera_base import CameraBase
 from .token_display import display_tokens
-from .tokens import Token
 
 
 class Vision:

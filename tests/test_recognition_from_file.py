@@ -1,8 +1,8 @@
-import pytest
-
 from pathlib import Path
 
-from sb_vision import Vision, FileCamera, Token
+import pytest
+
+from sb_vision import Token, Vision, FileCamera
 
 TEST_DATA = Path(__file__).parent / 'test_data'
 
