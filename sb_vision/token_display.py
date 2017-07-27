@@ -1,5 +1,7 @@
 """Tool, and utilities, for displaying detected tokens."""
 
+import typing
+
 import numpy as np
 from PIL import Image, ImageDraw, ImageFont
 
@@ -16,7 +18,7 @@ def _draw_centered(pos, text, font, color, dr):
     dr.text((x, y), text, font=font, fill=color)
 
 
-def display_tokens(tokens: Token, image: Image):
+def display_tokens(tokens: typing.Iterable[Token], image: Image):
     """
     Create an annotated image with the given tokens in it.
 
@@ -44,6 +46,8 @@ def display_tokens(tokens: Token, image: Image):
         (255, 125, 0),
         (0, 255, 255),
     ]
+
+    tokens = list(tokens)
 
     # Loop the colors if we run out
     token_colors *= (len(tokens) // len(token_colors)) + 1
