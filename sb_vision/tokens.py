@@ -102,26 +102,43 @@ def cart_to_polar(cartesian_coord):
     return (rot_x, rot_y, rot_z), dist
 
 
+DEFAULT_TOKEN_SIZE = (0.25, 0.25)
+
+
 class Token:
     """ Class representing an apriltag Token"""
 
-    def __init__(self, apriltag_detection, sizes, focal_length):
+    def __init__(self, id, size=DEFAULT_TOKEN_SIZE, certainty=0.0):
+        self.id = id
+        self.size = size
+        self.certainty = certainty
+
+    @classmethod
+    def from_apriltag_detection(cls, apriltag_detection, sizes, focal_length):
         # *************************************************************************
         # NOTE: IF YOU CHANGE THIS PLEASE ADD THEM IN THE ROBOT-API camera.py
         # *************************************************************************
 
-        # ID of the tag
-        self.id = apriltag_detection.id
-        # Marker size
-        self.size = sizes[self.id] if self.id in sizes else (0.25, 0.25)  # Return 0.25,0.25 as a default size
-        # Float from 0 to 1 on the quality of the token
-        self.certainty = apriltag_detection.goodness
+        instance = cls(
+            id=apriltag_detection.id,
+            size=sizes.get(apriltag_detection.id, DEFAULT_TOKEN_SIZE),
+            certainty=apriltag_detection.goodness,
+        )
+
         arr = [apriltag_detection.H.data[x] for x in range(9)]
         homography = np.reshape(arr, (3, 3))
+
+        instance.infer_location_from_homography_matrix(
+            homography_matrix=homography,
+            focal_length=focal_length,
+        )
+        return instance
+
+    def infer_location_from_homography_matrix(self, *, homography_matrix, focal_length):
         # pixel coordinates of the corners of the marker
-        self.pixel_corners = get_pixel_corners(homography)
+        self.pixel_corners = get_pixel_corners(homography_matrix)
         # pixel coordinates of the centre of the marker
-        self.pixel_centre = get_pixel_centre(homography)
+        self.pixel_centre = get_pixel_centre(homography_matrix)
         # Cartesian Co-ordinates in the 3D World, relative to the camera (as opposed to somehow being compass-aligned)
         self.cartesian = get_cartesian(self.pixel_corners, focal_length, self.size)
         # Polar Co-ordinates in the 3D World, relative to the front of the camera

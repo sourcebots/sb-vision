@@ -87,7 +87,7 @@ class Vision:
         markers = []
         for i in range(results.size):
             detection = lib.zarray_get_detection(results, i)
-            markers.append(Token(detection, self.token_sizes, self.camera.focal_length))
+            markers.append(Token.from_apriltag_detection(detection, self.token_sizes, self.camera.focal_length))
             lib.destroy_detection(detection)
         return markers
 
