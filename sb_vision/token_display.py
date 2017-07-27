@@ -7,11 +7,11 @@ from .tokens import Token
 def _draw_centered(pos, text, font, color, dr):
     w, h = dr.textsize(text, font=font)
     x, y = pos[0] - w / 2, pos[1] - h / 2
-    dr.text((x+2,y), text, font=font, fill='black')
-    dr.text((x-2,y), text, font=font, fill='black')
-    dr.text((x,y+2), text, font=font, fill='black')
-    dr.text((x,y-2), text, font=font, fill='black')
-    dr.text((x,y), text, font=font, fill=color)
+    dr.text((x + 2, y), text, font=font, fill='black')
+    dr.text((x - 2, y), text, font=font, fill='black')
+    dr.text((x, y + 2), text, font=font, fill='black')
+    dr.text((x, y - 2), text, font=font, fill='black')
+    dr.text((x, y), text, font=font, fill=color)
 
 
 def display_tokens(tokens: Token, image: Image):
@@ -39,18 +39,30 @@ def display_tokens(tokens: Token, image: Image):
     ]
 
     # Loop the colors if we run out
-    token_colors *= int(len(tokens) / len(token_colors))+1
+    token_colors *= (len(tokens) // len(token_colors)) + 1
 
     for token, color in zip(tokens, token_colors):
         corners = token.pixel_corners
         centre = token.pixel_centre
         avg_point = np.mean(corners, axis=0)
         dr.line(corners + [corners[0]], fill=color, width=4)
-        ellipse_pos = [(centre[0] - 5, centre[1] - 5), (centre[0] + 5, centre[1] + 5)]
+        ellipse_pos = [
+            (centre[0] - 5, centre[1] - 5),
+            (centre[0] + 5, centre[1] + 5),
+        ]
         dr.ellipse(ellipse_pos, fill=color)
         for point in corners:
-            ellipse_pos = [(point[0] - 5, point[1] - 5), (point[0] + 5, point[1] + 5)]
+            ellipse_pos = [
+                (point[0] - 5, point[1] - 5),
+                (point[0] + 5, point[1] + 5),
+            ]
             dr.ellipse(ellipse_pos, fill=color)
-        _draw_centered((int(avg_point[0]), int(avg_point[1])), str(token.id), fnt, color, dr)
+        _draw_centered(
+            (int(avg_point[0]), int(avg_point[1])),
+            str(token.id),
+            fnt,
+            color,
+            dr,
+        )
     del dr
     return new_image

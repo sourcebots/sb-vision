@@ -11,7 +11,7 @@ TEST_IMAGES = [
     ("Photo 2.jpg", [Token(id=12)]),
     ("Photo 3.jpg", [Token(id=15)]),
     ("Photo 4.jpg", [Token(id=26)]),
-    #("Photo 5.jpg", [Token(id=78)]),
+    # ("Photo 5.jpg", [Token(id=78)]),
     ("Photo 6.jpg", [Token(id=95)]),
 ]
 

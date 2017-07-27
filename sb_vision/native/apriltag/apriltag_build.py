@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-import glob
 from pathlib import Path
 
 from cffi import FFI

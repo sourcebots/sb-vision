@@ -32,16 +32,15 @@ class Camera(CameraBase):
     def capture_image(self):
         """
         Capture an image
-        :return: PIL image object of the captured image in Luminosity color scale
+        :return: PIL image object of the captured image in Luminosity
+                 color scale
         """
         image_bytes = self.camera.capture(*self.cam_image_size)
         return Image.frombytes('L', self.cam_image_size, image_bytes)
 
-    # TODO: Cancel out lens distortions
-
 
 class FileCamera(CameraBase):
-    """ Debug class for cameras, returns an image instead of querying a camera"""
+    """Pseudo-camera debug class, getting images from files."""
     def __init__(self, file_path, focal_length):
         super().__init__()
         self.file_name = file_path
