@@ -1,8 +1,8 @@
 """Tool, and utilities, for displaying detected tokens."""
 
 import typing
-
 import itertools
+
 import numpy as np
 from PIL import Image, ImageDraw, ImageFont
 
