@@ -17,6 +17,11 @@ def _draw_centered(pos, text, font, color, dr):
 
 
 def display_tokens(tokens: Token, image: Image):
+    """
+    Create an annotated image with the given tokens in it.
+
+    This is non-destructive to the original image.
+    """
     new_image = image.convert('RGBA')
     dr = ImageDraw.Draw(new_image)
     fnt = ImageFont.load_default()
