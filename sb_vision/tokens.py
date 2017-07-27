@@ -21,7 +21,7 @@ def _homography_transform(corner, homog):
     return x, y
 
 
-def decompose_homography(Homography, Calibration):
+def _decompose_homography(Homography, Calibration):
     """
     Python rewrite of the openCV function decomposeHomographyMat
     :param Homography:
