@@ -12,9 +12,10 @@ jobs:
       - run: python3 -m venv venv
       - run: venv/bin/pip install .
       - run: venv/bin/pip install pytest
+      - run: venv/bin/pip install -r script/linting/requirements.txt
       - save_cache:
           key: virtualenv-{{ checksum "setup.py" }}
           paths:
             - venv
       - run: venv/bin/py.test tests
-
+      - run: script/linting/lint
