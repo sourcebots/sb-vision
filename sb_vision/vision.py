@@ -1,5 +1,8 @@
 """Classes for handling vision"""
 
+import numbers
+import collections
+
 from sb_vision.native.apriltag._apriltag import ffi, lib
 from .camera import Camera, FileCamera
 from .camera_base import CameraBase
@@ -12,12 +15,19 @@ class Vision:
 
     def __init__(self, camera: CameraBase, token_sizes):
         self.camera = camera
-        # index for marker sizes
-        self.token_sizes = token_sizes
         # apriltag detector object
         self._detector = None
         # image from camera
         self.image = None
+
+        if isinstance(token_sizes, numbers.Number):
+            self.token_sizes = collections.defaultdict(
+                lambda: (token_sizes, token_sizes),
+            )
+        elif isinstance(token_sizes, tuple):
+            self.token_sizes = collections.defaultdict(lambda: token_sizes)
+        else:
+            self.token_sizes = self.token_sizes
 
         self.initialised = False
 
