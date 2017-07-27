@@ -5,7 +5,14 @@ jobs:
       - image: 3.5-jessie
     steps:
       - checkout
-      - run: pip install .
-      - run: pip install pytest
-      - run: py.test tests
+      - restore_cache:
+          key: virtualenv-{{ checksum "setup.py" }}
+      - run: python3 -m venv venv
+      - run: venv/bin/pip install .
+      - run: venv/bin/pip install pytest
+      - save_cache:
+          key: virtualenv-{{ checksum "setup.py" }}
+          paths:
+            - venv
+      - run: venv/bin/py.test tests
 
