@@ -81,11 +81,11 @@ class Vision:
             lib.destroy_detection(detection)
         return markers
 
-    def snapshot(self):
+    def capture_image(self):
         """
         Capture an image from the camera
 
-        returns: (List of Token objects, PIL Image Captured)
+        returns: (List of Token objects)
 
         """
         self._lazily_init()
@@ -108,6 +108,10 @@ class Vision:
         # Remove the array now we've got them
         lib.zarray_destroy(results)
         return tokens
+
+    def snapshot(self):
+        self._lazily_init()
+        return self.process_image(self.capture_image())
 
 
 if __name__ == "__main__":
