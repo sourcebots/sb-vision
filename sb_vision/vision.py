@@ -1,4 +1,4 @@
-"""Classes for handling vision"""
+"""Main vision driver."""
 
 import numbers
 import collections
@@ -15,6 +15,13 @@ class Vision:
     """Class that handles the vision library and the camera."""
 
     def __init__(self, camera: CameraBase, token_sizes):
+        """
+        General initialiser.
+
+        In general `token_sizes` must be a mapping of token IDs to (vertical,
+        horizontal) tuples in units of metres, but for convenience it may also
+        be passed as a single (vertical, horizontal) tuple, or a single number.
+        """
         self.camera = camera
         # apriltag detector object
         self._detector = None
@@ -33,21 +40,40 @@ class Vision:
         self.initialised = False
 
     def _init(self):
+        """
+        Run 'actual initialisation'.
+
+        This involves 'initting' the camera (opening the device, for instance)
+        and setting up the AprilTags library.
+        """
         self.camera.init()
         self._init_library()
         self.initialised = True
 
     def _lazily_init(self):
+        """
+        Lazily initialise.
+
+        Read as 'call `_init` if nobody else has done so'.
+        """
         if not self.initialised:
             self._init()
 
     def __del__(self):
+        """
+        Drop any referred-to resources.
+
+        Make sure that the library is deinitialised when the `Vision` falls
+        out of scope.
+        """
         self._deinit_library()
 
     def _init_library(self):
         """
-        Initialise the library
-        :return:
+        Initialise the AprilTag library.
+
+        This means creating and configuring the detector, which populates a
+        number of tables in memory.
         """
         # init detector
         self._detector = lib.apriltag_detector_create()
@@ -69,10 +95,7 @@ class Vision:
         self.image = lib.image_u8_create_stride(size[0], size[1], size[0])
 
     def _deinit_library(self):
-        """
-        Deinitialise the library
-        :return:
-        """
+        """Deinitialise the library."""
         # Always destroy the detector
         if self._detector:
             lib.apriltag_detector_destroy(self._detector)
@@ -81,7 +104,8 @@ class Vision:
 
     def _parse_results(self, results):
         """
-        Parse the array of results
+        Parse the array of results.
+
         :param results: cffi array of results
         :return: python iterable of individual token objects
         """
@@ -96,19 +120,20 @@ class Vision:
 
     def capture_image(self):
         """
-        Capture an image from the camera
+        Capture an image from the camera.
 
-        returns: (List of Token objects)
-
+        :return: single PIL image
         """
         self._lazily_init()
+
         # get the PIL image from the camera
         img = self.camera.capture_image()
         return img.point(lambda x: 255 if x > 128 else 0)
 
     def process_image(self, img):
         """
-        Run the given image through the apriltags detection library
+        Run the given image through the apriltags detection library.
+
         :param img: PIL Luminosity image to be processed
         :return: python list of Token objects.
         """
@@ -123,6 +148,11 @@ class Vision:
         return tokens
 
     def snapshot(self):
+        """
+        Get a single list of tokens from one camera snapshot.
+
+        Equivalent to calling `process_image` on the result of `capture_image`.
+        """
         self._lazily_init()
         return self.process_image(self.capture_image())
 
