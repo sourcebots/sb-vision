@@ -17,6 +17,7 @@ setup(
     ],
     install_requires=[
         'Pillow',
+        'numpy',
         "cffi>=1.4.0",
     ],
     zip_safe=False,
