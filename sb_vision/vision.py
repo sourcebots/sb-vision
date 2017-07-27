@@ -165,6 +165,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument(
         '-f',
+        nargs='?',
         default=False,
         help="Pass an image file to use, otherwise use webcam; if filename "
              "is blank, uses 'tagsampler.png'",
