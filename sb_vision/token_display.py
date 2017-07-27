@@ -1,6 +1,5 @@
 """Tool, and utilities, for displaying detected tokens."""
 
-import typing
 import itertools
 
 import numpy as np
@@ -19,7 +18,7 @@ def _draw_centered(pos, text, font, color, dr):
     dr.text((x, y), text, font=font, fill=color)
 
 
-def display_tokens(tokens: typing.Iterable[Token], image: Image):
+def display_tokens(tokens, image):
     """
     Create an annotated image with the given tokens in it.
 
