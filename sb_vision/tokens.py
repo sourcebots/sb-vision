@@ -33,7 +33,7 @@ def _decompose_homography(Homography, Calibration):
     pass
 
 
-def get_pixel_corners(homog):
+def _get_pixel_corners(homog):
     """
     Get the co-ordinate of the corners given the homography matrix
     :param homog: Numpy array Homography matrix as returned from Apriltags
@@ -172,7 +172,7 @@ class Token:
         focal_length,
     ):
         # pixel coordinates of the corners of the marker
-        self.pixel_corners = get_pixel_corners(homography_matrix)
+        self.pixel_corners = _get_pixel_corners(homography_matrix)
         # pixel coordinates of the centre of the marker
         self.pixel_centre = get_pixel_centre(homography_matrix)
         # Cartesian Co-ordinates in the 3D World, relative to the camera
