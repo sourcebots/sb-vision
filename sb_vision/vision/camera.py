@@ -1,7 +1,7 @@
 from PIL import Image
 
-from robotd.vision.camera_base import CameraBase
-from robotd.cvcapture import CaptureDevice
+from sb_vision.vision.camera_base import CameraBase
+from sb_vision.cvcapture import CaptureDevice
 
 
 class Camera(CameraBase):

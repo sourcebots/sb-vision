@@ -1,12 +1,12 @@
 """Classes for handling vision"""
 
-from robotd.native.apriltag._apriltag import ffi, lib
+from sb_vision.native.apriltag._apriltag import ffi, lib
 
-from robotd.game_specific import MARKER_SIZES
-from robotd.vision.camera import Camera, FileCamera
-from robotd.vision.camera_base import CameraBase
-from robotd.vision.token_display import display_tokens
-from robotd.vision.tokens import Token
+from sb_vision.game_specific import MARKER_SIZES
+from sb_vision.vision.camera import Camera, FileCamera
+from sb_vision.vision.camera_base import CameraBase
+from sb_vision.vision.token_display import display_tokens
+from sb_vision.vision.tokens import Token
 
 
 class Vision:
