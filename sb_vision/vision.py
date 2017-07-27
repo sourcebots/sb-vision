@@ -170,6 +170,13 @@ if __name__ == "__main__":
         help="Pass an image file to use, otherwise use webcam; if filename "
              "is blank, uses 'tagsampler.png'",
     )
+    parser.add_argument(
+        '-n',
+        action='store_false',
+        dest='show',
+        help="do not show the captured frames",
+    )
+
     args = parser.parse_args()
     # Change the below for quick debugging
     if args.f is False:
@@ -187,7 +194,8 @@ if __name__ == "__main__":
     while True:
         img = v.snapshot()
         tokens = v.process_image(img)
-        img = display_tokens(tokens, img)
-        img.show()
+        if args.show:
+            img = display_tokens(tokens, img)
+            img.show()
         if tokens:
             print(tokens[0].pixel_centre)
