@@ -92,7 +92,7 @@ def _get_cartesian(corner_pixels, focal_length, size):
     return cartesian
 
 
-def get_distance_for_family_day(pixel_corners, focal_length, token_height):
+def _get_distance_for_family_day(pixel_corners, focal_length, token_height):
     """HORRIBLE HACK."""
     pixel_height = (
         pixel_corners[1][1] -
@@ -103,7 +103,7 @@ def get_distance_for_family_day(pixel_corners, focal_length, token_height):
     return math.fabs(token_height * focal_length / pixel_height)
 
 
-def get_distance(cartesian):
+def _get_distance(cartesian):
     x = (
         cartesian[0][0] +
         cartesian[1][0] +
