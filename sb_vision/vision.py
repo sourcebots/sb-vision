@@ -190,7 +190,6 @@ if __name__ == "__main__":
             f = args.f
         camera = FileCamera(f, 720)
     v = Vision(camera, (0.01, 0.01))
-    v.init()
     while True:
         img = v.snapshot()
         tokens = v.process_image(img)
