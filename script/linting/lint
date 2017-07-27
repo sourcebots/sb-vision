@@ -1,2 +1,5 @@
 #!/bin/bash
-exec flake8 --ignore=D401 sb_vision tests
+if [ -z "$FLAKE8" ]; then
+    FLAKE8=flake8
+fi
+exec "$FLAKE8" --ignore=D401 sb_vision tests
