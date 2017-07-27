@@ -1,5 +1,6 @@
-import cffi
 from pathlib import Path
+
+import cffi
 
 base = Path(__file__).parent
 

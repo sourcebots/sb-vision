@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
-from cffi import FFI
 import glob
 from pathlib import Path
+
+from cffi import FFI
 
 ffi = FFI()
 

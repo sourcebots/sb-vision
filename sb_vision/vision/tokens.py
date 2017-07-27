@@ -1,9 +1,9 @@
 import code
 import json
-
-from sb_vision.native.apriltag._apriltag import ffi
-import numpy as np
 import math
+
+import numpy as np
+from sb_vision.native.apriltag._apriltag import ffi
 
 
 def row_mul(m, corner, col):

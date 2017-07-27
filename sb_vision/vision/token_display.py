@@ -1,7 +1,6 @@
-from PIL import Image, ImageDraw
-import numpy as np
-from PIL import ImageFont
+from PIL import Image, ImageDraw, ImageFont
 
+import numpy as np
 from sb_vision.vision.tokens import Token
 
 

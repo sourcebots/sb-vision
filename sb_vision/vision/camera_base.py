@@ -19,4 +19,3 @@ class CameraBase:
         :return: PIL Image captured
         """
         raise NotImplementedError()
-
