@@ -6,7 +6,7 @@ jobs:
     steps:
       - checkout
       - run: apt-get update -y
-      - run: apt-get install -y libcv-dev
+      - run: apt-get install -y libcv-dev libopencv-photo-dev
       - restore_cache:
           key: virtualenv-{{ checksum "setup.py" }}
       - run: python3 -m venv venv
