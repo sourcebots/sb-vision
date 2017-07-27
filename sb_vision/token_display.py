@@ -3,9 +3,7 @@
 import itertools
 
 import numpy as np
-from PIL import Image, ImageDraw, ImageFont
-
-from .tokens import Token
+from PIL import ImageDraw, ImageFont
 
 
 def _draw_centered(pos, text, font, color, dr):
