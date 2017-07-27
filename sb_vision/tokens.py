@@ -23,7 +23,8 @@ def _homography_transform(corner, homog):
 
 def _decompose_homography(Homography, Calibration):
     """
-    Python rewrite of the openCV function decomposeHomographyMat
+    Python rewrite of the openCV function decomposeHomographyMat.
+
     :param Homography:
     :param Calibration:
     :return: Rotation list, Translation List, Normals List
@@ -35,7 +36,8 @@ def _decompose_homography(Homography, Calibration):
 
 def _get_pixel_corners(homog):
     """
-    Get the co-ordinate of the corners given the homography matrix
+    Get the co-ordinate of the corners given the homography matrix.
+
     :param homog: Numpy array Homography matrix as returned from Apriltags
     :return: list of (x,y) pixel co-ordinates of the corners of the token
     """
@@ -52,12 +54,12 @@ def _get_pixel_corners(homog):
 
 
 def _get_pixel_centre(homography_matrix):
-    """ Get the centre of the transform (ie how much translation there is)"""
+    """Get the centre of the transform (ie how much translation there is)."""
     return _homography_transform((0, 0), homography_matrix)
 
 
 def _get_cartesian(corner_pixels, focal_length, size):
-    """ Convert the location of corner pixels to a 3D cartesian co-ordinate."""
+    """Convert the location of corner pixels to a 3D cartesian co-ordinate."""
     # TODO: This doesn't work. Re-implement to fix it.
     marker_width = size[0]
     # setup a
@@ -137,15 +139,22 @@ DEFAULT_TOKEN_SIZE = (0.25, 0.25)
 
 
 class Token:
-    """ Class representing an apriltag Token"""
+    """Representation of the detection of one token."""
 
     def __init__(self, id, size=DEFAULT_TOKEN_SIZE, certainty=0.0):
+        """
+        General initialiser.
+
+        This covers the main token properties but notably does _not_ populate
+        the coordinate information.
+        """
         self.id = id
         self.size = size
         self.certainty = certainty
 
     @classmethod
     def from_apriltag_detection(cls, apriltag_detection, sizes, focal_length):
+        """Construct a Token from an April Tag detection."""
         # *************************************************************************
         # NOTE: IF YOU CHANGE THIS PLEASE ADD THEM IN THE ROBOT-API camera.py
         # *************************************************************************
@@ -171,6 +180,7 @@ class Token:
         homography_matrix,
         focal_length,
     ):
+        """Infer coordinate information from a homography matrix."""
         # pixel coordinates of the corners of the marker
         self.pixel_corners = _get_pixel_corners(homography_matrix)
         # pixel coordinates of the centre of the marker
@@ -187,9 +197,11 @@ class Token:
         self.polar = _cart_to_polar(self.cartesian)
 
     def __repr__(self):
+        """General debug representation."""
         return "Token: {}, certainty:{}".format(self.id, self.certainty)
 
     def __eq__(self, other):
+        """Equivalent relation partitioning by `id`."""
         if not isinstance(other, Token):
             return False
 
