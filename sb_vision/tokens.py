@@ -125,7 +125,7 @@ def _get_distance(cartesian):
     return math.sqrt(x ** 2 + y ** 2 + z ** 2)
 
 
-def cart_to_polar(cartesian_coord):
+def _cart_to_polar(cartesian_coord):
     # TODO implement
     # Don't bother making a struct for this, we will to send it over json in
     # a sec. It's currently undefined what X, Y, and Z are. Go nuts.
@@ -184,7 +184,7 @@ class Token:
         )
         # Polar Co-ordinates in the 3D World, relative to the front of the
         # camera
-        self.polar = cart_to_polar(self.cartesian)
+        self.polar = _cart_to_polar(self.cartesian)
 
     def __repr__(self):
         return "Token: {}, certainty:{}".format(self.id, self.certainty)
