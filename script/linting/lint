@@ -1,0 +1,2 @@
+#!/bin/sh
+exec flake8 --ignore=D401 sb_vision tests
