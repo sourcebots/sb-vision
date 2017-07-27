@@ -56,7 +56,7 @@ def _get_pixel_centre(homography_matrix):
     return _homography_transform((0, 0), homography_matrix)
 
 
-def get_cartesian(corner_pixels, focal_length, size):
+def _get_cartesian(corner_pixels, focal_length, size):
     """ Convert the location of corner pixels to a 3D cartesian co-ordinate."""
     # TODO: This doesn't work. Re-implement to fix it.
     marker_width = size[0]
@@ -177,7 +177,7 @@ class Token:
         self.pixel_centre = _get_pixel_centre(homography_matrix)
         # Cartesian Co-ordinates in the 3D World, relative to the camera
         # (as opposed to somehow being compass-aligned)
-        self.cartesian = get_cartesian(
+        self.cartesian = _get_cartesian(
             self.pixel_corners,
             focal_length,
             self.size,
