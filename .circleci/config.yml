@@ -12,4 +12,7 @@ jobs:
       - run: venv/bin/pip install pytest
       - run: venv/bin/pip install -r script/linting/requirements.txt
       - run: venv/bin/py.test tests
-      - run: script/linting/lint
+      - run:
+          command: script/linting/lint
+          environment:
+            FLAKE8: venv/bin/flake8
