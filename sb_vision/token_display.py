@@ -2,6 +2,7 @@
 
 import typing
 
+import itertools
 import numpy as np
 from PIL import Image, ImageDraw, ImageFont
 
@@ -49,10 +50,7 @@ def display_tokens(tokens: typing.Iterable[Token], image: Image):
 
     tokens = list(tokens)
 
-    # Loop the colors if we run out
-    token_colors *= (len(tokens) // len(token_colors)) + 1
-
-    for token, color in zip(tokens, token_colors):
+    for token, color in zip(tokens, itertools.cycle(token_colors)):
         corners = token.pixel_corners
         centre = token.pixel_centre
         avg_point = np.mean(corners, axis=0)
