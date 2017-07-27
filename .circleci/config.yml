@@ -5,6 +5,8 @@ jobs:
       - image: python:3.5-jessie
     steps:
       - checkout
+      - run: sudo apt-get update -y
+      - run: sudo apt-get install -y libcv-dev
       - restore_cache:
           key: virtualenv-{{ checksum "setup.py" }}
       - run: python3 -m venv venv
