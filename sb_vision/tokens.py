@@ -5,7 +5,7 @@ import math
 import numpy as np
 
 
-def row_mul(m, corner, col):
+def _row_mul(m, corner, col):
     return m[col, 0] * corner[0] + m[col, 1] * corner[1] + m[col, 2]
 
 
@@ -15,9 +15,9 @@ def homography_transform(corner, homog):
 
     See http://bit.ly/2eQOTue for the equation.
     """
-    z = row_mul(homog, corner, 2)
-    x = row_mul(homog, corner, 0) / z
-    y = row_mul(homog, corner, 1) / z
+    z = _row_mul(homog, corner, 2)
+    x = _row_mul(homog, corner, 0) / z
+    y = _row_mul(homog, corner, 1) / z
     return x, y
 
 
