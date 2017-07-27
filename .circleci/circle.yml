@@ -1,6 +1,8 @@
 version: 2
 jobs:
   build:
+    docker:
+      - image: 3.5-jessie
     steps:
       - checkout
       - run: pip install .
