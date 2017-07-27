@@ -200,6 +200,8 @@ class Token:
         """General debug representation."""
         return "Token: {}, certainty:{}".format(self.id, self.certainty)
 
+    __str__ = __repr__
+
     def __eq__(self, other):
         """Equivalent relation partitioning by `id`."""
         if not isinstance(other, Token):
