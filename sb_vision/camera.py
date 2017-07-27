@@ -54,4 +54,6 @@ class FileCamera(CameraBase):
         self.cam_image_size = self.image.size
 
     def capture_image(self):
+        if self.image is None:
+            raise RuntimeError("init() not called")
         return self.image
