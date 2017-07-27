@@ -1,3 +1,5 @@
+"""Tool, and utilities, for displaying detected tokens."""
+
 import numpy as np
 from PIL import Image, ImageDraw, ImageFont
 
