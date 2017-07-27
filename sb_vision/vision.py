@@ -1,6 +1,7 @@
 """Main vision driver."""
 
 import numbers
+import contextlib
 import collections
 
 from sb_vision.native.apriltag._apriltag import ffi, lib
@@ -193,11 +194,12 @@ if __name__ == "__main__":
             f = args.f
         camera = FileCamera(f, 720)
     v = Vision(camera, (0.01, 0.01))
-    while True:
-        img = v.capture_image()
-        tokens = v.process_image(img)
-        if args.show:
-            img = display_tokens(tokens, img)
-            img.show()
-        if tokens:
-            print(tokens[0].bees)
+    with contextlib.suppress(KeyboardInterrupt):
+        while True:
+            img = v.capture_image()
+            tokens = v.process_image(img)
+            if args.show:
+                img = display_tokens(tokens, img)
+                img.show()
+            if tokens:
+                print(tokens[0].bees)
