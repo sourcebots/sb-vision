@@ -9,7 +9,7 @@ def _row_mul(m, corner, col):
     return m[col, 0] * corner[0] + m[col, 1] * corner[1] + m[col, 2]
 
 
-def homography_transform(corner, homog):
+def _homography_transform(corner, homog):
     """
     Perform the equivalent of an OpenCV WarpPerspectiveTransform on the points.
 
@@ -45,7 +45,7 @@ def get_pixel_corners(homog):
     transformed = []
 
     for corner in corners:
-        x, y = homography_transform(corner, homog)
+        x, y = _homography_transform(corner, homog)
         transformed.append((x, y))
 
     return transformed
@@ -53,7 +53,7 @@ def get_pixel_corners(homog):
 
 def get_pixel_centre(homography_matrix):
     """ Get the centre of the transform (ie how much translation there is)"""
-    return homography_transform((0, 0), homography_matrix)
+    return _homography_transform((0, 0), homography_matrix)
 
 
 def get_cartesian(corner_pixels, focal_length, size):
