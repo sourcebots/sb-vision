@@ -1,3 +1,10 @@
+"""
+CFFI build script for the cvcapture native module.
+
+This little bit of code is responsible for fondling OpenCV so that we can get
+snapshots from webcams.
+"""
+
 from pathlib import Path
 
 import cffi

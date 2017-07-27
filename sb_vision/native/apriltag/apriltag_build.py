@@ -1,4 +1,9 @@
-#!/usr/bin/env python3
+"""
+CFFI build script for AprilTags library and integration.
+
+This is how we actually do the fiducial marker detection.
+"""
+
 from pathlib import Path
 
 from cffi import FFI
