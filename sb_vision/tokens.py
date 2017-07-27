@@ -51,7 +51,7 @@ def _get_pixel_corners(homog):
     return transformed
 
 
-def get_pixel_centre(homography_matrix):
+def _get_pixel_centre(homography_matrix):
     """ Get the centre of the transform (ie how much translation there is)"""
     return _homography_transform((0, 0), homography_matrix)
 
@@ -174,7 +174,7 @@ class Token:
         # pixel coordinates of the corners of the marker
         self.pixel_corners = _get_pixel_corners(homography_matrix)
         # pixel coordinates of the centre of the marker
-        self.pixel_centre = get_pixel_centre(homography_matrix)
+        self.pixel_centre = _get_pixel_centre(homography_matrix)
         # Cartesian Co-ordinates in the 3D World, relative to the camera
         # (as opposed to somehow being compass-aligned)
         self.cartesian = get_cartesian(
