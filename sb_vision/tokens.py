@@ -178,7 +178,7 @@ class Token:
         self,
         *,
         homography_matrix,
-        focal_length,
+        focal_length
     ):
         """Infer coordinate information from a homography matrix."""
         # pixel coordinates of the corners of the marker
