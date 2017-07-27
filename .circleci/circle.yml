@@ -1,0 +1,9 @@
+version: 2
+jobs:
+  build:
+    steps:
+      - checkout
+      - run: pip install .
+      - run: pip install pytest
+      - run: py.test tests
+
