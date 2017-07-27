@@ -1,7 +1,7 @@
 from PIL import Image, ImageDraw, ImageFont
 
 import numpy as np
-from sb_vision.vision.tokens import Token
+from .tokens import Token
 
 
 def _draw_centered(pos, text, font, color, dr):

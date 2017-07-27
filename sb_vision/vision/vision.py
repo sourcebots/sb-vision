@@ -1,11 +1,10 @@
 """Classes for handling vision"""
 
-from sb_vision.game_specific import MARKER_SIZES
 from sb_vision.native.apriltag._apriltag import ffi, lib
-from sb_vision.vision.camera import Camera, FileCamera
-from sb_vision.vision.camera_base import CameraBase
-from sb_vision.vision.token_display import display_tokens
-from sb_vision.vision.tokens import Token
+from .camera import Camera, FileCamera
+from .camera_base import CameraBase
+from .token_display import display_tokens
+from .tokens import Token
 
 
 class Vision:
