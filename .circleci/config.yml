@@ -2,7 +2,7 @@ version: 2
 jobs:
   build:
     docker:
-      - image: 3.5-jessie
+      - image: python:3.5-jessie
     steps:
       - checkout
       - restore_cache:
