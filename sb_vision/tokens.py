@@ -129,3 +129,9 @@ class Token:
 
     def __repr__(self):
         return "Token: {}, certainty:{}".format(self.id, self.certainty)
+
+    def __eq__(self, other):
+        if not isinstance(other, Token):
+            return False
+
+        return self.id == other.id
