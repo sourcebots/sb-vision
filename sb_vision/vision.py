@@ -82,14 +82,16 @@ class Vision:
         """
         Parse the array of results
         :param results: cffi array of results
-        :return: python list of individual token objects
+        :return: python iterable of individual token objects
         """
-        markers = []
         for i in range(results.size):
             detection = lib.zarray_get_detection(results, i)
-            markers.append(Token.from_apriltag_detection(detection, self.token_sizes, self.camera.focal_length))
+            yield Token.from_apriltag_detection(
+                detection,
+                self.token_sizes,
+                self.camera.focal_length,
+            )
             lib.destroy_detection(detection)
-        return markers
 
     def capture_image(self):
         """
