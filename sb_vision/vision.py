@@ -19,9 +19,16 @@ class Vision:
         # image from camera
         self.image = None
 
-    def init(self):
+        self.initialised = False
+
+    def _init(self):
         self.camera.init()
         self._init_library()
+        self.initialised = True
+
+    def _lazily_init(self):
+        if not self.initialised:
+            self._init()
 
     def __del__(self):
         self._deinit_library()
@@ -81,6 +88,7 @@ class Vision:
         returns: (List of Token objects, PIL Image Captured)
 
         """
+        self._lazily_init()
         # get the PIL image from the camera
         img = self.camera.capture_image()
         return img.point(lambda x: 255 if x > 128 else 0)
@@ -91,6 +99,7 @@ class Vision:
         :param img: PIL Luminosity image to be processed
         :return: python list of Token objects.
         """
+        self._lazily_init()
         total_length = img.size[0] * img.size[1]
         # Detect the markers
         ffi.memmove(self.image.buf, img.tobytes(), total_length)
