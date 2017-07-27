@@ -1,3 +1,5 @@
+"""General, full-stack tests for running AprilTags vision on files."""
+
 from pathlib import Path
 
 import pytest
@@ -18,6 +20,7 @@ TEST_IMAGES = [
 
 @pytest.mark.parametrize("photo, expected_tokens", TEST_IMAGES)
 def test_recognises_markers(photo, expected_tokens):
+    """Make sure that this particular file gives these particular tokens."""
     camera = FileCamera(TEST_DATA / photo, 1.2)
     vision = Vision(camera, 0.01)
     snaps = vision.snapshot()
