@@ -1,3 +1,9 @@
+"""
+Base class and utilities for cameras.
+
+A camera is an arbitrary source of images.
+"""
+
 class CameraBase:
     def __init__(self):
         self.initialised = False
