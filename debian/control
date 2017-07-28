@@ -1,0 +1,27 @@
+Source: sb-vision
+Section: electronics
+Priority: optional
+Maintainer: Alistair Lynn <arplynn@gmail.com>
+Build-Depends: debhelper (>= 9),
+               dh-python,
+               python3,
+               python3-setuptools,
+               python3-cffi,
+               python3-pil,
+               libcv-dev,
+               libopencv-photo-dev,
+               libopencv-contrib-dev,
+Standards-Version: 3.9.6
+
+Package: sb-vision
+Architecture: any
+Depends: ${misc:Depends},
+         ${shlibs:Depends},
+         python3,
+         ${python3:Depends},
+         libcv2.4,
+         libopencv-photo2.4,
+         libopencv-contrib2.4,
+Description: SourceBots vision subsystem
+ Processes images from input streams such as cameras and produces
+ information on fiducial markers found within them.
