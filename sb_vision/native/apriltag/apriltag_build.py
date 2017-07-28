@@ -12,7 +12,18 @@ ffi = FFI()
 
 
 base = Path(__file__).parent
-source_files = base.glob("contrib/april/**/*.c")
+
+source_files = [
+    x
+    for x in base.glob("contrib/april/**/*.c")
+    if x.stem not in (
+        'tag16h5',
+        'tag25h7',
+        'tag25h9',
+        'tag36artoolkit',
+        'tag36h10',
+    )
+]
 
 with (base / 'apriltag_interface.c').open('r') as apriltag_interface:
     ffi.set_source(
