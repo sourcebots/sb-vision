@@ -45,4 +45,5 @@ def main(args=sys.argv[1:]):
         for x in files
     ]
 
-    fit(training_examples)
+    calibration = fit(training_examples)
+    print(calibration)
