@@ -134,20 +134,7 @@ class Vision:
         self._lazily_init()
 
         # get the PIL image from the camera
-        img = self.camera.capture_image()
-        as_bytes = img.convert('L').tobytes()
-
-        cleaned_bytes = clean_and_threshold(
-            as_bytes,
-            img.size[0],
-            img.size[1],
-        )
-
-        return Image.frombytes(
-            mode='L',
-            size=img.size,
-            data=cleaned_bytes,
-        )
+        return self.camera.capture_image()
 
     def process_image(self, img):
         """
@@ -156,6 +143,19 @@ class Vision:
         :param img: PIL Luminosity image to be processed
         :return: python list of Token objects.
         """
+        as_bytes = img.convert('L').tobytes()
+        cleaned_bytes = clean_and_threshold(
+            as_bytes,
+            img.size[0],
+            img.size[1],
+        )
+
+        img = Image.frombytes(
+            mode='L',
+            size=img.size,
+            data=cleaned_bytes,
+        )
+
         self._lazily_init()
         total_length = img.size[0] * img.size[1]
         # Detect the markers
