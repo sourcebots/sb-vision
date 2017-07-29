@@ -1,6 +1,7 @@
 """Utility to derive calibration matrix from training examples."""
 
 import numpy
+import scipy.linalg
 import scipy.optimize
 import collections
 
@@ -55,16 +56,17 @@ def fit(training_examples):
                     x.homography_matrix[:, 2],
                 ]).T
 
-                reconstructed_homography_matrix = calibration_matrix.dot(
-                    pose_matrix,
+                solved_pose_matrix, _, _, _ = scipy.linalg.lstsq(
+                    calibration_matrix,
+                    homography_matrix_with_extra_col,
                 )
 
-                print(homography_matrix_with_extra_col)
-                print(reconstructed_homography_matrix)
+                print(pose_matrix)
+                print(solved_pose_matrix)
 
                 error_matrix = abs(
-                    reconstructed_homography_matrix -
-                    homography_matrix_with_extra_col
+                    pose_matrix -
+                    solved_pose_matrix
                 )
 
                 error_levels.append(numpy.sum(error_matrix[:, 3]))
