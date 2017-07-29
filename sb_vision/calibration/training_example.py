@@ -22,7 +22,12 @@ class TrainingExample(object):
 
         image = vision.capture_image()
         self.size = image.size
-        (single_token,) = vision.process_image(image)
+        try:
+            (single_token,) = vision.process_image(image)
+        except ValueError:
+            raise RuntimeError(
+                "Cannot detect token in {}".format(self.image_file.name),
+            )
 
         # Explicitly clean up vision
         del vision
