@@ -2,9 +2,9 @@
 
 import sys
 import argparse
-import yaml
-
 from pathlib import Path
+
+import yaml
 
 from .training_example import TrainingExample
 

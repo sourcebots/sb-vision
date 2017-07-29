@@ -17,7 +17,6 @@ class TrainingExample(object):
 
     def _load(self):
         """Load and recognise the single marker from this image."""
-
         pseudo_camera = FileCamera(self.image_file, focal_length=None)
         vision = Vision(pseudo_camera, (0.01, 0.01))
 
@@ -30,7 +29,6 @@ class TrainingExample(object):
 
     def __repr__(self):
         """Debug representation."""
-
         return '<TrainingExample file={file}>'.format(file=self.image_file)
 
     __str__ = __repr__
