@@ -1,0 +1,9 @@
+version: 1
+files:
+  - image: 100cmM.jpg
+    z: 1
+  - image: 50cmM.jpg
+    z: 0.5
+  - image: 200cmM.jpg
+    z: 2
+
