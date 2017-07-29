@@ -203,10 +203,7 @@ class Token:
         # Polar Co-ordinates in the 3D World, relative to the front of the
         # camera
         self.polar = _cart_to_polar(self.cartesian)
-        self.bees = [
-            homography_matrix[0, 2] / homography_matrix[2, 2],
-            homography_matrix[1, 2] / homography_matrix[2, 2],
-        ]
+        self.homography_matrix = homography_matrix
 
     def __repr__(self):
         """General debug representation."""
