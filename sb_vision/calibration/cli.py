@@ -36,14 +36,19 @@ def main(args=sys.argv[1:]):
             raise SystemExit("Cannot handle config versions >1")
         files = config_data['files']
 
-    training_examples = [
-        TrainingExample(
-            image_file=options.directory / x['image'],
-            z_distance=x['z'],
-            x_offset_right=x.get('x', 0.0),
-        )
-        for x in files
-    ]
+    training_examples = []
+
+    for entry in files:
+        try:
+            training_examples.append(
+                TrainingExample(
+                    image_file=options.directory / entry['image'],
+                    z_distance=entry['z'],
+                    x_offset_right=entry.get('x', 0.0),
+                ),
+            )
+        except RuntimeError as e:
+            print(str(e))
 
     calibration = fit(training_examples)
     print(calibration)
