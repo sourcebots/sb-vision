@@ -229,6 +229,6 @@ if __name__ == "__main__":
                 img = display_tokens(tokens, img)
                 img.show()
             if tokens:
-                print(tokens[0].bees)
+                print(tokens[0].cartesian)
             if args.f != False:
                 break

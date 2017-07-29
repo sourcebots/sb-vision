@@ -3,6 +3,7 @@
 import math
 
 import numpy as np
+import scipy.linalg
 
 
 def _row_mul(m, corner, col):
@@ -58,81 +59,35 @@ def _get_pixel_centre(homography_matrix):
     return _homography_transform((0, 0), homography_matrix)
 
 
-def _get_cartesian(corner_pixels, focal_length, size):
-    """Convert the location of corner pixels to a 3D cartesian co-ordinate."""
-    # TODO: This doesn't work. Re-implement to fix it.
-    marker_width = size[0]
-    # setup a
-    a = np.array([
-        [-corner_pixels[0][0], corner_pixels[1][0], corner_pixels[2][0]],
-        [-corner_pixels[0][1], corner_pixels[1][1], corner_pixels[2][1]],
-        [-focal_length, focal_length, focal_length],
-    ])
-    # setup b
-    b = np.array([
-        [corner_pixels[3][0]],
-        [corner_pixels[3][1]], [focal_length],
+def _get_cartesian(
+    homography_matrix,
+    image_size,
+    focal_length,
+    marker_size,
+):
+    calibration_matrix = np.array([
+        [focal_length * image_size[0], 0.0, 0.5 * image_size[0]],
+        [0.0, focal_length * image_size[1], 0.5 * image_size[1]],
+        [0.0, 0.0, 1.0],
     ])
 
-    a_inv = np.linalg.inv(a)
-    k_out = np.dot(a_inv, b)
-    k0_over_k3 = k_out[0, 0]
-    temp_k3 = math.sqrt(((-k0_over_k3 * a[0, 0] - b[0, 0]) ** 2) +
-                        ((-k0_over_k3 * a[1, 0] - b[1, 0]) ** 2) +
-                        ((-k0_over_k3 * focal_length - focal_length) ** 2))
-    k3 = math.fabs(marker_width / temp_k3)
-    k_list = [math.fabs(k_out[i, 0]) * k3 for i in range(3)]
-    k_list.append(k3)
-    cartesian = [
-        (
-            corner_pixels[i][0] * k_list[i],
-            corner_pixels[i][1] * k_list[i],
-            focal_length * k_list[i],
-        )
-        for i in range(4)
-    ]
-    return cartesian
+    homography_matrix_with_fourth_column = numpy.array([
+        homography_matrix[:, 0],
+        homography_matrix[:, 1],
+        np.cross(
+            homography_matrix[:, 0],
+            homography_matrix[:, 1],
+        ),
+        homography_matrix[:, 2],
+    ]).T
 
+    pose_matrix, _, _, _ = scipy.lstsq(
+        calibration_matrix,
+        homography_matrix_with_fourth_column,
+    )
 
-def _get_distance_for_family_day(pixel_corners, focal_length, token_height):
-    """HORRIBLE HACK."""
-    pixel_height = (
-        pixel_corners[1][1] -
-        pixel_corners[0][1] +
-        pixel_corners[2][1] -
-        pixel_corners[3][1]
-    ) / 4
-    return math.fabs(token_height * focal_length / pixel_height)
+    return pose_matrix[:, 3]
 
-
-def _get_distance(cartesian):
-    x = (
-        cartesian[0][0] +
-        cartesian[1][0] +
-        cartesian[2][0] +
-        cartesian[3][0]
-    ) / 4
-    y = (
-        cartesian[0][1] +
-        cartesian[1][1] +
-        cartesian[2][1] +
-        cartesian[3][1]
-    ) / 4
-    z = (
-        cartesian[0][2] +
-        cartesian[1][2] +
-        cartesian[2][2] +
-        cartesian[3][2]
-    ) / 4
-    return math.sqrt(x ** 2 + y ** 2 + z ** 2)
-
-
-def _cart_to_polar(cartesian_coord):
-    # TODO implement
-    # Don't bother making a struct for this, we will to send it over json in
-    # a sec. It's currently undefined what X, Y, and Z are. Go nuts.
-    rot_x, rot_y, rot_z, dist = 0, 0, 0, 0
-    return (rot_x, rot_y, rot_z), dist
 
 
 DEFAULT_TOKEN_SIZE = (0.25, 0.25)
@@ -203,13 +158,14 @@ class Token:
         # Cartesian Co-ordinates in the 3D World, relative to the camera
         # (as opposed to somehow being compass-aligned)
         self.cartesian = _get_cartesian(
-            self.pixel_corners,
+            homography_matrix,
+            image_size,
             focal_length,
             self.size,
         )
         # Polar Co-ordinates in the 3D World, relative to the front of the
         # camera
-        self.polar = _cart_to_polar(self.cartesian)
+        #self.polar = _cart_to_polar(self.cartesian)
 
     def __repr__(self):
         """General debug representation."""
