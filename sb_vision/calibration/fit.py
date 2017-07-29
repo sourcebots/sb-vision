@@ -88,6 +88,7 @@ def fit(training_examples):
         ],
         method='Nelder-Mead',
     )
+    print(result)
 
     final_focal_length, final_principal_x, final_principal_y, final_skew = \
         result.x
