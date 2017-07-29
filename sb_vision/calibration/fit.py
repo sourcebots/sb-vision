@@ -1,6 +1,7 @@
 """Utility to derive calibration matrix from training examples."""
 
 import numpy
+import numpy.linalg
 import scipy.linalg
 import scipy.optimize
 import collections
@@ -18,7 +19,7 @@ def fit(training_examples):
 
     training_examples = list(training_examples)
 
-    def reconstruction_error(x):
+    def reconstruction_error(x, print_things=False):
         [focal_length, principal_x, principal_y, skew] = x
 
         total_error = 0.0
@@ -61,19 +62,19 @@ def fit(training_examples):
                     homography_matrix_with_extra_col,
                 )
 
-                print(pose_matrix)
-                print(solved_pose_matrix)
+                if print_things:
+                    print(pose_matrix)
+                    print(solved_pose_matrix)
 
-                error_matrix = abs(
-                    pose_matrix -
-                    solved_pose_matrix
+                error_levels.append(
+                    numpy.linalg.norm(
+                        (pose_matrix - solved_pose_matrix)[:, 3]
+                    ),
                 )
-
-                error_levels.append(numpy.sum(error_matrix[:, 3]))
 
             total_error += max(error_levels)
 
-        return total_error
+        return total_error / len(training_examples)
 
     initial_focal_length = 1.0  # 1m
     initial_skew = 0
@@ -91,6 +92,9 @@ def fit(training_examples):
         method='Nelder-Mead',
     )
     print(result)
+
+    fre = reconstruction_error(result.x, print_things=True)
+    print("Mean error: ", fre)
 
     final_focal_length, final_principal_x, final_principal_y, final_skew = \
         result.x
