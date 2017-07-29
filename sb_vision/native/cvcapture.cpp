@@ -100,20 +100,20 @@ void cvthreshold(
     size_t height
 ) {
     cv::Mat src(
-        static_cast<int>(width),
         static_cast<int>(height),
+        static_cast<int>(width),
         CV_8UC1
     );
     cv::Mat denoised;
     cv::Mat thresholded;
-
-    cv::medianBlur(src, denoised, 3);
 
     memcpy(
         src.ptr(),
         src_buffer,
         width * height
     );
+
+    cv::medianBlur(src, denoised, 3);
 
     size_t kernel_size = (width < height) ? width : height;
     kernel_size /= 2;

@@ -4,12 +4,15 @@ import numbers
 import contextlib
 import collections
 
+from PIL import Image
+
 from sb_vision.native.apriltag._apriltag import ffi, lib
 
 from .camera import Camera, FileCamera
 from .tokens import Token
 from .camera_base import CameraBase
 from .token_display import display_tokens
+from .cvcapture import clean_and_threshold
 
 
 class Vision:
@@ -132,7 +135,19 @@ class Vision:
 
         # get the PIL image from the camera
         img = self.camera.capture_image()
-        return img.point(lambda x: 0 if x < 128 else 255)
+        as_bytes = img.convert('L').tobytes()
+
+        cleaned_bytes = clean_and_threshold(
+            as_bytes,
+            img.size[0],
+            img.size[1],
+        )
+
+        return Image.frombytes(
+            mode='L',
+            size=img.size,
+            data=cleaned_bytes,
+        )
 
     def process_image(self, img):
         """
@@ -203,3 +218,5 @@ if __name__ == "__main__":
                 img.show()
             if tokens:
                 print(tokens[0].bees)
+            if args.f != False:
+                break
