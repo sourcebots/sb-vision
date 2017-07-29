@@ -136,13 +136,8 @@ class Vision:
         # get the PIL image from the camera
         return self.camera.capture_image()
 
-    def process_image(self, img):
-        """
-        Run the given image through the apriltags detection library.
-
-        :param img: PIL Luminosity image to be processed
-        :return: python list of Token objects.
-        """
+    def threshold_image(self, img):
+        """Run thresholding and preprocessing on an image."""
         as_bytes = img.convert('L').tobytes()
         cleaned_bytes = clean_and_threshold(
             as_bytes,
@@ -150,11 +145,20 @@ class Vision:
             img.size[1],
         )
 
-        img = Image.frombytes(
+        return Image.frombytes(
             mode='L',
             size=img.size,
             data=cleaned_bytes,
         )
+
+    def process_image(self, img):
+        """
+        Run the given image through the apriltags detection library.
+
+        :param img: PIL Luminosity image to be processed
+        :return: python list of Token objects.
+        """
+        img = self.threshold_image(img)
 
         self._lazily_init()
         total_length = img.size[0] * img.size[1]
@@ -195,6 +199,12 @@ if __name__ == "__main__":
         dest='show',
         help="do not show the captured frames",
     )
+    parser.add_argument(
+        '-t',
+        '--after-thresholding',
+        action='store_true',
+        help="show image after thresholding",
+    )
 
     args = parser.parse_args()
     # Change the below for quick debugging
@@ -213,6 +223,8 @@ if __name__ == "__main__":
         while True:
             img = v.capture_image()
             tokens = v.process_image(img)
+            if args.after_thresholding:
+                img = v.threshold_image(img)
             if args.show:
                 img = display_tokens(tokens, img)
                 img.show()
