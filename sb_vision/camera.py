@@ -65,8 +65,7 @@ class FileCamera(CameraBase):
     def init(self):
         """Open the file and read in the image."""
         super().init()
-        self.image = Image.open(self.file_name)
-        self.image = self.image.convert('L')
+        self.image = Image.open(self.file_name).convert('L')
         self.cam_image_size = self.image.size
 
     def capture_image(self):

@@ -74,3 +74,32 @@ class CaptureDevice(object):
             self.instance = None
 
     __del__ = close
+
+
+def clean_and_threshold(image, width, height):
+    """Prepare an image (as bytes) with thresholding/filtering."""
+
+    if len(image) != width * height:
+        raise ValueError("image has the wrong length")
+
+    source_buffer = _cvcapture.ffi.new(
+        'uint8_t[{}]'.format(width * height),
+    )
+    dst_buffer = _cvcapture.ffi.new(
+        'uint8_t[{}]'.format(width * height),
+    )
+
+    _cvcapture.ffi.memmove(
+        source_buffer,
+        image,
+        len(image),
+    )
+
+    _cvcapture.lib.cvthreshold(
+        source_buffer,
+        dst_buffer,
+        width,
+        height,
+    )
+
+    return bytes(_cvcapture.ffi.buffer(dst_buffer))

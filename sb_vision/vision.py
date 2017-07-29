@@ -4,12 +4,15 @@ import numbers
 import contextlib
 import collections
 
+from PIL import Image
+
 from sb_vision.native.apriltag._apriltag import ffi, lib
 
 from .camera import Camera, FileCamera
 from .tokens import Token
 from .camera_base import CameraBase
 from .token_display import display_tokens
+from .cvcapture import clean_and_threshold
 
 
 class Vision:
@@ -131,8 +134,22 @@ class Vision:
         self._lazily_init()
 
         # get the PIL image from the camera
-        img = self.camera.capture_image()
-        return img.point(lambda x: 0 if x < 128 else 255)
+        return self.camera.capture_image()
+
+    def threshold_image(self, img):
+        """Run thresholding and preprocessing on an image."""
+        as_bytes = img.convert('L').tobytes()
+        cleaned_bytes = clean_and_threshold(
+            as_bytes,
+            img.size[0],
+            img.size[1],
+        )
+
+        return Image.frombytes(
+            mode='L',
+            size=img.size,
+            data=cleaned_bytes,
+        )
 
     def process_image(self, img):
         """
@@ -141,6 +158,8 @@ class Vision:
         :param img: PIL Luminosity image to be processed
         :return: python list of Token objects.
         """
+        img = self.threshold_image(img)
+
         self._lazily_init()
         total_length = img.size[0] * img.size[1]
         # Detect the markers
@@ -180,6 +199,12 @@ if __name__ == "__main__":
         dest='show',
         help="do not show the captured frames",
     )
+    parser.add_argument(
+        '-t',
+        '--after-thresholding',
+        action='store_true',
+        help="show image after thresholding",
+    )
 
     args = parser.parse_args()
     # Change the below for quick debugging
@@ -198,8 +223,12 @@ if __name__ == "__main__":
         while True:
             img = v.capture_image()
             tokens = v.process_image(img)
+            if args.after_thresholding:
+                img = v.threshold_image(img)
             if args.show:
                 img = display_tokens(tokens, img)
                 img.show()
             if tokens:
                 print(tokens[0].bees)
+            if args.f != False:
+                break
