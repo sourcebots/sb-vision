@@ -91,5 +91,5 @@ def fit(training_examples):
         result.x
 
     return Calibration(
-        focal_length=final_focal_length,
+        focal_length=final_focal_length / 0.01,
     )
