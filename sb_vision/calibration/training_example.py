@@ -20,7 +20,9 @@ class TrainingExample(object):
         pseudo_camera = FileCamera(self.image_file, focal_length=None)
         vision = Vision(pseudo_camera, (0.01, 0.01))
 
-        (single_token,) = vision.snapshot()
+        image = vision.capture_image()
+        self.size = image.size
+        (single_token,) = vision.process_image(image)
 
         # Explicitly clean up vision
         del vision
