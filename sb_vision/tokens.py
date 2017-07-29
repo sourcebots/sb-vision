@@ -193,6 +193,13 @@ class Token:
         self.pixel_corners = _get_pixel_corners(homography_matrix)
         # pixel coordinates of the centre of the marker
         self.pixel_centre = _get_pixel_centre(homography_matrix)
+        self.homography_matrix = homography_matrix
+
+        # We don't set cartesian and polar coordinates in the absence of a
+        # focal length.
+        if focal_length is None:
+            return
+
         # Cartesian Co-ordinates in the 3D World, relative to the camera
         # (as opposed to somehow being compass-aligned)
         self.cartesian = _get_cartesian(
@@ -203,7 +210,6 @@ class Token:
         # Polar Co-ordinates in the 3D World, relative to the front of the
         # camera
         self.polar = _cart_to_polar(self.cartesian)
-        self.homography_matrix = homography_matrix
 
     def __repr__(self):
         """General debug representation."""
