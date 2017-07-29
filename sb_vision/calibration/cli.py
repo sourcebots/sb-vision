@@ -6,6 +6,7 @@ from pathlib import Path
 
 import yaml
 
+from .fit import fit
 from .training_example import TrainingExample
 
 
@@ -44,4 +45,4 @@ def main(args=sys.argv[1:]):
         for x in files
     ]
 
-    print(training_examples)
+    fit(training_examples)
