@@ -8,7 +8,7 @@ Camera class could, for instance, fetch images from a file.
 
 from PIL import Image
 
-from sb_vision.cvcapture import CaptureDevice
+from sb_vision.cvcapture import CaptureDevice, clean_and_threshold
 
 from .camera_base import CameraBase
 
@@ -49,6 +49,7 @@ class Camera(CameraBase):
                  color scale
         """
         image_bytes = self.camera.capture(*self.cam_image_size)
+        image_bytes = clean_and_threshold(image_bytes, *self.cam_image_size)
         return Image.frombytes('L', self.cam_image_size, image_bytes)
 
 
