@@ -8,9 +8,6 @@ import collections
 
 Calibration = collections.namedtuple('Calibration', (
     'focal_length',
-    'principal_x',
-    'principal_y',
-    'skew',
 ))
 
 
@@ -20,14 +17,14 @@ def fit(training_examples):
     training_examples = list(training_examples)
 
     def reconstruction_error(x, print_things=False):
-        [focal_length, principal_x, principal_y, skew] = x
+        [focal_length] = x
 
         total_error = 0.0
 
         for x in training_examples:
             calibration_matrix = numpy.array([
-                [x.size[0] * focal_length, skew, principal_x * x.size[0]],
-                [0.0, x.size[1] * focal_length, principal_y * x.size[1]],
+                [x.size[0] * focal_length, 0.0, 0.5 * x.size[0]],
+                [0.0, x.size[1] * focal_length, 0.5 * x.size[1]],
                 [0.0, 0.0, 1.0],
             ])
 
@@ -77,17 +74,11 @@ def fit(training_examples):
         return total_error / len(training_examples)
 
     initial_focal_length = 1.0  # 1m
-    initial_skew = 0
-    initial_principal_x = 0.5
-    initial_principal_y = 0.5
 
     result = scipy.optimize.minimize(
         reconstruction_error,
         x0=[
             initial_focal_length,
-            initial_principal_x,
-            initial_principal_y,
-            initial_skew,
         ],
         method='Nelder-Mead',
     )
@@ -96,12 +87,9 @@ def fit(training_examples):
     fre = reconstruction_error(result.x, print_things=True)
     print("Mean error: ", fre)
 
-    final_focal_length, final_principal_x, final_principal_y, final_skew = \
+    final_focal_length, = \
         result.x
 
     return Calibration(
         focal_length=final_focal_length,
-        skew=final_skew,
-        principal_x=final_principal_x,
-        principal_y=final_principal_y,
     )
