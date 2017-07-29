@@ -89,7 +89,7 @@ def fit(training_examples):
         method='Nelder-Mead',
     )
 
-    final_focal_length, final_skew, final_principal_x, final_principal_y = \
+    final_focal_length, final_principal_x, final_principal_y, final_skew = \
         result.x
 
     return Calibration(
