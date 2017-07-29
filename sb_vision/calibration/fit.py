@@ -2,6 +2,14 @@
 
 import numpy
 import scipy.optimize
+import collections
+
+Calibration = collections.namedtuple('Calibration', (
+    'focal_length',
+    'principal_x',
+    'principal_y',
+    'skew',
+))
 
 
 def fit(training_examples):
@@ -21,35 +29,47 @@ def fit(training_examples):
                 [0.0, 0.0, 1.0],
             ])
 
-            pose_matrix = numpy.array([
-                [1.0, 0.0, 0.0, x.x_offset_right],
-                [0.0, 1.0, 0.0, 0.0],
-                [0.0, 0.0, 1.0, x.z_distance],
-            ])
+            error_levels = []
 
-            homography_matrix_with_extra_col = numpy.array([
-                x.homography_matrix[:, 0],
-                x.homography_matrix[:, 1],
-                numpy.cross(
+            for rotation in (
+                (1, 0, 0, 1),
+                (0, -1, 1, 0),
+                (-1, 0, 0, -1),
+                (0, 1, -1, 0),
+            ):
+                a, b, c, d = rotation
+
+                pose_matrix = numpy.array([
+                    [a, b, 0.0, x.x_offset_right],
+                    [c, d, 0.0, 0.0],
+                    [0.0, 0.0, 1.0, x.z_distance],
+                ])
+
+                homography_matrix_with_extra_col = numpy.array([
                     x.homography_matrix[:, 0],
                     x.homography_matrix[:, 1],
-                ),
-                x.homography_matrix[:, 2],
-            ]).T
+                    numpy.cross(
+                        x.homography_matrix[:, 0],
+                        x.homography_matrix[:, 1],
+                    ),
+                    x.homography_matrix[:, 2],
+                ]).T
 
-            reconstructed_homography_matrix = calibration_matrix.dot(
-                pose_matrix,
-            )
+                reconstructed_homography_matrix = calibration_matrix.dot(
+                    pose_matrix,
+                )
 
-            print(homography_matrix_with_extra_col)
-            print(reconstructed_homography_matrix)
+                print(homography_matrix_with_extra_col)
+                print(reconstructed_homography_matrix)
 
-            error_matrix = abs(
-                reconstructed_homography_matrix -
-                homography_matrix_with_extra_col
-            )
+                error_matrix = abs(
+                    reconstructed_homography_matrix -
+                    homography_matrix_with_extra_col
+                )
 
-            total_error += numpy.sum(error_matrix)
+                error_levels.append(numpy.sum(error_matrix[:, 3]))
+
+            total_error += max(error_levels)
 
         return total_error
 
@@ -66,6 +86,15 @@ def fit(training_examples):
             initial_principal_y,
             initial_skew,
         ],
-        method='Powell',
+        method='Nelder-Mead',
     )
-    print(result)
+
+    final_focal_length, final_skew, final_principal_x, final_principal_y = \
+        result.x
+
+    return Calibration(
+        focal_length=final_focal_length,
+        skew=final_skew,
+        principal_x=final_principal_x,
+        principal_y=final_principal_y,
+    )
