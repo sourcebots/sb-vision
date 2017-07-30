@@ -36,7 +36,7 @@ class Vision:
         elif isinstance(token_sizes, tuple):
             self.token_sizes = collections.defaultdict(lambda: token_sizes)
         else:
-            self.token_sizes = self.token_sizes
+            self.token_sizes = token_sizes
 
         self.initialised = False
 
