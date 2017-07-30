@@ -5,7 +5,7 @@
 #include <string>
 
 extern "C" {
-    void* cvopen(const char* path);
+    void* cvopen(const int device_id);
     void cvclose(void* context);
     int cvcapture(void* context, void* buffer, size_t width, size_t height);
 
@@ -19,13 +19,8 @@ extern "C" {
 
 #include "opencv2/opencv.hpp"
 
-void* cvopen(const char* path) {
-    cv::VideoCapture* context;
-    if (path) {
-        context = new cv::VideoCapture(std::string(path));
-    } else {
-        context = new cv::VideoCapture(0);
-    }
+void* cvopen(const int device_id) {
+    cv::VideoCapture* context = new cv::VideoCapture(device_id);
     if (!context->isOpened()) {
         delete context;
         return NULL;

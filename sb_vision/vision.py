@@ -176,6 +176,13 @@ if __name__ == "__main__":
              "is blank, uses 'tagsampler.png'",
     )
     parser.add_argument(
+        '-v',
+        '--device-id',
+        default=0,
+        help="Deivce id of the camera to use",
+        type=int,
+    )
+    parser.add_argument(
         '-n',
         action='store_false',
         dest='show',
@@ -197,7 +204,7 @@ if __name__ == "__main__":
     # Change the below for quick debugging
     if args.f is False:
         CAM_IMAGE_SIZE = (1280, 720)
-        camera = Camera(None, CAM_IMAGE_SIZE, args.distance_model)
+        camera = Camera(args.device_id, CAM_IMAGE_SIZE, args.distance_model)
     else:
         if args.f is None:
             f = "tagsampler.png"

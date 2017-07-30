@@ -16,11 +16,11 @@ from .camera_base import CameraBase
 class Camera(CameraBase):
     """Actual camera, hooked up to a physical device."""
 
-    def __init__(self, camera_path, proposed_image_size, distance_model):
+    def __init__(self, device_id, proposed_image_size, distance_model):
         """Initialise camera with focal length and image size."""
         super().__init__()
         self.cam_image_size = proposed_image_size
-        self.cam_path = camera_path
+        self.device_id = device_id
         self.camera = None
         self.distance_model = distance_model
 
@@ -30,7 +30,7 @@ class Camera(CameraBase):
         self._init_camera()
 
     def _init_camera(self):
-        self.camera = CaptureDevice(self.cam_path)
+        self.camera = CaptureDevice(self.device_id)
 
     def _deinit_camera(self):
         if self.camera:

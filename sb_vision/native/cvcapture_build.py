@@ -15,7 +15,7 @@ ffibuilder = cffi.FFI()
 
 CVCAPTURE_DECLS = """
     int cvcapture(void* context, void* buffer, size_t width, size_t height);
-    void* cvopen(const char* path);
+    void* cvopen(const int path);
     void cvclose(void* context);
     void cvthreshold(
         const void* src_buffer, void* dst_buffer, size_t width, size_t height

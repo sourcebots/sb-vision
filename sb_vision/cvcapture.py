@@ -12,25 +12,17 @@ from sb_vision.native import _cvcapture
 class CaptureDevice(object):
     """A single device for capturing images."""
 
-    def __init__(self, path=None):
+    def __init__(self, device_id):
         """
         General initialiser.
 
-        Where a device path is well-defined (for instance, v4l devices in
-        `/dev` on Linux) this can be passed in; otherwise a default device
-        is used).
+        Where a ``device_id`` is the udev 'MINOR' device number for the camera
+        device.
         """
         self.lock = threading.Lock()
-        if path is not None:
-            argument_c = _cvcapture.ffi.new(
-                'char[]',
-                path.encode('utf-8') + b'\0',
-            )
-        else:
-            argument_c = _cvcapture.ffi.NULL
-        self.instance = _cvcapture.lib.cvopen(argument_c)
+        self.instance = _cvcapture.lib.cvopen(device_id)
         if self.instance == _cvcapture.ffi.NULL:
-            raise RuntimeError("Unable to open capture device '{}'".format(path))
+            raise RuntimeError("Unable to open capture device {}".format(device_id))
 
     def capture(self, width, height):
         """Capture a single image with the given width and height."""
