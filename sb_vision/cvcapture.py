@@ -104,36 +104,3 @@ def clean_and_threshold(image, width, height):
     )
 
     return bytes(_cvcapture.ffi.buffer(dst_buffer))
-
-
-def decompose_homography_matrix(homography, intrinsics):
-    homography = numpy.array(homography).astype('float64')
-    intrinsics = numpy.array(intrinsics).astype('float64')
-
-    if homography.shape != (3, 3):
-        raise ValueError("Homography must be a 3x3 matrix")
-
-    if intrinsics.shape != (3, 3):
-        raise ValueError("Intrinsics must be a 3x3 matrix")
-
-    homography_ptr = _cvcapture.ffi.cast('double*', homography.ctypes.data)
-    intrinsics_ptr = _cvcapture.ffi.cast('double*', intrinsics.ctypes.data)
-
-    max_outputs = 4
-    outputs = numpy.zeros(max_outputs * 3, dtype='float64')
-
-    outputs_ptr = _cvcapture.ffi.cast('double*', outputs.ctypes.data)
-
-    actual_outputs = _cvcapture.lib.cv_decompose_homography(
-        homography_ptr,
-        intrinsics_ptr,
-        outputs_ptr,
-        max_outputs,
-    )
-
-    if actual_outputs <= 0:
-        raise ValueError("cv_decompose_homography() failed")
-
-    outputs = outputs[:3 * actual_outputs]
-
-    return outputs.reshape((-1, 3))

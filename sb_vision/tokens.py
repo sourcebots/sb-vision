@@ -5,8 +5,6 @@ import math
 import numpy as np
 import scipy.linalg
 
-from .cvcapture import decompose_homography_matrix
-
 
 def _row_mul(m, corner, col):
     return m[col, 0] * corner[0] + m[col, 1] * corner[1] + m[col, 2]
