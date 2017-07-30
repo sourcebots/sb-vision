@@ -1,8 +1,6 @@
 """Main vision driver."""
 
-import numbers
 import contextlib
-import collections
 
 from PIL import Image
 
@@ -10,9 +8,9 @@ from sb_vision.native.apriltag._apriltag import ffi, lib
 
 from .camera import Camera, FileCamera
 from .tokens import Token
+from .cvcapture import clean_and_threshold
 from .camera_base import CameraBase
 from .token_display import display_tokens
-from .cvcapture import clean_and_threshold
 
 
 class Vision:
@@ -218,5 +216,5 @@ if __name__ == "__main__":
                 img.show()
             if tokens:
                 print(tokens[0].cartesian)
-            if args.f != False:
+            if args.f is not False:
                 break

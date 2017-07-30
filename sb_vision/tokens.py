@@ -1,6 +1,5 @@
 """Tokens detections, and the utilities to manipulate them."""
 
-import math
 import lzma
 import pickle
 import functools

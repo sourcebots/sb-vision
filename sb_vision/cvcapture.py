@@ -4,7 +4,6 @@ Low-level device capture utility.
 This builds upon some functionality sneaked in here from OpenCV.
 """
 
-import numpy
 import threading
 
 from sb_vision.native import _cvcapture
@@ -79,7 +78,6 @@ class CaptureDevice(object):
 
 def clean_and_threshold(image, width, height):
     """Prepare an image (as bytes) with thresholding/filtering."""
-
     if len(image) != width * height:
         raise ValueError("image has the wrong length")
 

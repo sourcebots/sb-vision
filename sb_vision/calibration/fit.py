@@ -1,19 +1,17 @@
 """Utility to derive calibration matrix from training examples."""
 
+import collections
+
 import numpy
 import numpy.linalg
-import scipy.linalg
-import scipy.optimize
 import sklearn.base
 import sklearn.metrics
 import sklearn.pipeline
 import sklearn.linear_model
 import sklearn.preprocessing
 import sklearn.model_selection
-import collections
 
 from ..tokens import homography_matrix_to_distance_model_input_vector
-
 
 Calibration = collections.namedtuple('Calibration', (
     'resolution',
@@ -55,7 +53,6 @@ def _find_coefficients(X, y, name):
 
 def fit(training_examples):
     """Fit calibration matrix to given iterable of training examples."""
-
     training_examples = list(training_examples)
 
     X = numpy.array([
