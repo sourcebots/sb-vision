@@ -19,7 +19,7 @@ class CameraBase(metaclass=abc.ABCMeta):
         Initialise the camera.
 
         This is guaranteed to only be called once, and after it is called
-        the values for `focal_length` and `cam_image_size` must be set.
+        the values for `distance_model` and `cam_image_size` must be set.
         """
         self.initialised = True
 

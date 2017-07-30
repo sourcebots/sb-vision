@@ -121,7 +121,7 @@ class Vision:
                 detection,
                 self.token_sizes,
                 image_size,
-                self.camera.focal_length,
+                self.camera.distance_model,
             )
             lib.destroy_detection(detection)
 

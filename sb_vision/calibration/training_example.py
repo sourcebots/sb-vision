@@ -17,7 +17,7 @@ class TrainingExample(object):
 
     def _load(self):
         """Load and recognise the single marker from this image."""
-        pseudo_camera = FileCamera(self.image_file, focal_length=None)
+        pseudo_camera = FileCamera(self.image_file, distance_model=None)
         vision = Vision(pseudo_camera, (0.01, 0.01))
 
         image = vision.capture_image()

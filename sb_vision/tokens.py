@@ -66,12 +66,12 @@ def bees(v):
 def _get_cartesian(
     homography_matrix,
     image_size,
-    focal_length,
+    distance_model,
     marker_size,
 ):
     calibration_matrix = np.array([
-        [focal_length * image_size[0], 0.0, 0.5 * image_size[0]],
-        [0.0, focal_length * image_size[1], 0.5 * image_size[1]],
+        [distance_model * image_size[0], 0.0, 0.5 * image_size[0]],
+        [0.0, distance_model * image_size[1], 0.5 * image_size[1]],
         [0.0, 0.0, 1.0],
     ])
 
@@ -142,7 +142,7 @@ class Token:
         apriltag_detection,
         sizes,
         image_size,
-        focal_length
+        distance_model
     ):
         """Construct a Token from an April Tag detection."""
         # *************************************************************************
@@ -160,7 +160,7 @@ class Token:
 
         instance.infer_location_from_homography_matrix(
             homography_matrix=homography,
-            focal_length=focal_length,
+            distance_model=distance_model,
             image_size=image_size,
         )
         return instance
@@ -169,7 +169,7 @@ class Token:
         self,
         *,
         homography_matrix,
-        focal_length,
+        distance_model,
         image_size
     ):
         """Infer coordinate information from a homography matrix."""
@@ -181,7 +181,7 @@ class Token:
 
         # We don't set cartesian and polar coordinates in the absence of a
         # focal length.
-        if focal_length is None:
+        if distance_model is None:
             return
 
         # Cartesian Co-ordinates in the 3D World, relative to the camera
@@ -189,7 +189,7 @@ class Token:
         self.cartesian = _get_cartesian(
             homography_matrix,
             image_size,
-            focal_length,
+            distance_model,
             self.size,
         )
         # Polar Co-ordinates in the 3D World, relative to the front of the
