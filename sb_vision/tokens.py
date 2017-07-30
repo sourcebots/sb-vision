@@ -1,9 +1,12 @@
 """Tokens detections, and the utilities to manipulate them."""
 
 import math
+import lzma
+import pickle
+import functools
+from pathlib import Path
 
 import numpy as np
-import scipy.linalg
 
 
 def _row_mul(m, corner, col):
@@ -59,8 +62,28 @@ def _get_pixel_centre(homography_matrix):
     return _homography_transform((0, 0), homography_matrix)
 
 
-def bees(v):
-    return v[:-1] / v[-1]
+@functools.lru_cache()
+def _get_distance_model(name, image_size):
+    if name is None:
+        raise ValueError("Getting distance model of None")
+
+    builtin_models_dir = Path(__file__).parent
+    model_file = builtin_models_dir / '{}.pkl.xz'.format(name)
+
+    with lzma.open(str(model_file), 'rb') as f:
+        calibration = pickle.load(f)
+
+    if calibration.resolution != image_size:
+        raise ValueError(
+            "Model {model} is calibrated for resolution {res_model}, not "
+            "{res_this}".format(
+                model=name,
+                res_model=calibration.resolution,
+                res_this=image_size,
+            ),
+        )
+
+    return calibration
 
 
 def _get_cartesian(
@@ -69,54 +92,20 @@ def _get_cartesian(
     distance_model,
     marker_size,
 ):
-    calibration_matrix = np.array([
-        [distance_model * image_size[0], 0.0, 0.5 * image_size[0]],
-        [0.0, distance_model * image_size[1], 0.5 * image_size[1]],
-        [0.0, 0.0, 1.0],
-    ])
+    calibration = _get_distance_model(distance_model, image_size)
+    flattened_homography_matrix = homography_matrix.ravel()
 
-    translations = decompose_homography_matrix(
-        homography_matrix,
-        calibration_matrix,
-    )
+    (x,) = calibration.x_model.predict([flattened_homography_matrix])
+    y = 0.0
+    (z,) = calibration.z_model.predict([flattened_homography_matrix])
 
-    # Require only solutions in front of the camera
-    translations = [
-        x
-        for x in translations
-        if x[2] > 0
-    ]
+    position = np.array([x, y, z])
 
-    print(translations)
-    raise KeyError('?')
+    # Adjust for marker size
+    effective_marker_size = np.mean(marker_size)
+    effective_marker_scale = effective_marker_size / 0.1
 
-
-
-
-
-
-    homography_matrix_with_fourth_column = np.array([
-        homography_matrix[:, 0],
-        homography_matrix[:, 1],
-        np.cross(
-            homography_matrix[:, 0],
-            homography_matrix[:, 1],
-        ),
-        homography_matrix[:, 2],
-    ]).T
-
-    homography_matrix_with_fourth_column /= \
-      homography_matrix_with_fourth_column[2,3]
-
-    pose_matrix = scipy.linalg.solve(
-        calibration_matrix,
-        homography_matrix_with_fourth_column,
-    )
-
-    import pdb; pdb.set_trace()
-
-    return pose_matrix[:, 3] / np.mean(marker_size)
-
+    return position * effective_marker_scale
 
 
 DEFAULT_TOKEN_SIZE = (0.25, 0.25)
@@ -180,7 +169,7 @@ class Token:
         self.homography_matrix = homography_matrix
 
         # We don't set cartesian and polar coordinates in the absence of a
-        # focal length.
+        # distance model.
         if distance_model is None:
             return
 
