@@ -22,7 +22,9 @@ class CaptureDevice(object):
         self.lock = threading.Lock()
         self.instance = _cvcapture.lib.cvopen(device_id)
         if self.instance == _cvcapture.ffi.NULL:
-            raise RuntimeError("Unable to open capture device {}".format(device_id))
+            raise RuntimeError(
+                "Unable to open capture device {}".format(device_id),
+            )
 
     def capture(self, width, height):
         """Capture a single image with the given width and height."""
