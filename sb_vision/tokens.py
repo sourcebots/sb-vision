@@ -1,6 +1,9 @@
 """Tokens detections, and the utilities to manipulate them."""
 
-import math
+import lzma
+import pickle
+import functools
+from pathlib import Path
 
 import numpy as np
 
@@ -58,90 +61,88 @@ def _get_pixel_centre(homography_matrix):
     return _homography_transform((0, 0), homography_matrix)
 
 
-def _get_cartesian(corner_pixels, focal_length, size):
-    """Convert the location of corner pixels to a 3D cartesian co-ordinate."""
-    # TODO: This doesn't work. Re-implement to fix it.
-    marker_width = size[0]
-    # setup a
-    a = np.array([
-        [-corner_pixels[0][0], corner_pixels[1][0], corner_pixels[2][0]],
-        [-corner_pixels[0][1], corner_pixels[1][1], corner_pixels[2][1]],
-        [-focal_length, focal_length, focal_length],
-    ])
-    # setup b
-    b = np.array([
-        [corner_pixels[3][0]],
-        [corner_pixels[3][1]], [focal_length],
-    ])
+@functools.lru_cache()
+def _get_distance_model(name, image_size):
+    if name is None:
+        raise ValueError("Getting distance model of None")
 
-    a_inv = np.linalg.inv(a)
-    k_out = np.dot(a_inv, b)
-    k0_over_k3 = k_out[0, 0]
-    temp_k3 = math.sqrt(((-k0_over_k3 * a[0, 0] - b[0, 0]) ** 2) +
-                        ((-k0_over_k3 * a[1, 0] - b[1, 0]) ** 2) +
-                        ((-k0_over_k3 * focal_length - focal_length) ** 2))
-    k3 = math.fabs(marker_width / temp_k3)
-    k_list = [math.fabs(k_out[i, 0]) * k3 for i in range(3)]
-    k_list.append(k3)
-    cartesian = [
-        (
-            corner_pixels[i][0] * k_list[i],
-            corner_pixels[i][1] * k_list[i],
-            focal_length * k_list[i],
+    builtin_models_dir = Path(__file__).parent
+    model_file = builtin_models_dir / '{}.pkl.xz'.format(name)
+
+    with lzma.open(str(model_file), 'rb') as f:
+        calibration = pickle.load(f)
+
+    if calibration.resolution != image_size:
+        raise ValueError(
+            "Model {model} is calibrated for resolution {res_model}, not "
+            "{res_this}".format(
+                model=name,
+                res_model=calibration.resolution,
+                res_this=image_size,
+            ),
         )
-        for i in range(4)
-    ]
-    return cartesian
+
+    return calibration
 
 
-def _get_distance_for_family_day(pixel_corners, focal_length, token_height):
-    """HORRIBLE HACK."""
-    pixel_height = (
-        pixel_corners[1][1] -
-        pixel_corners[0][1] +
-        pixel_corners[2][1] -
-        pixel_corners[3][1]
-    ) / 4
-    return math.fabs(token_height * focal_length / pixel_height)
+def homography_matrix_to_distance_model_input_vector(homography_matrix):
+    """Convert a 3x3 homography matrix to a vector for distance models."""
+    flattened_vector = homography_matrix.ravel()
+    flattened_vector_as_row_matrix = np.array([flattened_vector])
+
+    quadratic_features = \
+        flattened_vector_as_row_matrix.T.dot(flattened_vector_as_row_matrix)
+    quadratic_features = quadratic_features.ravel()
+
+    all_features = np.hstack((
+        quadratic_features,
+        flattened_vector,
+    ))
+
+    return all_features
 
 
-def _get_distance(cartesian):
-    x = (
-        cartesian[0][0] +
-        cartesian[1][0] +
-        cartesian[2][0] +
-        cartesian[3][0]
-    ) / 4
-    y = (
-        cartesian[0][1] +
-        cartesian[1][1] +
-        cartesian[2][1] +
-        cartesian[3][1]
-    ) / 4
-    z = (
-        cartesian[0][2] +
-        cartesian[1][2] +
-        cartesian[2][2] +
-        cartesian[3][2]
-    ) / 4
-    return math.sqrt(x ** 2 + y ** 2 + z ** 2)
+def _apply_distance_model_component_to_homography_matrix(
+    model_component,
+    homography_matrix,
+):
+    flattened_homography_matrix = \
+        homography_matrix_to_distance_model_input_vector(homography_matrix)
+
+    biases = model_component['biases']
+    intercepts = model_component['intercept']
+    coefs = model_component['coefs']
+
+    return (
+        (biases + flattened_homography_matrix).dot(coefs) +
+        intercepts
+    )
 
 
-def _cart_to_polar(cartesian_coord):
-    # TODO implement
-    # Don't bother making a struct for this, we will to send it over json in
-    # a sec. It's currently undefined what X, Y, and Z are. Go nuts.
-    rot_x, rot_y, rot_z, dist = 0, 0, 0, 0
-    return (rot_x, rot_y, rot_z), dist
+def _get_cartesian(
+    homography_matrix,
+    image_size,
+    distance_model,
+):
+    calibration = _get_distance_model(distance_model, image_size)
 
+    x = _apply_distance_model_component_to_homography_matrix(
+        calibration.x_model,
+        homography_matrix,
+    )
+    y = 0.0
+    z = _apply_distance_model_component_to_homography_matrix(
+        calibration.z_model,
+        homography_matrix,
+    )
 
-DEFAULT_TOKEN_SIZE = (0.25, 0.25)
+    return np.array([x, y, z])
 
 
 class Token:
     """Representation of the detection of one token."""
 
-    def __init__(self, id, size=DEFAULT_TOKEN_SIZE, certainty=0.0):
+    def __init__(self, id, certainty=0.0):
         """
         General initialiser.
 
@@ -149,16 +150,14 @@ class Token:
         the coordinate information.
         """
         self.id = id
-        self.size = size
         self.certainty = certainty
 
     @classmethod
     def from_apriltag_detection(
         cls,
         apriltag_detection,
-        sizes,
         image_size,
-        focal_length
+        distance_model
     ):
         """Construct a Token from an April Tag detection."""
         # *************************************************************************
@@ -167,7 +166,6 @@ class Token:
 
         instance = cls(
             id=apriltag_detection.id,
-            size=sizes.get(apriltag_detection.id, DEFAULT_TOKEN_SIZE),
             certainty=apriltag_detection.goodness,
         )
 
@@ -176,7 +174,7 @@ class Token:
 
         instance.infer_location_from_homography_matrix(
             homography_matrix=homography,
-            focal_length=focal_length,
+            distance_model=distance_model,
             image_size=image_size,
         )
         return instance
@@ -185,7 +183,7 @@ class Token:
         self,
         *,
         homography_matrix,
-        focal_length,
+        distance_model,
         image_size
     ):
         """Infer coordinate information from a homography matrix."""
@@ -193,20 +191,20 @@ class Token:
         self.pixel_corners = _get_pixel_corners(homography_matrix)
         # pixel coordinates of the centre of the marker
         self.pixel_centre = _get_pixel_centre(homography_matrix)
+        self.homography_matrix = homography_matrix
+
+        # We don't set cartesian coordinates in the absence of a
+        # distance model.
+        if distance_model is None:
+            return
+
         # Cartesian Co-ordinates in the 3D World, relative to the camera
         # (as opposed to somehow being compass-aligned)
         self.cartesian = _get_cartesian(
-            self.pixel_corners,
-            focal_length,
-            self.size,
+            homography_matrix,
+            image_size,
+            distance_model,
         )
-        # Polar Co-ordinates in the 3D World, relative to the front of the
-        # camera
-        self.polar = _cart_to_polar(self.cartesian)
-        self.bees = [
-            homography_matrix[0, 2] / homography_matrix[2, 2],
-            homography_matrix[1, 2] / homography_matrix[2, 2],
-        ]
 
     def __repr__(self):
         """General debug representation."""

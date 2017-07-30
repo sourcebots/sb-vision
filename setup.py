@@ -21,5 +21,11 @@ setup(
         'scipy',
         "cffi>=1.4.0",
     ],
+    extras_require={
+        'calibration': [
+            'pyyaml',
+            'scikit-learn',
+        ],
+    },
     zip_safe=False,
 )

@@ -16,13 +16,13 @@ from .camera_base import CameraBase
 class Camera(CameraBase):
     """Actual camera, hooked up to a physical device."""
 
-    def __init__(self, camera_path, proposed_image_size, focal_length):
+    def __init__(self, camera_path, proposed_image_size, distance_model):
         """Initialise camera with focal length and image size."""
         super().__init__()
         self.cam_image_size = proposed_image_size
         self.cam_path = camera_path
         self.camera = None
-        self.focal_length = focal_length
+        self.distance_model = distance_model
 
     def init(self):
         """Open the actual device."""
@@ -55,18 +55,17 @@ class Camera(CameraBase):
 class FileCamera(CameraBase):
     """Pseudo-camera debug class, getting images from files."""
 
-    def __init__(self, file_path, focal_length):
+    def __init__(self, file_path, distance_model):
         """Open from a given path, with a given pseudo-focal-length."""
         super().__init__()
         self.file_name = file_path
         self.image = None
-        self.focal_length = focal_length
+        self.distance_model = distance_model
 
     def init(self):
         """Open the file and read in the image."""
         super().init()
-        self.image = Image.open(self.file_name)
-        self.image = self.image.convert('L')
+        self.image = Image.open(self.file_name).convert('L')
         self.cam_image_size = self.image.size
 
     def capture_image(self):

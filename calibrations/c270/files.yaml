@@ -1,0 +1,157 @@
+version: 1
+files:
+ - image: 100cmL10cm.jpg
+   z: 1.0
+   x: -0.1
+ - image: 100cmL20cm.jpg
+   z: 1.0
+   x: -0.2
+ - image: 100cmL30cm.jpg
+   z: 1.0
+   x: -0.3
+ - image: 100cmL35cm.jpg
+   z: 1.0
+   x: -0.35
+ - image: 100cmM.jpg
+   z: 1.0
+ - image: 100cmR10cm.jpg
+   z: 1.0
+   x:  0.1
+ - image: 100cmR20cm.jpg
+   z: 1.0
+   x:  0.2
+ - image: 100cmR30cm.jpg
+   z: 1.0
+   x:  0.3
+ - image: 100cmR35cm.jpg
+   z: 1.0
+   x:  0.35
+ - image: 150cmM.jpg
+   z: 1.5
+ - image: 200cmL10cm.jpg
+   z: 2.0
+   x: -0.1
+ - image: 200cmL20cm.jpg
+   z: 2.0
+   x: -0.2
+ - image: 200cmL30cm.jpg
+   z: 2.0
+   x: -0.3
+ - image: 200cmL40cm.jpg
+   z: 2.0
+   x: -0.4
+ - image: 200cmL50cm.jpg
+   z: 2.0
+   x: -0.5
+ - image: 200cmL60cm.jpg
+   z: 2.0
+   x: -0.6
+ - image: 200cmL70cm.jpg
+   z: 2.0
+   x: -0.7
+ - image: 200cmL80cm.jpg
+   z: 2.0
+   x: -0.8
+ - image: 200cmL90cm.jpg
+   z: 2.0
+   x: -0.9
+ - image: 200cmM.jpg
+   z: 2.0
+ - image: 200cmR10cm.jpg
+   z: 2.0
+   x:  0.1
+ - image: 200cmR20cm.jpg
+   z: 2.0
+   x:  0.2
+ - image: 200cmR30cm.jpg
+   z: 2.0
+   x:  0.3
+ - image: 200cmR40cm.jpg
+   z: 2.0
+   x:  0.4
+ - image: 200cmR50cm.jpg
+   z: 2.0
+   x:  0.5
+ - image: 200cmR60cm.jpg
+   z: 2.0
+   x:  0.6
+ - image: 200cmR70cm.jpg
+   z: 2.0
+   x:  0.7
+ - image: 200cmR80cm.jpg
+   z: 2.0
+   x:  0.8
+ - image: 200cmR90cm.jpg
+   z: 2.0
+   x:  0.9
+ - image: 250cmM.jpg
+   z: 2.5
+ - image: 300cmL100cm.jpg
+   z: 3.0
+   x: -1.0
+ - image: 300cmL10cm.jpg
+   z: 3.0
+   x: -0.1
+ - image: 300cmL20cm.jpg
+   z: 3.0
+   x: -0.2
+ - image: 300cmL30cm.jpg
+   z: 3.0
+   x: -0.3
+ - image: 300cmL40cm.jpg
+   z: 3.0
+   x: -0.4
+ - image: 300cmL50cm.jpg
+   z: 3.0
+   x: -0.5
+ - image: 300cmL60cm.jpg
+   z: 3.0
+   x: -0.6
+ - image: 300cmL70cm.jpg
+   z: 3.0
+   x: -0.7
+ - image: 300cmL80cm.jpg
+   z: 3.0
+   x: -0.8
+ - image: 300cmL90cm.jpg
+   z: 3.0
+   x: -0.9
+ - image: 300cmM.jpg
+   z: 3.0
+ - image: 300cmR100cm.jpg
+   z: 3.0
+   x:  1.0
+ - image: 300cmR10cm.jpg
+   z: 3.0
+   x:  0.1
+ - image: 300cmR20cm.jpg
+   z: 3.0
+   x:  0.2
+ - image: 300cmR30cm.jpg
+   z: 3.0
+   x:  0.3
+ - image: 300cmR40cm.jpg
+   z: 3.0
+   x:  0.4
+ - image: 300cmR50cm.jpg
+   z: 3.0
+   x:  0.5
+ - image: 300cmR60cm.jpg
+   z: 3.0
+   x:  0.6
+ - image: 300cmR70cm.jpg
+   z: 3.0
+   x:  0.7
+ - image: 300cmR90cm.jpg
+   z: 3.0
+   x:  0.9
+ - image: 350cmM.jpg
+   z: 3.5
+ - image: 400cmM.jpg
+   z: 4.0
+ - image: 450cmM.jpg
+   z: 4.5
+ - image: 500cmM.jpg
+   z: 5.0
+ - image: 50cmM.jpg
+   z: 0.5

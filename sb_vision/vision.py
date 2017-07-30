@@ -1,13 +1,14 @@
 """Main vision driver."""
 
-import numbers
 import contextlib
-import collections
+
+from PIL import Image
 
 from sb_vision.native.apriltag._apriltag import ffi, lib
 
 from .camera import Camera, FileCamera
 from .tokens import Token
+from .cvcapture import clean_and_threshold
 from .camera_base import CameraBase
 from .token_display import display_tokens
 
@@ -15,28 +16,13 @@ from .token_display import display_tokens
 class Vision:
     """Class that handles the vision library and the camera."""
 
-    def __init__(self, camera: CameraBase, token_sizes):
-        """
-        General initialiser.
-
-        In general `token_sizes` must be a mapping of token IDs to (vertical,
-        horizontal) tuples in units of metres, but for convenience it may also
-        be passed as a single (vertical, horizontal) tuple, or a single number.
-        """
+    def __init__(self, camera: CameraBase):
+        """General initialiser."""
         self.camera = camera
         # apriltag detector object
         self._detector = None
         # image from camera
         self.image = None
-
-        if isinstance(token_sizes, numbers.Number):
-            self.token_sizes = collections.defaultdict(
-                lambda: (token_sizes, token_sizes),
-            )
-        elif isinstance(token_sizes, tuple):
-            self.token_sizes = collections.defaultdict(lambda: token_sizes)
-        else:
-            self.token_sizes = token_sizes
 
         self.initialised = False
 
@@ -116,9 +102,8 @@ class Vision:
             detection = lib.zarray_get_detection(results, i)
             yield Token.from_apriltag_detection(
                 detection,
-                self.token_sizes,
                 image_size,
-                self.camera.focal_length,
+                self.camera.distance_model,
             )
             lib.destroy_detection(detection)
 
@@ -131,8 +116,22 @@ class Vision:
         self._lazily_init()
 
         # get the PIL image from the camera
-        img = self.camera.capture_image()
-        return img.point(lambda x: 0 if x < 128 else 255)
+        return self.camera.capture_image()
+
+    def threshold_image(self, img):
+        """Run thresholding and preprocessing on an image."""
+        as_bytes = img.convert('L').tobytes()
+        cleaned_bytes = clean_and_threshold(
+            as_bytes,
+            img.size[0],
+            img.size[1],
+        )
+
+        return Image.frombytes(
+            mode='L',
+            size=img.size,
+            data=cleaned_bytes,
+        )
 
     def process_image(self, img):
         """
@@ -141,6 +140,8 @@ class Vision:
         :param img: PIL Luminosity image to be processed
         :return: python list of Token objects.
         """
+        img = self.threshold_image(img)
+
         self._lazily_init()
         total_length = img.size[0] * img.size[1]
         # Detect the markers
@@ -180,26 +181,40 @@ if __name__ == "__main__":
         dest='show',
         help="do not show the captured frames",
     )
+    parser.add_argument(
+        '-t',
+        '--after-thresholding',
+        action='store_true',
+        help="show image after thresholding",
+    )
+    parser.add_argument(
+        '-d',
+        '--distance-model',
+        help="distance model to use",
+    )
 
     args = parser.parse_args()
     # Change the below for quick debugging
     if args.f is False:
         CAM_IMAGE_SIZE = (1280, 720)
-        FOCAL_DISTANCE = 720
-        camera = Camera(None, CAM_IMAGE_SIZE, 720)
+        camera = Camera(None, CAM_IMAGE_SIZE, args.distance_model)
     else:
         if args.f is None:
             f = "tagsampler.png"
         else:
             f = args.f
-        camera = FileCamera(f, 720)
-    v = Vision(camera, (0.01, 0.01))
+        camera = FileCamera(f, args.distance_model)
+    v = Vision(camera)
     with contextlib.suppress(KeyboardInterrupt):
         while True:
             img = v.capture_image()
             tokens = v.process_image(img)
+            if args.after_thresholding:
+                img = v.threshold_image(img)
             if args.show:
                 img = display_tokens(tokens, img)
                 img.show()
             if tokens:
-                print(tokens[0].bees)
+                print(tokens[0].cartesian)
+            if args.f is not False:
+                break

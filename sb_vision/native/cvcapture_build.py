@@ -17,6 +17,9 @@ CVCAPTURE_DECLS = """
     int cvcapture(void* context, void* buffer, size_t width, size_t height);
     void* cvopen(const char* path);
     void cvclose(void* context);
+    void cvthreshold(
+        const void* src_buffer, void* dst_buffer, size_t width, size_t height
+    );
 """
 
 ffibuilder.set_source(
