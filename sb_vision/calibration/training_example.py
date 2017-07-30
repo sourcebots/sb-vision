@@ -29,7 +29,11 @@ class TrainingExample(object):
                 "Cannot detect token in {}".format(self.image_file.name),
             )
 
-        # Explicitly clean up vision
+        # Explicitly clean up vision. The `Vision` instance has some baked-in
+        # assumptions about being a singleton and controls overall
+        # initialisation and de-initialisation of the apriltags library.
+        # We delete it so that `__del__` de-initialises the library, since
+        # `_load` is called multiple times.
         del vision
 
         self.homography_matrix = single_token.homography_matrix
