@@ -1,6 +1,8 @@
 """Command-line tool for camera calibration."""
 
 import sys
+import lzma
+import pickle
 import argparse
 from pathlib import Path
 
@@ -20,6 +22,13 @@ def argument_parser():
         'directory',
         type=Path,
         help="calibration directory",
+    )
+
+    parser.add_argument(
+        '-o',
+        '--output',
+        type=Path,
+        help="file to save into",
     )
 
     return parser
@@ -51,4 +60,7 @@ def main(args=sys.argv[1:]):
             print(str(e))
 
     calibration = fit(training_examples)
-    print(calibration)
+
+    if options.output:
+        with lzma.open(str(options.output), 'wb') as f:
+            pickle.dump(calibration, f)
