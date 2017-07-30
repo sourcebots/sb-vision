@@ -18,28 +18,13 @@ from .cvcapture import clean_and_threshold
 class Vision:
     """Class that handles the vision library and the camera."""
 
-    def __init__(self, camera: CameraBase, token_sizes):
-        """
-        General initialiser.
-
-        In general `token_sizes` must be a mapping of token IDs to (vertical,
-        horizontal) tuples in units of metres, but for convenience it may also
-        be passed as a single (vertical, horizontal) tuple, or a single number.
-        """
+    def __init__(self, camera: CameraBase):
+        """General initialiser."""
         self.camera = camera
         # apriltag detector object
         self._detector = None
         # image from camera
         self.image = None
-
-        if isinstance(token_sizes, numbers.Number):
-            self.token_sizes = collections.defaultdict(
-                lambda: (token_sizes, token_sizes),
-            )
-        elif isinstance(token_sizes, tuple):
-            self.token_sizes = collections.defaultdict(lambda: token_sizes)
-        else:
-            self.token_sizes = self.token_sizes
 
         self.initialised = False
 
@@ -119,7 +104,6 @@ class Vision:
             detection = lib.zarray_get_detection(results, i)
             yield Token.from_apriltag_detection(
                 detection,
-                self.token_sizes,
                 image_size,
                 self.camera.distance_model,
             )
@@ -222,7 +206,7 @@ if __name__ == "__main__":
         else:
             f = args.f
         camera = FileCamera(f, args.distance_model)
-    v = Vision(camera, (0.01, 0.01))
+    v = Vision(camera)
     with contextlib.suppress(KeyboardInterrupt):
         while True:
             img = v.capture_image()

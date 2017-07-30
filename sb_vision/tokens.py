@@ -90,7 +90,6 @@ def _get_cartesian(
     homography_matrix,
     image_size,
     distance_model,
-    marker_size,
 ):
     calibration = _get_distance_model(distance_model, image_size)
     flattened_homography_matrix = homography_matrix.ravel()
@@ -99,22 +98,13 @@ def _get_cartesian(
     y = 0.0
     (z,) = calibration.z_model.predict([flattened_homography_matrix])
 
-    position = np.array([x, y, z])
-
-    # Adjust for marker size
-    effective_marker_size = np.mean(marker_size)
-    effective_marker_scale = effective_marker_size / 0.1
-
-    return position * effective_marker_scale
-
-
-DEFAULT_TOKEN_SIZE = (0.25, 0.25)
+    return np.array([x, y, z])
 
 
 class Token:
     """Representation of the detection of one token."""
 
-    def __init__(self, id, size=DEFAULT_TOKEN_SIZE, certainty=0.0):
+    def __init__(self, id, certainty=0.0):
         """
         General initialiser.
 
@@ -122,14 +112,12 @@ class Token:
         the coordinate information.
         """
         self.id = id
-        self.size = size
         self.certainty = certainty
 
     @classmethod
     def from_apriltag_detection(
         cls,
         apriltag_detection,
-        sizes,
         image_size,
         distance_model
     ):
@@ -140,7 +128,6 @@ class Token:
 
         instance = cls(
             id=apriltag_detection.id,
-            size=sizes.get(apriltag_detection.id, DEFAULT_TOKEN_SIZE),
             certainty=apriltag_detection.goodness,
         )
 
@@ -179,7 +166,6 @@ class Token:
             homography_matrix,
             image_size,
             distance_model,
-            self.size,
         )
 
     def __repr__(self):
