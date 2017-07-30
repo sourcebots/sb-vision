@@ -86,13 +86,31 @@ def _get_distance_model(name, image_size):
     return calibration
 
 
+def homography_matrix_to_distance_model_input_vector(homography_matrix):
+    """Convert a 3x3 homography matrix to a vector for distance models."""
+    flattened_vector = homography_matrix.ravel()
+    flattened_vector_as_row_matrix = np.array([flattened_vector])
+
+    quadratic_features = \
+        flattened_vector_as_row_matrix.T.dot(flattened_vector_as_row_matrix)
+    quadratic_features = quadratic_features.ravel()
+
+    all_features = np.hstack((
+        quadratic_features,
+        flattened_vector,
+    ))
+
+    return all_features
+
+
 def _get_cartesian(
     homography_matrix,
     image_size,
     distance_model,
 ):
     calibration = _get_distance_model(distance_model, image_size)
-    flattened_homography_matrix = homography_matrix.ravel()
+    flattened_homography_matrix = \
+        homography_matrix_to_distance_model_input_vector(homography_matrix)
 
     (x,) = calibration.x_model.predict([flattened_homography_matrix])
     y = 0.0

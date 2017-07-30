@@ -12,6 +12,9 @@ import sklearn.preprocessing
 import sklearn.model_selection
 import collections
 
+from ..tokens import homography_matrix_to_distance_model_input_vector
+
+
 Calibration = collections.namedtuple('Calibration', (
     'resolution',
     'z_model',
@@ -25,17 +28,14 @@ def fit(training_examples):
     training_examples = list(training_examples)
 
     pipeline = sklearn.pipeline.make_pipeline(
-        sklearn.preprocessing.PolynomialFeatures(
-            degree=2,
-            interaction_only=False,
-            include_bias=False,
-        ),
         sklearn.preprocessing.RobustScaler(),
         sklearn.linear_model.LinearRegression(),
     )
 
     X = numpy.array([
-        x.homography_matrix.ravel()
+        homography_matrix_to_distance_model_input_vector(
+            x.homography_matrix,
+        )
         for x in training_examples
     ])
 
