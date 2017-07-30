@@ -34,8 +34,11 @@ def argument_parser():
     return parser
 
 
-def main(args=sys.argv[1:]):
+def main(args=None):
     """Main entry point."""
+    if args is None:
+        args = sys.argv[1:]
+
     options = argument_parser().parse_args(args)
 
     with (options.directory / 'files.yaml').open('r') as f:
