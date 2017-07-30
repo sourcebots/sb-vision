@@ -30,7 +30,7 @@ class CaptureDevice(object):
             argument_c = _cvcapture.ffi.NULL
         self.instance = _cvcapture.lib.cvopen(argument_c)
         if self.instance == _cvcapture.ffi.NULL:
-            raise RuntimeError("Unable to open capture device")
+            raise RuntimeError("Unable to open capture device '{}'".format(path))
 
     def capture(self, width, height):
         """Capture a single image with the given width and height."""
