@@ -205,19 +205,23 @@ if __name__ == "__main__":
         action='store_true',
         help="show image after thresholding",
     )
+    parser.add_argument(
+        '-d',
+        '--distance-model',
+        help="distance model to use",
+    )
 
     args = parser.parse_args()
     # Change the below for quick debugging
-    FOCAL_DISTANCE = 0.004
     if args.f is False:
         CAM_IMAGE_SIZE = (1280, 720)
-        camera = Camera(None, CAM_IMAGE_SIZE, FOCAL_DISTANCE)
+        camera = Camera(None, CAM_IMAGE_SIZE, args.distance_model)
     else:
         if args.f is None:
             f = "tagsampler.png"
         else:
             f = args.f
-        camera = FileCamera(f, FOCAL_DISTANCE)
+        camera = FileCamera(f, args.distance_model)
     v = Vision(camera, (0.01, 0.01))
     with contextlib.suppress(KeyboardInterrupt):
         while True:
