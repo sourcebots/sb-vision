@@ -24,7 +24,7 @@ class CaptureDevice(object):
         if path is not None:
             argument_c = _cvcapture.ffi.new(
                 'char[]',
-                path.encode('utf-8'),
+                path.encode('utf-8') + b'\0',
             )
         else:
             argument_c = _cvcapture.ffi.NULL
