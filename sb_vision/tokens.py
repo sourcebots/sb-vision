@@ -5,6 +5,8 @@ import math
 import numpy as np
 import scipy.linalg
 
+from .cvcapture import decompose_homography_matrix
+
 
 def _row_mul(m, corner, col):
     return m[col, 0] * corner[0] + m[col, 1] * corner[1] + m[col, 2]
@@ -59,6 +61,10 @@ def _get_pixel_centre(homography_matrix):
     return _homography_transform((0, 0), homography_matrix)
 
 
+def bees(v):
+    return v[:-1] / v[-1]
+
+
 def _get_cartesian(
     homography_matrix,
     image_size,
@@ -71,7 +77,27 @@ def _get_cartesian(
         [0.0, 0.0, 1.0],
     ])
 
-    homography_matrix_with_fourth_column = numpy.array([
+    translations = decompose_homography_matrix(
+        homography_matrix,
+        calibration_matrix,
+    )
+
+    # Require only solutions in front of the camera
+    translations = [
+        x
+        for x in translations
+        if x[2] > 0
+    ]
+
+    print(translations)
+    raise KeyError('?')
+
+
+
+
+
+
+    homography_matrix_with_fourth_column = np.array([
         homography_matrix[:, 0],
         homography_matrix[:, 1],
         np.cross(
@@ -81,12 +107,17 @@ def _get_cartesian(
         homography_matrix[:, 2],
     ]).T
 
-    pose_matrix, _, _, _ = scipy.lstsq(
+    homography_matrix_with_fourth_column /= \
+      homography_matrix_with_fourth_column[2,3]
+
+    pose_matrix = scipy.linalg.solve(
         calibration_matrix,
         homography_matrix_with_fourth_column,
     )
 
-    return pose_matrix[:, 3]
+    import pdb; pdb.set_trace()
+
+    return pose_matrix[:, 3] / np.mean(marker_size)
 
 
 

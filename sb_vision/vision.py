@@ -208,16 +208,16 @@ if __name__ == "__main__":
 
     args = parser.parse_args()
     # Change the below for quick debugging
+    FOCAL_DISTANCE = 0.004
     if args.f is False:
         CAM_IMAGE_SIZE = (1280, 720)
-        FOCAL_DISTANCE = 720
-        camera = Camera(None, CAM_IMAGE_SIZE, 720)
+        camera = Camera(None, CAM_IMAGE_SIZE, FOCAL_DISTANCE)
     else:
         if args.f is None:
             f = "tagsampler.png"
         else:
             f = args.f
-        camera = FileCamera(f, 720)
+        camera = FileCamera(f, FOCAL_DISTANCE)
     v = Vision(camera, (0.01, 0.01))
     with contextlib.suppress(KeyboardInterrupt):
         while True:

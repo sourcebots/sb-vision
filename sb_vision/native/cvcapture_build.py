@@ -20,12 +20,17 @@ CVCAPTURE_DECLS = """
     void cvthreshold(
         const void* src_buffer, void* dst_buffer, size_t width, size_t height
     );
+
+    int cv_decompose_homography(
+        const double* homog, const double* intrinsic, double* output, int max
+    );
 """
 
 ffibuilder.set_source(
     "sb_vision.native._cvcapture",
     CVCAPTURE_DECLS, sources=[
         str(base / 'cvcapture.cpp'),
+        str(base / 'homography_decomp.cpp'),
     ], libraries=[
         'opencv_core',
         'opencv_highgui',
