@@ -13,6 +13,7 @@ import sklearn.model_selection
 import collections
 
 Calibration = collections.namedtuple('Calibration', (
+    'resolution',
     'z_model',
     'x_model',
 ))
@@ -56,6 +57,7 @@ def fit(training_examples):
     ))
 
     return Calibration(
+        resolution=training_examples[0].size,
         z_model=pipeline_z,
         x_model=pipeline_x,
     )
