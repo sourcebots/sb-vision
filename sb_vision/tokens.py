@@ -168,7 +168,7 @@ class Token:
         self.pixel_centre = _get_pixel_centre(homography_matrix)
         self.homography_matrix = homography_matrix
 
-        # We don't set cartesian and polar coordinates in the absence of a
+        # We don't set cartesian coordinates in the absence of a
         # distance model.
         if distance_model is None:
             return
@@ -181,9 +181,6 @@ class Token:
             distance_model,
             self.size,
         )
-        # Polar Co-ordinates in the 3D World, relative to the front of the
-        # camera
-        #self.polar = _cart_to_polar(self.cartesian)
 
     def __repr__(self):
         """General debug representation."""
