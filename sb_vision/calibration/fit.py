@@ -4,10 +4,17 @@ import numpy
 import numpy.linalg
 import scipy.linalg
 import scipy.optimize
+import sklearn.base
+import sklearn.metrics
+import sklearn.pipeline
+import sklearn.linear_model
+import sklearn.preprocessing
+import sklearn.model_selection
 import collections
 
 Calibration = collections.namedtuple('Calibration', (
-    'focal_length',
+    'z_model',
+    'x_model',
 ))
 
 
@@ -16,80 +23,39 @@ def fit(training_examples):
 
     training_examples = list(training_examples)
 
-    def reconstruction_error(x, print_things=False):
-        [focal_length] = x
-
-        total_error = 0.0
-
-        for x in training_examples:
-            calibration_matrix = numpy.array([
-                [x.size[0] * focal_length, 0.0, 0.5 * x.size[0]],
-                [0.0, x.size[1] * focal_length, 0.5 * x.size[1]],
-                [0.0, 0.0, 1.0],
-            ])
-
-            error_levels = []
-
-            for rotation in (
-                (1, 0, 0, 1),
-                (0, -1, 1, 0),
-                (-1, 0, 0, -1),
-                (0, 1, -1, 0),
-            ):
-                a, b, c, d = rotation
-
-                pose_matrix = numpy.array([
-                    [a, b, 0.0, x.x_offset_right],
-                    [c, d, 0.0, 0.0],
-                    [0.0, 0.0, 1.0, x.z_distance],
-                ])
-
-                homography_matrix_with_extra_col = numpy.array([
-                    x.homography_matrix[:, 0],
-                    x.homography_matrix[:, 1],
-                    numpy.cross(
-                        x.homography_matrix[:, 0],
-                        x.homography_matrix[:, 1],
-                    ),
-                    x.homography_matrix[:, 2],
-                ]).T
-
-                solved_pose_matrix, _, _, _ = scipy.linalg.lstsq(
-                    calibration_matrix,
-                    homography_matrix_with_extra_col,
-                )
-
-                if print_things:
-                    print(pose_matrix)
-                    print(solved_pose_matrix)
-
-                error_levels.append(
-                    numpy.linalg.norm(
-                        (pose_matrix - solved_pose_matrix)[:, 3]
-                    ),
-                )
-
-            total_error += max(error_levels)
-
-        return total_error / len(training_examples)
-
-    initial_focal_length = 1.0  # 1m
-
-    result = scipy.optimize.minimize(
-        reconstruction_error,
-        x0=[
-            initial_focal_length,
-        ],
-        method='Nelder-Mead',
+    pipeline = sklearn.pipeline.make_pipeline(
+        sklearn.preprocessing.PolynomialFeatures(
+            degree=2,
+            interaction_only=False,
+            include_bias=False,
+        ),
+        sklearn.preprocessing.RobustScaler(),
+        sklearn.linear_model.LinearRegression(),
     )
-    print(result)
 
-    fre = reconstruction_error(result.x, print_things=True)
-    print("Mean error: ", fre)
+    X = numpy.array([
+        x.homography_matrix.ravel()
+        for x in training_examples
+    ])
 
-    final_focal_length, = \
-        result.x
+    y_z = numpy.array([x.z_distance for x in training_examples])
+    y_x = numpy.array([x.x_offset_right for x in training_examples])
+
+    pipeline_z = sklearn.base.clone(pipeline)
+    pipeline_z.fit(X, y_z)
+    print("MAE(z): ", sklearn.metrics.mean_absolute_error(
+        y_z,
+        pipeline_z.predict(X),
+    ))
+
+    pipeline_x = sklearn.base.clone(pipeline)
+    pipeline_x.fit(X, y_x)
+    print("MAE(x): ", sklearn.metrics.mean_absolute_error(
+        y_x,
+        pipeline_x.predict(X),
+    ))
 
     return Calibration(
-        focal_length=final_focal_length / 0.1,
+        z_model=pipeline_z,
+        x_model=pipeline_x,
     )
