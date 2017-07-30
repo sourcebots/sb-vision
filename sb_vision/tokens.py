@@ -103,18 +103,39 @@ def homography_matrix_to_distance_model_input_vector(homography_matrix):
     return all_features
 
 
+def _apply_distance_model_component_to_homography_matrix(
+    model_component,
+    homography_matrix,
+):
+    flattened_homography_matrix = \
+        homography_matrix_to_distance_model_input_vector(homography_matrix)
+
+    biases = model_component['biases']
+    intercepts = model_component['intercept']
+    coefs = model_component['coefs']
+
+    return (
+        (biases + flattened_homography_matrix).dot(coefs) +
+        intercepts
+    )
+
+
 def _get_cartesian(
     homography_matrix,
     image_size,
     distance_model,
 ):
     calibration = _get_distance_model(distance_model, image_size)
-    flattened_homography_matrix = \
-        homography_matrix_to_distance_model_input_vector(homography_matrix)
 
-    (x,) = calibration.x_model.predict([flattened_homography_matrix])
+    x = _apply_distance_model_component_to_homography_matrix(
+        calibration.x_model,
+        homography_matrix,
+    )
     y = 0.0
-    (z,) = calibration.z_model.predict([flattened_homography_matrix])
+    z = _apply_distance_model_component_to_homography_matrix(
+        calibration.z_model,
+        homography_matrix,
+    )
 
     return np.array([x, y, z])
 

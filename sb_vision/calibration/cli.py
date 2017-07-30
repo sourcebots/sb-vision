@@ -61,6 +61,8 @@ def main(args=sys.argv[1:]):
 
     calibration = fit(training_examples)
 
+    print(calibration)
+
     if options.output:
         with lzma.open(str(options.output), 'wb') as f:
             pickle.dump(calibration, f)
