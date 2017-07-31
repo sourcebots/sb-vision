@@ -13,12 +13,6 @@ import sklearn.model_selection
 
 from ..tokens import homography_matrix_to_distance_model_input_vector
 
-Calibration = collections.namedtuple('Calibration', (
-    'resolution',
-    'z_model',
-    'x_model',
-))
-
 
 def _find_coefficients(X, y, name):
     pipeline = sklearn.pipeline.make_pipeline(
@@ -68,8 +62,8 @@ def fit(training_examples):
     model_x = _find_coefficients(X, y_x, 'x')
     model_z = _find_coefficients(X, y_z, 'z')
 
-    return Calibration(
-        resolution=training_examples[0].size,
-        z_model=model_z,
-        x_model=model_x,
-    )
+    return {
+        'resolution': training_examples[0].size,
+        'z_model': model_z,
+        'x_model': model_x,
+    }

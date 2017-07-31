@@ -72,12 +72,12 @@ def _get_distance_model(name, image_size):
     with lzma.open(str(model_file), 'rb') as f:
         calibration = pickle.load(f)
 
-    if calibration.resolution != image_size:
+    if calibration['resolution'] != image_size:
         raise ValueError(
             "Model {model} is calibrated for resolution {res_model}, not "
             "{res_this}".format(
                 model=name,
-                res_model=calibration.resolution,
+                res_model=calibration['resolution'],
                 res_this=image_size,
             ),
         )
@@ -127,12 +127,12 @@ def _get_cartesian(
     calibration = _get_distance_model(distance_model, image_size)
 
     x = _apply_distance_model_component_to_homography_matrix(
-        calibration.x_model,
+        calibration['x_model'],
         homography_matrix,
     )
     y = 0.0
     z = _apply_distance_model_component_to_homography_matrix(
-        calibration.z_model,
+        calibration['z_model'],
         homography_matrix,
     )
 
