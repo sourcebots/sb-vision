@@ -9,6 +9,25 @@ import threading
 from sb_vision.native import _cvcapture
 
 
+class CvCaptureError(RuntimeError):
+    pass
+
+
+class DeviceOpenError(CvCaptureError):
+    def __init__(self, device_id):
+        super().__init__("Unable to open capture device {}".format(device_id))
+
+
+class DeviceClosedError(CvCaptureError):
+    def __init__(self):
+        super().__init__("capture device is closed")
+
+
+class ImageCaptureError(CvCaptureError):
+    def __init__(self):
+        super().__init__("cvcapture() failed")
+
+
 class CaptureDevice(object):
     """A single device for capturing images."""
 
@@ -22,14 +41,12 @@ class CaptureDevice(object):
         self.lock = threading.Lock()
         self.instance = _cvcapture.lib.cvopen(device_id)
         if self.instance == _cvcapture.ffi.NULL:
-            raise RuntimeError(
-                "Unable to open capture device {}".format(device_id),
-            )
+            raise DeviceOpenError(device_id)
 
     def capture(self, width, height):
         """Capture a single image with the given width and height."""
         if self.instance is None:
-            raise RuntimeError("capture device is closed")
+            raise DeviceClosedError()
 
         capture_buffer = _cvcapture.ffi.new(
             'uint8_t[{}]'.format(width * height),
@@ -44,7 +61,7 @@ class CaptureDevice(object):
             )
 
         if status == 0:
-            raise RuntimeError("cvcapture() failed")
+            raise ImageCaptureError()
 
         return bytes(_cvcapture.ffi.buffer(capture_buffer))
 
