@@ -208,7 +208,7 @@ class Token:
 
     def __repr__(self):
         """General debug representation."""
-        return "Token: {}, certainty:{}".format(self.id, self.certainty)
+        return "Token: {}, certainty: {}".format(self.id, self.certainty)
 
     __str__ = __repr__
 
