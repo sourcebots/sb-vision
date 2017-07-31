@@ -9,3 +9,6 @@ build
 .eggs
 venv
 .cache
+
+# VSCode project files
+/.vscode
