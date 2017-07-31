@@ -221,7 +221,8 @@ if __name__ == "__main__":
             if args.show:
                 img = display_tokens(tokens, img)
                 img.show()
-            if tokens:
-                print(tokens[0].cartesian)
+            print("Saw {} token(s)".format(len(tokens)))
+            for token in tokens:
+                print("- {}".format(token))
             if args.f is not False:
                 break
