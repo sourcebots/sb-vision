@@ -52,6 +52,11 @@ int cvcapture(void* context, void* buffer, size_t width, size_t height) {
     cv::Mat colour_image, greyscale_image;
 
     (*cap) >> colour_image;
+    if (colour_image.empty()) {
+        fprintf(stderr, "Failed to capture image (result was empty)\n");
+        return 0;
+    }
+
     cv::cvtColor(colour_image, greyscale_image, cv::COLOR_BGR2GRAY);
 
     if (!greyscale_image.isContinuous()) {
