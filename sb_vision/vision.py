@@ -224,5 +224,9 @@ if __name__ == "__main__":
             print("Saw {} token(s)".format(len(tokens)))
             for token in tokens:
                 print("- {}".format(token))
+                try:
+                    print(token.cartesian)
+                except AttributeError:
+                    pass
             if args.f is not False:
                 break
