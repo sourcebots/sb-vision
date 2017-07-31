@@ -179,7 +179,7 @@ if __name__ == "__main__":
         '-v',
         '--device-id',
         default=0,
-        help="Device id of the camera to use",
+        help="device id of the camera to use",
         type=int,
     )
     parser.add_argument(
