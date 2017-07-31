@@ -176,7 +176,7 @@ if __name__ == "__main__":
              "is blank, uses 'tagsampler.png'",
     )
     parser.add_argument(
-        '-v',
+        '-i',
         '--device-id',
         default=0,
         help="device id of the camera to use",
