@@ -188,6 +188,7 @@ class Token:
         )
         return instance
 
+    # noinspection PyAttributeOutsideInit
     def infer_location_from_homography_matrix(
         self,
         *,
@@ -215,6 +216,7 @@ class Token:
             distance_model,
         )
 
+        # Polar co-ordinates in the 3D world, relative to the camera
         self.polar = self.cartesian_to_polar(self.cartesian)
 
     def __repr__(self):
