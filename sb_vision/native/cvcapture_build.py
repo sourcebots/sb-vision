@@ -28,6 +28,7 @@ ffibuilder.set_source(
         str(base / 'cvcapture.cpp'),
     ], libraries=[
         'opencv_core',
+        'opencv_videoio',
         'opencv_highgui',
         'opencv_imgproc',
     ],
