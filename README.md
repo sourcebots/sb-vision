@@ -12,4 +12,5 @@ $ pipenv install --dev
 
 ```bash
 $ pipenv run python setup.py test
+$ pipenv run pytest --flake8 sb_vision tests
 ```

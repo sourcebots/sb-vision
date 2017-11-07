@@ -20,7 +20,7 @@ setup(
         'Pillow',
         'numpy',
         'scipy',
-        "cffi>=1.4.0",
+        'cffi>=1.4.0',
         'pytest-runner',
     ],
     extras_require={
@@ -29,6 +29,16 @@ setup(
             'scikit-learn',
         ],
     },
-    tests_require=['pytest'],
+    tests_require=[
+        'pytest',
+        'pytest-flake8',
+        'flake8',
+        'flake8-docstrings',
+        'flake8-isort',
+        'flake8-mutable',
+        'flake8-debugger',
+        'flake8-comprehensions',
+        'flake8-todo',
+    ],
     zip_safe=False,
 )
