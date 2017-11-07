@@ -1,7 +1,5 @@
 """Utility to derive calibration matrix from training examples."""
 
-import collections
-
 import numpy
 import numpy.linalg
 import sklearn.base

@@ -10,21 +10,32 @@ from sb_vision.native import _cvcapture
 
 
 class CvCaptureError(RuntimeError):
+    """A generic OpenCV error."""
+
     pass
 
 
 class DeviceOpenError(CvCaptureError):
+    """An error when OpenCV cannot open a device."""
+
     def __init__(self, device_id):
+        """Initialise the exception."""
         super().__init__("Unable to open capture device {}".format(device_id))
 
 
 class DeviceClosedError(CvCaptureError):
+    """An error when OpenCV cannot close a device."""
+
     def __init__(self):
+        """Initialise the exception."""
         super().__init__("capture device is closed")
 
 
 class ImageCaptureError(CvCaptureError):
+    """An error when OpenCV cannot capture an image."""
+
     def __init__(self):
+        """Initialise the exception."""
         super().__init__("cvcapture() failed")
 
 
@@ -33,9 +44,9 @@ class CaptureDevice(object):
 
     def __init__(self, device_id):
         """
-        General initialiser.
+        Initialise the capture device.
 
-        Where a ``device_id`` is the udev 'MINOR' device number for the camera
+        The ``device_id`` is the udev 'MINOR' device number for the camera
         device.
         """
         self.lock = threading.Lock()

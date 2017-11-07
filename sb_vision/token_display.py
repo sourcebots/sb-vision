@@ -29,11 +29,11 @@ def display_tokens(tokens, image):
     try:
         # Pretty font, pretty sure I'm the only one to have it though - Andy
         fnt = ImageFont.truetype("DejaVuSans.ttf", font_size, encoding="unic")
-    except:
+    except Exception:
         try:
             # More common font
             fnt = ImageFont.truetype("arial.ttf", font_size, encoding="unic")
-        except:
+        except Exception:
             print("fallback to default font")
             pass
 
