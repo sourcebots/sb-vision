@@ -11,7 +11,7 @@ jobs:
       - run: venv/bin/pip install .
       - run: venv/bin/pip install pytest
       - run: venv/bin/pip install -r script/linting/requirements.txt
-      - run: venv/bin/py.test tests
+      - run: venv/bin/python setup.py test
       - run:
           command: script/linting/lint
           environment:

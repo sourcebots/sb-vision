@@ -264,6 +264,13 @@
             ],
             "version": "==3.2.3"
         },
+        "pytest-runner": {
+            "hashes": [
+                "sha256:71e581622a1fad23cf12c1c1bd23e826e3358ab10b28c6e7e1a88f2f4489bf2f",
+                "sha256:0f7c3a3cf5aead13f54baaa01ceb49e5ae92aba5d3ff1928e81e189c40bc6703"
+            ],
+            "version": "==3.0"
+        },
         "pyyaml": {
             "hashes": [
                 "sha256:3262c96a1ca437e7e4763e2843746588a965426550f3797a79fca9c6199c431f",

@@ -21,6 +21,7 @@ setup(
         'numpy',
         'scipy',
         "cffi>=1.4.0",
+        'pytest-runner',
     ],
     extras_require={
         'calibration': [
@@ -28,5 +29,6 @@ setup(
             'scikit-learn',
         ],
     },
+    tests_require=['pytest'],
     zip_safe=False,
 )

@@ -11,5 +11,5 @@ $ pipenv install --dev
 ## Running Tests
 
 ```bash
-$ pipenv run py.test tests
+$ pipenv run python setup.py test
 ```
