@@ -7,12 +7,7 @@ jobs:
       - checkout
       - run: apt-get update -y
       - run: apt-get install -y libcv-dev libopencv-photo-dev libopencv-contrib-dev
-      - run: python3 -m venv venv
-      - run: venv/bin/pip install .
-      - run: venv/bin/pip install pytest
-      - run: venv/bin/pip install -r script/linting/requirements.txt
-      - run: venv/bin/python setup.py test
-      - run:
-          command: script/linting/lint
-          environment:
-            FLAKE8: venv/bin/flake8
+      - run: pip3 install pipenv
+      - run: pipenv install --dev
+      - run: pipenv run python setup.py test
+      - run: pipenv run pytest --flake8 sb_vision tests
