@@ -152,6 +152,15 @@ class Token:
         self.id = id
         self.certainty = certainty
 
+    @staticmethod
+    def cartesian_to_polar(cartesian):
+        """ Convert cartesian co-ordinate space to polar """
+        cart_x, cart_y, cart_z = tuple(cartesian)
+        polar_dist = np.linalg.norm(cartesian)
+        polar_x = np.arctan2(cart_z, cart_x)
+        polar_y = np.arctan2(cart_z, cart_y)
+        return polar_x, polar_y, polar_dist
+
     @classmethod
     def from_apriltag_detection(
         cls,
@@ -179,6 +188,7 @@ class Token:
         )
         return instance
 
+    # noinspection PyAttributeOutsideInit
     def infer_location_from_homography_matrix(
         self,
         *,
@@ -205,6 +215,9 @@ class Token:
             image_size,
             distance_model,
         )
+
+        # Polar co-ordinates in the 3D world, relative to the camera
+        self.polar = self.cartesian_to_polar(self.cartesian)
 
     def __repr__(self):
         """General debug representation."""
