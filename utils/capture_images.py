@@ -40,10 +40,16 @@ def parse_args():
     parser.add_argument(
         'device_id',
         type=int,
+        help="The id of the video device. For example: for the camera at "
+             "'/dev/video0', this would be 0.",
     )
     parser.add_argument(
         'image_template',
         type=str,
+        help="The file name and path to use for the images, optionally with a "
+             "placeholder for the index of the image within the current "
+             "sequence. For example: '/tmp/foo-{}.png' will result in images "
+             "'/tmp/foo-0.png',' /tmp/foo-1.png' and so on.",
     )
     parser.add_argument(
         '--resolution',
