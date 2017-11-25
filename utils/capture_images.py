@@ -35,11 +35,6 @@ class Resolution(collections.namedtuple('Resolution', ('width', 'height'))):
         return '{0.width}x{0.height}'.format(self)
 
 
-def capture_image(device, image_size):
-    image_bytes = device.capture(*image_size)
-    return Image.frombytes('L', image_size, image_bytes)
-
-
 def parse_args():
     parser = argparse.ArgumentParser()
     parser.add_argument('device_id', type=int)
@@ -63,7 +58,10 @@ def main(args):
     with CaptureDevice(args.device_id) as d:
         for num in range(args.num_images):
             print("Capturing image {}...".format(num), end='')
-            image = capture_image(d, args.resolution)
+
+            image_bytes = d.capture(*args.resolution)
+
+            image = Image.frombytes('L', args.resolution, image_bytes)
 
             with open(args.image_template.format(num), mode='wb') as f:
                 image.save(f)
