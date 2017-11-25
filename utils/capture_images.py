@@ -55,11 +55,11 @@ def parse_args():
 
 
 def main(args):
-    with CaptureDevice(args.device_id) as d:
+    with CaptureDevice(args.device_id) as capture_device:
         for num in range(args.num_images):
             print("Capturing image {}...".format(num), end='')
 
-            image_bytes = d.capture(*args.resolution)
+            image_bytes = capture_device.capture(*args.resolution)
 
             image = Image.frombytes('L', args.resolution, image_bytes)
 
