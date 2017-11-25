@@ -66,6 +66,11 @@ def parse_args():
     parser.add_argument(
         '--num-images',
         type=int,
+        # Note: we default to 2 as we have seen issues with some cameras which
+        # are only able to successfully campture a first image. By expecting
+        # that all cameras will capture two images we avoid accidentally
+        # believing that cameras which fail in this manner are fine when they
+        # are in fact not fine.
         default=2,
         help="The number of images to capture, default: %(default)s",
     )
