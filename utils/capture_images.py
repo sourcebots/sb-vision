@@ -37,8 +37,14 @@ class Resolution(collections.namedtuple('Resolution', ('width', 'height'))):
 
 def parse_args():
     parser = argparse.ArgumentParser()
-    parser.add_argument('device_id', type=int)
-    parser.add_argument('image_template', type=str)
+    parser.add_argument(
+        'device_id',
+        type=int,
+    )
+    parser.add_argument(
+        'image_template',
+        type=str,
+    )
     parser.add_argument(
         '--resolution',
         type=Resolution.from_argument,
