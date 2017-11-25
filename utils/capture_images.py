@@ -63,7 +63,8 @@ def main(args):
 
             image = Image.frombytes('L', args.resolution, image_bytes)
 
-            with open(args.image_template.format(num), mode='wb') as f:
+            file_name = args.image_template.format(num)
+            with open(file_name, mode='wb') as f:
                 image.save(f)
 
             print("done")
