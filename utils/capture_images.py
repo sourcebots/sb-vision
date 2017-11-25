@@ -1,5 +1,11 @@
 #!/usr/bin/env python3
 
+"""
+Utility to capture images from the camera. Primarily used
+for testing camera compatibility with the platform, though
+potentially also useful for gathering calibration images.
+"""
+
 import argparse
 import collections
 import re
@@ -36,7 +42,7 @@ class Resolution(collections.namedtuple('Resolution', ('width', 'height'))):
 
 
 def parse_args():
-    parser = argparse.ArgumentParser()
+    parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
         'device_id',
         type=int,
