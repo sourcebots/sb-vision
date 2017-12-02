@@ -154,7 +154,7 @@ class Token:
 
     @staticmethod
     def cartesian_to_polar(cartesian):
-        """ Convert cartesian co-ordinate space to polar """
+        """Convert cartesian co-ordinate space to polar."""
         cart_x, cart_y, cart_z = tuple(cartesian)
         polar_dist = np.linalg.norm(cartesian)
         polar_x = np.arctan2(cart_z, cart_x)
