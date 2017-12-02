@@ -12,13 +12,11 @@ from sb_vision.cvcapture import CaptureDevice
 
 from .camera_base import CameraBase
 
-from typing import Tuple
-
 
 class Camera(CameraBase):
     """Actual camera, hooked up to a physical device."""
 
-    def __init__(self, device_id: int, proposed_image_size: Tuple[int, int], distance_model: str):
+    def __init__(self, device_id, proposed_image_size, distance_model):
         """Initialise camera with focal length and image size."""
         super().__init__()
         self.cam_image_size = proposed_image_size
