@@ -7,9 +7,13 @@ Camera class could, for instance, fetch images from a file.
 """
 
 from PIL import Image
+try:
+    from picamera import PiCamera
+    CAN_USE_PI_CAMERA = True
+except:
+    CAN_USE_PI_CAMERA = False
 
-from sb_vision.cvcapture import CaptureDevice
-
+from io import BytesIO
 from .camera_base import CameraBase
 
 
@@ -22,6 +26,7 @@ class Camera(CameraBase):
         self.cam_image_size = proposed_image_size
         self.device_id = device_id
         self.camera = None
+        self.stream = None
         self.distance_model = distance_model
 
     def init(self):
@@ -30,7 +35,8 @@ class Camera(CameraBase):
         self._init_camera()
 
     def _init_camera(self):
-        self.camera = CaptureDevice(self.device_id)
+        self.stream = BytesIO()
+        self.camera = PiCamera()
 
     def _deinit_camera(self):
         if self.camera:
@@ -48,8 +54,12 @@ class Camera(CameraBase):
         :return: PIL image object of the captured image in Luminosity
                  color scale
         """
-        image_bytes = self.camera.capture(*self.cam_image_size)
-        return Image.frombytes('L', self.cam_image_size, image_bytes)
+        self.camera.capture(self.stream, format='jpeg')
+        # "Rewind" the stream to the beginning so we can read its content
+        self.stream.seek(0)
+        image = Image.open(self.stream)
+        gray, _, _ = image.split()
+        return gray
 
 
 class FileCamera(CameraBase):

@@ -21,6 +21,7 @@ setup(
         'numpy',
         'scipy',
         "cffi>=1.4.0",
+        'picamera',
     ],
     extras_require={
         'calibration': [
