@@ -38,7 +38,6 @@ int cvcapture(void* context, void* buffer, size_t width, size_t height) {
 
     cap->set(CV_CAP_PROP_FRAME_WIDTH, width);
     cap->set(CV_CAP_PROP_FRAME_HEIGHT, height);
-    cap->set(CV_CAP_PROP_FOURCC, CV_FOURCC('B', 'G', 'R', 3));
 
     if (cap->get(CV_CAP_PROP_FRAME_WIDTH) != (double)width) {
         fprintf(stderr, "Incorrect width set on cap: %f\n", cap->get(CV_CAP_PROP_FRAME_WIDTH));
