@@ -9,10 +9,43 @@ potentially also useful for gathering calibration images.
 import argparse
 import collections
 import re
+import time
 
 from PIL import Image
 
 from sb_vision.cvcapture import CaptureDevice
+
+
+class Stopwatch:
+    @staticmethod
+    def print_duration(stopwatch):
+        print("Took {} seconds".format(stopwatch.duration))
+
+    def __init__(self, on_stop=lambda x: None):
+        self._period = (None, None)
+        self._on_stop = on_stop
+
+    def __enter__(self):
+        self.start()
+        return self
+
+    def __exit__(self, exc_type, exc_value, traceback):
+        self.stop()
+
+    def start(self):
+        self._period = (time.time(), None)
+
+    def stop(self):
+        assert self._period[1] is None
+        self._period = (self._period[0], time.time())
+
+        self._on_stop(self)
+
+    @property
+    def duration(self):
+        start, end = self._period
+        assert end is not None
+        return end - start
 
 
 class Resolution(collections.namedtuple('Resolution', ('width', 'height'))):
@@ -74,15 +107,24 @@ def parse_args():
         default=2,
         help="The number of images to capture, default: %(default)s",
     )
+    parser.add_argument(
+        '--timings',
+        action='store_true',
+        default=False,
+        help="Print the time take to capture each image",
+    )
     return parser.parse_args()
 
 
 def main(args):
+    stopwatch = Stopwatch(on_stop=Stopwatch.print_duration if args.timings else lambda x: None)
+
     with CaptureDevice(args.device_id) as capture_device:
         for num in range(args.num_images):
             print("Capturing image {}...".format(num))
 
-            image_bytes = capture_device.capture(*args.resolution)
+            with stopwatch:
+                image_bytes = capture_device.capture(*args.resolution)
 
             image = Image.frombytes('L', args.resolution, image_bytes)
 
