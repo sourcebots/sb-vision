@@ -119,7 +119,11 @@ def parse_args():
 def main(args):
     stopwatch = Stopwatch(on_stop=Stopwatch.print_duration if args.timings else lambda x: None)
 
-    with CaptureDevice(args.device_id) as capture_device:
+    with stopwatch:
+        print("Initialising camera...")
+        capture_device = CaptureDevice(args.device_id)
+
+    with capture_device:
         for num in range(args.num_images):
             print("Capturing image {}...".format(num))
 
