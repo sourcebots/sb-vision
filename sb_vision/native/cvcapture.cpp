@@ -35,6 +35,7 @@ void cvclose(void* context) {
 
 int cvcapture(void* context, void* buffer, size_t width, size_t height) {
     cv::VideoCapture* cap = reinterpret_cast<cv::VideoCapture*>(context);
+
     cap->set(CV_CAP_PROP_FRAME_WIDTH, width);
     cap->set(CV_CAP_PROP_FRAME_HEIGHT, height);
     cap->set(CV_CAP_PROP_FOURCC, CV_FOURCC('B', 'G', 'R', 3));
