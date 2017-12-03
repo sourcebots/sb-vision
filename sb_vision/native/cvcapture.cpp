@@ -35,9 +35,17 @@ void cvclose(void* context) {
 
 int cvcapture(void* context, void* buffer, size_t width, size_t height) {
     cv::VideoCapture* cap = reinterpret_cast<cv::VideoCapture*>(context);
-    cap->set(CV_CAP_PROP_FRAME_WIDTH, width);
-    cap->set(CV_CAP_PROP_FRAME_HEIGHT, height);
-    cap->set(CV_CAP_PROP_FOURCC, CV_FOURCC('B', 'G', 'R', 3));
+
+    double current_width = cap->get(CV_CAP_PROP_FRAME_WIDTH);
+    double current_height = cap->get(CV_CAP_PROP_FRAME_HEIGHT);
+
+    if (current_width != (double)width || current_height != (double)height) {
+        fprintf( stderr, "Changing resolution from %dx%d to %dx%d\n", current_width, current_height, width, height);
+        cap->set(CV_CAP_PROP_FRAME_WIDTH, width);
+        if (cap->get(CV_CAP_PROP_FRAME_HEIGHT) != (double)height) {
+            cap->set(CV_CAP_PROP_FRAME_HEIGHT, height);
+        }
+    }
 
     if (cap->get(CV_CAP_PROP_FRAME_WIDTH) != (double)width) {
         fprintf(stderr, "Incorrect width set on cap: %f\n", cap->get(CV_CAP_PROP_FRAME_WIDTH));
