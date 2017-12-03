@@ -9,6 +9,8 @@ __all__ = ('AprilTagLibrary',)
 
 
 class AprilTagLibrary:
+    """Wrapper for the AprilTag library."""
+
     def __init__(self, image_size):
         """
         Initialise the AprilTag library.
@@ -36,9 +38,9 @@ class AprilTagLibrary:
         lib.apriltag_init(self._detector, 1.0, 0.0, 1, 0, 0)
 
         # TODO: keeping this around for the lifetime of the library feels like
-        # it's an optiisation rather than actually required. Given that it makes
-        # the instance non-thread-safe, work out whether it's desirable and/or
-        # there are other reasons the instance isn't thread-safe anyway.
+        # it's an optiisation rather than actually required. Given that it
+        # makes the instance non-thread-safe, work out whether it's desirable
+        # and/or there are other reasons the instance isn't thread-safe anyway.
         self._working_image = lib.image_u8_create_stride(
             image_size[0],
             image_size[1],
