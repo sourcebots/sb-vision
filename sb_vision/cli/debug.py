@@ -8,7 +8,7 @@ from ..vision import Vision
 from ..token_display import display_tokens
 
 
-def capture_and_display_image(vision, after_thresholding, draw_tokens, show_image, output_file):
+def _capture_and_display_image(vision, after_thresholding, draw_tokens, show_image, output_file):
     img = vision.capture_image()
     tokens = vision.process_image(img)
 
@@ -35,6 +35,7 @@ def capture_and_display_image(vision, after_thresholding, draw_tokens, show_imag
 
 
 def main(input_file, device_id, distance_model, **options):
+    """Execute this command."""
     with contextlib.suppress(KeyboardInterrupt):
         if device_id is not None:
             CAM_IMAGE_SIZE = (1280, 720)
@@ -51,13 +52,14 @@ def main(input_file, device_id, distance_model, **options):
 
         vision = Vision(camera)
         while True:
-            capture_and_display_image(vision, **options)
+            _capture_and_display_image(vision, **options)
 
             if not should_continue():
                 break
 
 
 def add_arguments(parser):
+    """Add arguments for this command."""
     group = parser.add_mutually_exclusive_group(required=True)
     group.add_argument(
         '-f',

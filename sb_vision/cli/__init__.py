@@ -41,4 +41,3 @@ def main(args=None):
         settings.pop('func')(**settings)
     else:
         parser.print_help()
-
