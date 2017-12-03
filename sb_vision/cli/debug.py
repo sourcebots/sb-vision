@@ -1,10 +1,10 @@
 """Debug code, load the first video device seen and capture an image."""
 
-import contextlib
 import pathlib
+import contextlib
 
-from ..vision import Vision
 from ..camera import Camera, FileCamera
+from ..vision import Vision
 from ..token_display import display_tokens
 
 
