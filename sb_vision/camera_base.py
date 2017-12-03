@@ -5,16 +5,19 @@ A camera is an arbitrary source of images.
 """
 
 import abc
+from typing import Tuple
+
+import PIL
 
 
 class CameraBase(metaclass=abc.ABCMeta):
     """Base class for all cameras."""
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Basic, general initialisation."""
         self.initialised = False
 
-    def init(self):
+    def init(self) -> None:
         """
         Initialise the camera.
 
@@ -23,7 +26,7 @@ class CameraBase(metaclass=abc.ABCMeta):
         """
         self.initialised = True
 
-    def get_image_size(self):
+    def get_image_size(self) -> Tuple[int, int]:
         """Get the size of images captured by the camera."""
         if not self.initialised:
             raise RuntimeError(
@@ -32,7 +35,7 @@ class CameraBase(metaclass=abc.ABCMeta):
         return self.cam_image_size
 
     @abc.abstractmethod
-    def capture_image(self):
+    def capture_image(self) -> PIL.Image:
         """
         Capture a single image from this camera.
 

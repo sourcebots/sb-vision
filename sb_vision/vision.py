@@ -1,5 +1,7 @@
 """Main vision driver."""
 
+from typing import Iterator, List, Optional
+
 from PIL import Image
 
 from .camera_base import CameraBase
@@ -11,7 +13,7 @@ from .tokens import Token
 class Vision:
     """Class that handles the vision library and the camera."""
 
-    def __init__(self, camera: CameraBase):
+    def __init__(self, camera: CameraBase) -> None:
         """General initialiser."""
         self._camera = camera
         self._camera_ready = False
@@ -41,7 +43,7 @@ class Vision:
 
         return self._detector
 
-    def capture_image(self):
+    def capture_image(self) -> Image:
         """
         Capture an image from the camera.
 
@@ -50,7 +52,7 @@ class Vision:
         # get the PIL image from the camera
         return self.camera.capture_image()
 
-    def threshold_image(self, img):
+    def threshold_image(self, img: Image) -> Image:
         """Run thresholding and preprocessing on an image."""
         as_bytes = img.convert('L').tobytes()
         cleaned_bytes = clean_and_threshold(
@@ -65,7 +67,7 @@ class Vision:
             data=cleaned_bytes,
         )
 
-    def process_image(self, img):
+    def process_image(self, img: Image) -> List[Token]:
         """
         Run the given image through the apriltags detection library.
 
@@ -83,7 +85,7 @@ class Vision:
 
         return tokens
 
-    def snapshot(self):
+    def snapshot(self) -> Image:
         """
         Get a single list of tokens from one camera snapshot.
 
