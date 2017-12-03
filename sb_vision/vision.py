@@ -18,54 +18,35 @@ class Vision:
 
     def __init__(self, camera: CameraBase):
         """General initialiser."""
-        self.camera = camera
-        self.apriltag_library = None
+        self._camera = camera
+        self._camera_ready = False
 
-        self.initialised = False
+        self._apriltag_library = None
 
-    def _init(self):
+    @property
+    def camera(self):
         """
-        Run 'actual initialisation'.
-
-        This involves 'initting' the camera (opening the device, for instance)
-        and setting up the AprilTags library.
+        Property wrapping our 'camera' instance. We assume that when we're given
+        the instance it has not yet been initialised, so we do that on first
+        use.
         """
-        self.camera.init()
-        self._init_library()
-        self.initialised = True
+        if not self._camera_ready:
+            self._camera.init()
+            self._camera_ready = True
 
-    def _lazily_init(self):
+        return self._camera
+
+    @property
+    def apriltag_library(self):
         """
-        Lazily initialise.
-
-        Read as 'call `_init` if nobody else has done so'.
+        Property wrapping our instance of the apriltag library. We lazily
+        initialise the library on first use.
         """
-        if not self.initialised:
-            self._init()
+        if self._apriltag_library is None:
+            size = self.camera.get_image_size()
+            self._apriltag_library = AprilTagLibrary(size)
 
-    def __del__(self):
-        """
-        Drop any referred-to resources.
-
-        Make sure that the library is deinitialised when the `Vision` falls
-        out of scope.
-        """
-        self._deinit_library()
-
-    def _init_library(self):
-        """
-        Initialise the AprilTag library.
-
-        This means creating and configuring the detector, which populates a
-        number of tables in memory.
-        """
-
-        size = self.camera.get_image_size()
-        self.apriltag_library = AprilTagLibrary(size)
-
-    def _deinit_library(self):
-        """Deinitialise the library."""
-        self.apriltag_library = None
+        return self._apriltag_library
 
     def capture_image(self):
         """
@@ -73,7 +54,6 @@ class Vision:
 
         :return: single PIL image
         """
-        self._lazily_init()
 
         # get the PIL image from the camera
         return self.camera.capture_image()
@@ -102,8 +82,6 @@ class Vision:
         """
         img = self.threshold_image(img)
 
-        self._lazily_init()
-
         distance_model = self.camera.distance_model
 
         tokens = [
@@ -119,7 +97,6 @@ class Vision:
 
         Equivalent to calling `process_image` on the result of `capture_image`.
         """
-        self._lazily_init()
         return self.process_image(self.capture_image())
 
 
