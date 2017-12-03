@@ -4,7 +4,7 @@ import contextlib
 
 from PIL import Image
 
-from sb_vision.native.apriltag._apriltag import ffi, lib
+from .native.apriltag import AprilTagLibrary
 
 from .camera import Camera, FileCamera
 from .tokens import Token
@@ -19,10 +19,7 @@ class Vision:
     def __init__(self, camera: CameraBase):
         """General initialiser."""
         self.camera = camera
-        # apriltag detector object
-        self._detector = None
-        # image from camera
-        self.image = None
+        self.apriltag_library = None
 
         self.initialised = False
 
@@ -62,50 +59,13 @@ class Vision:
         This means creating and configuring the detector, which populates a
         number of tables in memory.
         """
-        # init detector
-        self._detector = lib.apriltag_detector_create()
-        """
-        apriltag_detector_t* td,
-        float decimate,
-          default: 1.0, "Decimate input image by this factor"
-        float sigma,
-          default: 0.0, "Apply low-pass blur to input; negative sharpens"
-        int refine_edges,
-          default: 1, "Spend more time trying to align edges of tags"
-        int refine_decode,
-          default: 0, "Spend more time trying to decode tags"
-        int refine_pose
-          default: 0, "Spend more time trying to find the position of the tag"
-        """
-        lib.apriltag_init(self._detector, 1.0, 0.0, 1, 0, 0)
+
         size = self.camera.get_image_size()
-        self.image = lib.image_u8_create_stride(size[0], size[1], size[0])
+        self.apriltag_library = AprilTagLibrary(size)
 
     def _deinit_library(self):
         """Deinitialise the library."""
-        # Always destroy the detector
-        if self._detector:
-            lib.apriltag_detector_destroy(self._detector)
-        if self.image:
-            lib.image_u8_destroy(self.image)
-
-    def _parse_results(self, results):
-        """
-        Parse the array of results.
-
-        :param results: cffi array of results
-        :return: python iterable of individual token objects
-        """
-        image_size = self.camera.get_image_size()
-
-        for i in range(results.size):
-            detection = lib.zarray_get_detection(results, i)
-            yield Token.from_apriltag_detection(
-                detection,
-                image_size,
-                self.camera.distance_model,
-            )
-            lib.destroy_detection(detection)
+        self.apriltag_library = None
 
     def capture_image(self):
         """
@@ -143,13 +103,14 @@ class Vision:
         img = self.threshold_image(img)
 
         self._lazily_init()
-        total_length = img.size[0] * img.size[1]
-        # Detect the markers
-        ffi.memmove(self.image.buf, img.tobytes(), total_length)
-        results = lib.apriltag_detector_detect(self._detector, self.image)
-        tokens = list(self._parse_results(results))
-        # Remove the array now we've got them
-        lib.zarray_destroy(results)
+
+        distance_model = self.camera.distance_model
+
+        tokens = [
+            Token.from_apriltag_detection(x, img.size, distance_model)
+            for x in self.apriltag_library.detect_tags(img)
+        ]
+
         return tokens
 
     def snapshot(self):
