@@ -42,7 +42,7 @@ def main(input_file, device_id, distance_model, **options):
             camera = Camera(device_id, CAM_IMAGE_SIZE, distance_model)
 
             def should_continue():
-                return input("Process next frame? [Y/n]").lower() in ('y', '')
+                return input("Process next frame? [Y/n]: ").lower() in ('y', '')
 
         else:
             camera = FileCamera(input_file, distance_model)
