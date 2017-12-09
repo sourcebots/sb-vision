@@ -30,6 +30,9 @@ ffibuilder.set_source(
         'opencv_core',
         'opencv_highgui',
         'opencv_imgproc',
+        # Uncomment if you have an issue with _ZNK2cv12VideoCapture8isOpenedEv as you've got a newer 
+        # version of opencv than the current build.
+        # 'opencv_videoio', 
     ],
 )
 
