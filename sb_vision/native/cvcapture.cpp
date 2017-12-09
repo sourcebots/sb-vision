@@ -19,12 +19,22 @@ extern "C" {
 
 #include "opencv2/opencv.hpp"
 
+void warmup(cv::VideoCapture* context) {
+    // The TechNet camera needs about 11 frames to warm up either when first
+    // opened or when changing resolution. Without this the images returned are
+    // too dark to be useful.
+    for (int i=0; i < 11; i++) {
+        context->grab();
+    }
+}
+
 void* cvopen(const int device_id) {
     cv::VideoCapture* context = new cv::VideoCapture(device_id);
     if (!context->isOpened()) {
         delete context;
         return NULL;
     }
+    warmup(context);
     return reinterpret_cast<void*>(context);
 }
 
@@ -45,6 +55,9 @@ int cvcapture(void* context, void* buffer, size_t width, size_t height) {
         if (cap->get(CV_CAP_PROP_FRAME_HEIGHT) != (double)height) {
             cap->set(CV_CAP_PROP_FRAME_HEIGHT, height);
         }
+
+        // Get the camera warmed up for the new resolution
+        warmup(cap);
     }
 
     if (cap->get(CV_CAP_PROP_FRAME_WIDTH) != (double)width) {
