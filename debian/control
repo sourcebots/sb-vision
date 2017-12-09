@@ -25,8 +25,8 @@ Depends: ${misc:Depends},
          python3,
          ${python3:Depends},
          libcv2.4,
-         libopencv-photo2.4,
-         libopencv-contrib2.4,
+         libopencv-photo2.4v5,
+         libopencv-contrib2.4v5,
 Description: SourceBots vision subsystem
  Processes images from input streams such as cameras and produces
  information on fiducial markers found within them.
