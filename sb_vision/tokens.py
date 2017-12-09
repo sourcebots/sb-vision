@@ -8,16 +8,14 @@ from pathlib import Path
 import numpy as np
 
 
-def _row_mul(m, corner, col):
-    return m[col, 0] * corner[0] + m[col, 1] * corner[1] + m[col, 2]
-
-
 def _homography_transform(corner, homog):
     """
     Perform the equivalent of an OpenCV WarpPerspectiveTransform on the points.
 
     See http://bit.ly/2eQOTue for the equation.
     """
+    def _row_mul(m, corner, col):
+        return m[col, 0] * corner[0] + m[col, 1] * corner[1] + m[col, 2]
     z = _row_mul(homog, corner, 2)
     x = _row_mul(homog, corner, 0) / z
     y = _row_mul(homog, corner, 1) / z
