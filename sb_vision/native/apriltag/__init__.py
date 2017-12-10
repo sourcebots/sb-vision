@@ -5,15 +5,15 @@ from PIL import Image
 from ._apriltag import ffi, lib
 
 
-__all__ = ('AprilTagLibrary',)
+__all__ = ('AprilTagDetector',)
 
 
-class AprilTagLibrary:
-    """Wrapper for the AprilTag library."""
+class AprilTagDetector:
+    """Wrapper for the AprilTag tag detector."""
 
     def __init__(self, image_size):
         """
-        Initialise the AprilTag library.
+        Initialise the AprilTag tag detector.
 
         This means creating and configuring the detector, which populates a
         number of tables in memory.
@@ -48,7 +48,7 @@ class AprilTagLibrary:
         )
 
     def __del__(self):
-        """Deinitialise the library."""
+        """Deinitialise the detector."""
 
         if self._detector:
             lib.apriltag_detector_destroy(self._detector)
@@ -59,14 +59,14 @@ class AprilTagLibrary:
     @property
     def image_size(self):
         """
-        The image size, a tuple of (width, height), for which the library
+        The image size, a tuple of (width, height), for which the detector
         instance is configured.
         """
         return self._image_size
 
     def detect_tags(self, img: Image):
         """
-        Run the given image through the apriltags detection library.
+        Run the given image through the apriltags detection routines.
 
         :param img: PIL Luminosity image to be processed
         :yield: python iterable of apriltag detections; these must be processed
@@ -74,7 +74,7 @@ class AprilTagLibrary:
         """
 
         assert self.image_size == img.size, (
-            "Cannot process images of an incompatible size. Library is "
+            "Cannot process images of an incompatible size. Detector is "
             "configured for {}, given image at {}".format(
                 self.image_size,
                 img.size,

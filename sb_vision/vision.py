@@ -4,7 +4,7 @@ import contextlib
 
 from PIL import Image
 
-from .native.apriltag import AprilTagLibrary
+from .native.apriltag import AprilTagDetector
 
 from .camera import Camera, FileCamera
 from .tokens import Token
@@ -21,7 +21,7 @@ class Vision:
         self._camera = camera
         self._camera_ready = False
 
-        self._apriltag_library = None
+        self._detector = None
 
     @property
     def camera(self):
@@ -42,11 +42,11 @@ class Vision:
         Property wrapping our instance of the apriltag library. We lazily
         initialise the library on first use.
         """
-        if self._apriltag_library is None:
+        if self._detector is None:
             size = self.camera.get_image_size()
-            self._apriltag_library = AprilTagLibrary(size)
+            self._detector = AprilTagDetector(size)
 
-        return self._apriltag_library
+        return self._detector
 
     def capture_image(self):
         """
