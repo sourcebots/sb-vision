@@ -47,14 +47,32 @@ class AprilTagDetector:
             image_size[0],
         )
 
+    def __enter__(self):
+        """Start using the detector as a context manager."""
+        return self
+
+    def __exit__(self, exc_type, exc_value, traceback):
+        """Close the detector at the end of a managed context."""
+        self.close()
+
     def __del__(self):
         """Deinitialise the detector."""
+        self.close()
 
-        if self._detector:
+    def close(self):
+        """Deinitialise the detector."""
+        if self._detector is not None:
             lib.apriltag_detector_destroy(self._detector)
+            self._detector = None
 
-        if self._working_image:
+        if self._working_image is not None:
             lib.image_u8_destroy(self._working_image)
+            self._working_image = None
+
+    def _raise_if_already_closed(self):
+        """Check whether the detector is closed and raise if so."""
+        if self._detector is None or self._working_image is None:
+            raise ValueError("This detector has already been closed")
 
     @property
     def image_size(self):
@@ -69,6 +87,7 @@ class AprilTagDetector:
         :yield: python iterable of apriltag detections; these must be processed
                 and discarded before continuing iteration
         """
+        self._raise_if_already_closed()
 
         if self.image_size != img.size:
             raise ValueError(
