@@ -73,13 +73,14 @@ class AprilTagDetector:
                 and discarded before continuing iteration
         """
 
-        assert self.image_size == img.size, (
-            "Cannot process images of an incompatible size. Detector is "
-            "configured for {}, given image at {}".format(
-                self.image_size,
-                img.size,
+        if self.image_size != img.size:
+            raise ValueError(
+                "Cannot process images of an incompatible size. Detector is "
+                "configured for {}, given image at {}".format(
+                    self.image_size,
+                    img.size,
+                ),
             )
-        )
 
         total_length = img.size[0] * img.size[1]
 
