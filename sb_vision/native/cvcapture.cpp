@@ -66,10 +66,13 @@ int cvcapture(void* context, void* buffer, size_t width, size_t height) {
     else {
         // To be sure that we get an image which accurately describes what is in
         // front of the camera _right now_ (rather than whenever the last frames
-        // were grabbed) we ditch the last 3 frames.
+        // were grabbed) we ditch the last few frames.
         // This is needed with the TeckNet cameras we're using, though may not
-        // be needed for others.
-        skipframes(cap, 3);
+        // be needed for others. Note: manual testing suggests that skipping 4
+        // frames works for this purpose, though we deliberatly skip one more
+        // than that to reduce the chances that we'll get a bad frame (in case
+        // this is timing related).
+        skipframes(cap, 5);
     }
 
     if (cap->get(CV_CAP_PROP_FRAME_WIDTH) != (double)width) {
