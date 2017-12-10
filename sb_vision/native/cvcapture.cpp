@@ -20,7 +20,7 @@ extern "C" {
 #include "opencv2/opencv.hpp"
 
 void warmup(cv::VideoCapture* context) {
-    // The TechNet camera needs about 11 frames to warm up either when first
+    // The TeckNet camera needs about 11 frames to warm up either when first
     // opened or when changing resolution. Without this the images returned are
     // too dark to be useful.
     for (int i=0; i < 11; i++) {
