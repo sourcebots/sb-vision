@@ -19,13 +19,17 @@ extern "C" {
 
 #include "opencv2/opencv.hpp"
 
+void skipframes(cv::VideoCapture* context, int frames_to_skip) {
+    for (int i=0; i < frames_to_skip; i++) {
+        context->grab();
+    }
+}
+
 void warmup(cv::VideoCapture* context) {
     // The TeckNet camera needs about 11 frames to warm up either when first
     // opened or when changing resolution. Without this the images returned are
     // too dark to be useful.
-    for (int i=0; i < 11; i++) {
-        context->grab();
-    }
+    skipframes(context, 11);
 }
 
 void* cvopen(const int device_id) {
@@ -58,6 +62,14 @@ int cvcapture(void* context, void* buffer, size_t width, size_t height) {
 
         // Get the camera warmed up for the new resolution
         warmup(cap);
+    }
+    else {
+        // To be sure that we get an image which accurately describes what is in
+        // front of the camera _right now_ (rather than whenever the last frames
+        // were grabbed) we ditch the last 3 frames.
+        // This is needed with the TeckNet cameras we're using, though may not
+        // be needed for others.
+        skipframes(cap, 3);
     }
 
     if (cap->get(CV_CAP_PROP_FRAME_WIDTH) != (double)width) {
