@@ -25,9 +25,10 @@ class Vision:
     @property
     def camera(self):
         """
-        Property wrapping our 'camera' instance. We assume that when we're
-        given the instance it has not yet been initialised, so we do that on
-        first use.
+        Property wrapping our 'camera' instance.
+
+        We assume that when we're given the instance it has not yet been
+        initialised, so we do that on first use.
         """
         if not self._camera_ready:
             self._camera.init()
@@ -37,10 +38,7 @@ class Vision:
 
     @property
     def apriltag_library(self):
-        """
-        Property wrapping our instance of the apriltag library. We lazily
-        initialise the library on first use.
-        """
+        """Lazy property wrapping our instance of the apriltag detector."""
         if self._detector is None:
             size = self.camera.get_image_size()
             self._detector = AprilTagDetector(size)
