@@ -58,10 +58,7 @@ class AprilTagDetector:
 
     @property
     def image_size(self):
-        """
-        The image size, a tuple of (width, height), for which the detector
-        instance is configured.
-        """
+        """The configured image size, as a tuple of (width, height)."""
         return self._image_size
 
     def detect_tags(self, img: Image):
