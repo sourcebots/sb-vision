@@ -51,7 +51,6 @@ class Vision:
 
         :return: single PIL image
         """
-
         # get the PIL image from the camera
         return self.camera.capture_image()
 
