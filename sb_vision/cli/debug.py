@@ -8,7 +8,13 @@ from ..vision import Vision
 from ..token_display import display_tokens
 
 
-def _capture_and_display_image(vision, after_thresholding, draw_tokens, show_image, output_file):
+def _capture_and_display_image(
+    vision,
+    after_thresholding,
+    draw_tokens,
+    show_image,
+    output_file,
+):
     img = vision.capture_image()
     tokens = vision.process_image(img)
 
@@ -42,7 +48,9 @@ def main(input_file, device_id, distance_model, **options):
             camera = Camera(device_id, CAM_IMAGE_SIZE, distance_model)
 
             def should_continue():
-                return input("Process next frame? [Y/n]: ").lower() in ('y', '')
+                return input(
+                    "Process next frame? [Y/n]: ",
+                ).lower() in ('y', '')
 
         else:
             camera = FileCamera(input_file, distance_model)
@@ -102,6 +110,6 @@ def add_arguments(parser):
         dest='output_file',
         type=pathlib.Path,
         help="Save the processed image (useful with --after-thresholding and "
-             "--draw-tokens). Beware using this with a camera as the same file "
-             "name will be used for all frames.",
+             "--draw-tokens). Beware using this with a camera as the same "
+             "file name will be used for all frames.",
     )
