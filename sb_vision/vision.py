@@ -4,13 +4,12 @@ import contextlib
 
 from PIL import Image
 
-from .native.apriltag import AprilTagDetector
-
 from .camera import Camera, FileCamera
 from .tokens import Token
 from .cvcapture import clean_and_threshold
 from .camera_base import CameraBase
 from .token_display import display_tokens
+from .native.apriltag import AprilTagDetector
 
 
 class Vision:
