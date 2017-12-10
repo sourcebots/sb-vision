@@ -25,9 +25,9 @@ class Vision:
     @property
     def camera(self):
         """
-        Property wrapping our 'camera' instance. We assume that when we're given
-        the instance it has not yet been initialised, so we do that on first
-        use.
+        Property wrapping our 'camera' instance. We assume that when we're
+        given the instance it has not yet been initialised, so we do that on
+        first use.
         """
         if not self._camera_ready:
             self._camera.init()
