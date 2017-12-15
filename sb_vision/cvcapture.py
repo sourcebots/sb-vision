@@ -92,8 +92,9 @@ class CaptureDevice(object):
         """
         if self.instance is not None:
             with self.lock:
-                _cvcapture.lib.cvclose(self.instance)
-            self.instance = None
+                if self.instance is not None:
+                    _cvcapture.lib.cvclose(self.instance)
+                    self.instance = None
 
     __del__ = close
 

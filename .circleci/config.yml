@@ -2,7 +2,7 @@ version: 2
 jobs:
   build:
     docker:
-      - image: python:3.4-jessie
+      - image: python:3-stretch
     steps:
       - checkout
       - run: apt-get update -y

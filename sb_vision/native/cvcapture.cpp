@@ -19,12 +19,22 @@ extern "C" {
 
 #include "opencv2/opencv.hpp"
 
+void warmup(cv::VideoCapture* context) {
+    // The TeckNet camera needs about 11 frames to warm up either when first
+    // opened or when changing resolution. Without this the images returned are
+    // too dark to be useful.
+    for (int i=0; i < 11; i++) {
+        context->grab();
+    }
+}
+
 void* cvopen(const int device_id) {
     cv::VideoCapture* context = new cv::VideoCapture(device_id);
     if (!context->isOpened()) {
         delete context;
         return NULL;
     }
+    warmup(context);
     return reinterpret_cast<void*>(context);
 }
 
@@ -35,9 +45,20 @@ void cvclose(void* context) {
 
 int cvcapture(void* context, void* buffer, size_t width, size_t height) {
     cv::VideoCapture* cap = reinterpret_cast<cv::VideoCapture*>(context);
-    cap->set(CV_CAP_PROP_FRAME_WIDTH, width);
-    cap->set(CV_CAP_PROP_FRAME_HEIGHT, height);
-    cap->set(CV_CAP_PROP_FOURCC, CV_FOURCC('B', 'G', 'R', 3));
+
+    double current_width = cap->get(CV_CAP_PROP_FRAME_WIDTH);
+    double current_height = cap->get(CV_CAP_PROP_FRAME_HEIGHT);
+
+    if (current_width != (double)width || current_height != (double)height) {
+        fprintf( stderr, "Changing resolution from %dx%d to %dx%d\n", current_width, current_height, width, height);
+        cap->set(CV_CAP_PROP_FRAME_WIDTH, width);
+        if (cap->get(CV_CAP_PROP_FRAME_HEIGHT) != (double)height) {
+            cap->set(CV_CAP_PROP_FRAME_HEIGHT, height);
+        }
+
+        // Get the camera warmed up for the new resolution
+        warmup(cap);
+    }
 
     if (cap->get(CV_CAP_PROP_FRAME_WIDTH) != (double)width) {
         fprintf(stderr, "Incorrect width set on cap: %f\n", cap->get(CV_CAP_PROP_FRAME_WIDTH));
