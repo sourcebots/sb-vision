@@ -49,8 +49,8 @@ int cvcapture(void* context, void* buffer, size_t width, size_t height) {
     double current_width = cap->get(CV_CAP_PROP_FRAME_WIDTH);
     double current_height = cap->get(CV_CAP_PROP_FRAME_HEIGHT);
 
-    if (current_width != (double)width || current_height != (double)height) {
-        fprintf( stderr, "Changing resolution from %dx%d to %dx%d\n", current_width, current_height, width, height);
+    if (static_cast<unsigned int>(current_width) != width || static_cast<unsigned int>(current_height) != height) {
+        fprintf( stderr, "Changing resolution from %fx%f to %lux%lu\n", current_width, current_height, width, height);
         cap->set(CV_CAP_PROP_FRAME_WIDTH, width);
         if (cap->get(CV_CAP_PROP_FRAME_HEIGHT) != (double)height) {
             cap->set(CV_CAP_PROP_FRAME_HEIGHT, height);
@@ -84,19 +84,19 @@ int cvcapture(void* context, void* buffer, size_t width, size_t height) {
         return 0;
     }
     int died_horribly = 0;
-    if (greyscale_image.size().width != width) {
+    if (static_cast<unsigned int>(greyscale_image.size().width) != width) {
         fprintf(
             stderr,
-            "Width mismatch: %d expected, %d actual\n",
+            "Width mismatch: %lu expected, %d actual\n",
             width,
             greyscale_image.size().width
         );
         died_horribly = 1;
     }
-    if (greyscale_image.size().height != height) {
+    if (static_cast<unsigned int>(greyscale_image.size().height) != height) {
         fprintf(
             stderr,
-            "Height mismatch: %d expected, %d actual\n",
+            "Height mismatch: %lu expected, %d actual\n",
             height,
             greyscale_image.size().height
         );
