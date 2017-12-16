@@ -1,0 +1,21 @@
+[[source]]
+url = "https://pypi.python.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+
+[dev-packages]
+
+"e1839a8" = {path = ".", editable = true}
+pyyaml = "*"
+"scikit-learn" = "*"
+"flake8" = "*"
+"flake8-docstrings" = "*"
+"flake8-isort" = "*"
+"flake8-mutable" = "*"
+"flake8-debugger" = "*"
+"flake8-comprehensions" = "*"
+"flake8-todo" = "*"
+pytest = "*"
+"pytest-flake8" = "*"

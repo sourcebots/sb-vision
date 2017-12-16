@@ -3,7 +3,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='sb-vision',
-    version='1.0',
+    version='0.1.0',
     description="Vision system for SourceBots",
     author="SourceBots",
     author_email='',
@@ -20,7 +20,8 @@ setup(
         'Pillow',
         'numpy',
         'scipy',
-        "cffi>=1.4.0",
+        'cffi>=1.4.0',
+        'pytest-runner',
     ],
     extras_require={
         'calibration': [
@@ -28,5 +29,16 @@ setup(
             'scikit-learn',
         ],
     },
+    tests_require=[
+        'pytest',
+        'pytest-flake8',
+        'flake8',
+        'flake8-docstrings',
+        'flake8-isort',
+        'flake8-mutable',
+        'flake8-debugger',
+        'flake8-comprehensions',
+        'flake8-todo',
+    ],
     zip_safe=False,
 )
