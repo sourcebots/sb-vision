@@ -2,4 +2,4 @@
 if [ -z "$FLAKE8" ]; then
     FLAKE8=flake8
 fi
-exec "$FLAKE8" --ignore=D401 sb_vision tests
+exec "$FLAKE8" sb_vision tests
