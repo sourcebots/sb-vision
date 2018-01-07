@@ -5,8 +5,8 @@ from PIL import Image
 from .tokens import Token
 from .cvcapture import clean_and_threshold
 from .camera_base import CameraBase
-from .token_display import display_tokens
 from .native.apriltag import AprilTagDetector
+
 
 class Vision:
     """Class that handles the vision library and the camera."""
