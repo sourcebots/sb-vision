@@ -54,6 +54,9 @@ class Camera(CameraBase):
         :return: PIL image object of the captured image in Luminosity
                  color scale
         """
+        if self.camera is None:
+            raise RuntimeError("Capture device not available")
+
         image_bytes = self.camera.capture(*self.cam_image_size)
         return Image.frombytes('L', self.cam_image_size, image_bytes)
 
