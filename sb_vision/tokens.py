@@ -1,8 +1,8 @@
 """Tokens detections, and the utilities to manipulate them."""
 
+import functools
 import lzma
 import pickle
-import functools
 from pathlib import Path
 
 import numpy as np

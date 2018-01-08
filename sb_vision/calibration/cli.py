@@ -1,9 +1,9 @@
 """Command-line tool for camera calibration."""
 
-import sys
+import argparse
 import lzma
 import pickle
-import argparse
+import sys
 from pathlib import Path
 
 import yaml

@@ -2,10 +2,10 @@
 
 from PIL import Image
 
-from .tokens import Token
-from .cvcapture import clean_and_threshold
 from .camera_base import CameraBase
+from .cvcapture import clean_and_threshold
 from .native.apriltag import AprilTagDetector
+from .tokens import Token
 
 
 class Vision:

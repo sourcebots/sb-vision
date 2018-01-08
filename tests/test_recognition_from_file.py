@@ -4,7 +4,7 @@ from pathlib import Path
 
 import pytest
 
-from sb_vision import Token, Vision, FileCamera
+from sb_vision import FileCamera, Token, Vision
 
 TEST_DATA = Path(__file__).parent / 'test_data'
 

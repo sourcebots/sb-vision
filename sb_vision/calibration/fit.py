@@ -3,11 +3,11 @@
 import numpy
 import numpy.linalg
 import sklearn.base
-import sklearn.metrics
-import sklearn.pipeline
 import sklearn.linear_model
-import sklearn.preprocessing
+import sklearn.metrics
 import sklearn.model_selection
+import sklearn.pipeline
+import sklearn.preprocessing
 
 from ..tokens import homography_matrix_to_distance_model_input_vector
 
