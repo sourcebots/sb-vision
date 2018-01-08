@@ -4,7 +4,7 @@ import functools
 import lzma
 import pickle
 from pathlib import Path
-from typing import Any, List, Tuple
+from typing import Any, List, Optional, Tuple
 
 import numpy as np
 
@@ -170,7 +170,7 @@ class Token:
         cls,
         apriltag_detection: 'ApriltagDetection',
         image_size: Tuple[int, int],
-        distance_model: str
+        distance_model: Optional[str],
     ) -> 'Token':
         """Construct a Token from an April Tag detection."""
         # *************************************************************************

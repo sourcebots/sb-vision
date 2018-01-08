@@ -5,7 +5,7 @@ A camera is an arbitrary source of images.
 """
 
 import abc
-from typing import Tuple
+from typing import Optional, Tuple
 
 import PIL
 
@@ -13,7 +13,7 @@ import PIL
 class CameraBase(metaclass=abc.ABCMeta):
     """Base class for all cameras."""
 
-    def __init__(self, distance_model: str) -> None:
+    def __init__(self, distance_model: Optional[str]) -> None:
         """Basic, general initialisation."""
         self.distance_model = distance_model
 

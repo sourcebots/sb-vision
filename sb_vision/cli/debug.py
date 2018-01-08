@@ -3,7 +3,7 @@
 import contextlib
 import pathlib
 
-from ..camera import Camera, FileCamera, CameraBase  # noqa: F401
+from ..camera import Camera, CameraBase, FileCamera  # noqa: F401
 from ..token_display import display_tokens
 from ..vision import Vision
 
