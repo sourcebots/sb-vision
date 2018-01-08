@@ -3,7 +3,7 @@
 import contextlib
 import pathlib
 
-from ..camera import Camera, FileCamera
+from ..camera import Camera, FileCamera, CameraBase  # noqa: F401
 from ..token_display import display_tokens
 from ..vision import Vision
 
@@ -45,7 +45,11 @@ def main(input_file, device_id, distance_model, **options):
     with contextlib.suppress(KeyboardInterrupt):
         if device_id is not None:
             CAM_IMAGE_SIZE = (1280, 720)
-            camera = Camera(device_id, CAM_IMAGE_SIZE, distance_model)
+            camera = Camera(
+                device_id,
+                CAM_IMAGE_SIZE,
+                distance_model,
+            )  # type: CameraBase
 
             def should_continue():
                 return input(
