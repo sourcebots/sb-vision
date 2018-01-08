@@ -1,3 +1,5 @@
+from typing import Tuple
+
 class ImageU8:
     width: int
     height: int
