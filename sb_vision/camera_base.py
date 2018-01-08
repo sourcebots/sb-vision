@@ -15,25 +15,20 @@ class CameraBase(metaclass=abc.ABCMeta):
 
     def __init__(self, distance_model: str) -> None:
         """Basic, general initialisation."""
-        self.initialised = False
         self.distance_model = distance_model
 
     def init(self) -> None:
         """
         Initialise the camera.
 
-        This is guaranteed to only be called once, and after it is called
-        the value for `cam_image_size` must be set.
+        This is guaranteed to only be called once.
         """
-        self.initialised = True
+        pass
 
+    @abc.abstractmethod
     def get_image_size(self) -> Tuple[int, int]:
         """Get the size of images captured by the camera."""
-        if not self.initialised:
-            raise RuntimeError(
-                "Must Initialise camera before getting image size",
-            )
-        return self.cam_image_size
+        raise NotImplementedError()
 
     @abc.abstractmethod
     def capture_image(self) -> PIL.Image:

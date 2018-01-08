@@ -47,6 +47,14 @@ class Camera(CameraBase):
         """Make sure that the camera is deinitialised on closing."""
         self._deinit_camera()
 
+    def get_image_size(self) -> Tuple[int, int]:
+        """Get the size of images captured by the camera."""
+        if self.camera is None:
+            raise RuntimeError(
+                "Must initialise camera before getting image size",
+            )
+        return self.cam_image_size
+
     def capture_image(self) -> Image:
         """
         Capture an image.
@@ -74,7 +82,14 @@ class FileCamera(CameraBase):
         """Open the file and read in the image."""
         super().init()
         self.image = Image.open(self.file_name).convert('L')
-        self.cam_image_size = self.image.size
+
+    def get_image_size(self) -> Tuple[int, int]:
+        """Get the size of images captured by the camera."""
+        if self.image is None:
+            raise RuntimeError(
+                "Must initialise camera before getting image size",
+            )
+        return self.image.size
 
     def capture_image(self) -> Image:
         """
