@@ -1,6 +1,6 @@
 """Main vision driver."""
 
-from typing import Iterator, List, Optional
+from typing import List, Optional  # noqa: F401
 
 from PIL import Image
 

@@ -6,7 +6,7 @@ Camera only has to serve as a source of images for further processing. A
 Camera class could, for instance, fetch images from a file.
 """
 
-from typing import Optional, Tuple
+from typing import Optional, Tuple  # noqa: F401
 
 from PIL import Image
 

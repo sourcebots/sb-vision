@@ -9,7 +9,7 @@ from typing import Any, List, Tuple
 import numpy as np
 
 if False:
-    from .native.apriltag.types import ApriltagDetection
+    from .native.apriltag.types import ApriltagDetection  # noqa: F401
 
 
 def _row_mul(m, corner, col):
