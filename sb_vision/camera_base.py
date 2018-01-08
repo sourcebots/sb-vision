@@ -13,16 +13,17 @@ import PIL
 class CameraBase(metaclass=abc.ABCMeta):
     """Base class for all cameras."""
 
-    def __init__(self) -> None:
+    def __init__(self, distance_model: str) -> None:
         """Basic, general initialisation."""
         self.initialised = False
+        self.distance_model = distance_model
 
     def init(self) -> None:
         """
         Initialise the camera.
 
         This is guaranteed to only be called once, and after it is called
-        the values for `distance_model` and `cam_image_size` must be set.
+        the value for `cam_image_size` must be set.
         """
         self.initialised = True
 
