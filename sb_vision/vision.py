@@ -18,10 +18,10 @@ class Vision:
         self._camera = camera
         self._camera_ready = False
 
-        self._detector = None
+        self._detector = None  # type: Optional[AprilTagDetector]
 
     @property
-    def camera(self):
+    def camera(self) -> CameraBase:
         """
         Property wrapping our 'camera' instance.
 
@@ -35,7 +35,7 @@ class Vision:
         return self._camera
 
     @property
-    def apriltag_library(self):
+    def apriltag_library(self) -> AprilTagDetector:
         """Lazy property wrapping our instance of the apriltag detector."""
         if self._detector is None:
             size = self.camera.get_image_size()
