@@ -6,7 +6,7 @@ This builds upon some functionality sneaked in here from OpenCV.
 
 import threading
 
-from sb_vision.native import _cvcapture
+from sb_vision.native import _cvcapture  # type: ignore
 
 
 class CvCaptureError(RuntimeError):
