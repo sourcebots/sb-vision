@@ -1,12 +1,12 @@
 """AprilTag detector wrapper."""
 
-from typing import Any, Iterator, Tuple
+from typing import TYPE_CHECKING, Any, Iterator, Tuple
 
 from PIL import Image
 
 from ._apriltag import ffi, lib
 
-if False:
+if TYPE_CHECKING:
     from .types import ApriltagDetection  # noqa: F401
 
 

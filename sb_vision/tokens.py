@@ -4,11 +4,11 @@ import functools
 import lzma
 import pickle
 from pathlib import Path
-from typing import Any, List, Optional, Tuple
+from typing import TYPE_CHECKING, Any, List, Optional, Tuple
 
 import numpy as np
 
-if False:
+if TYPE_CHECKING:
     from .native.apriltag.types import ApriltagDetection  # noqa: F401
 
 
