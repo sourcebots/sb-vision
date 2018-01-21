@@ -9,6 +9,7 @@ from typing import TYPE_CHECKING, Any, List, Optional, Tuple
 import numpy as np
 
 if TYPE_CHECKING:
+    # Interface-only definitions
     from .native.apriltag.types import ApriltagDetection  # noqa: F401
 
 

@@ -7,6 +7,7 @@ from PIL import Image
 from ._apriltag import ffi, lib
 
 if TYPE_CHECKING:
+    # Interface-only definitions
     from .types import ApriltagDetection  # noqa: F401
 
 
