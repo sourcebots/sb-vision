@@ -35,7 +35,7 @@ class Vision:
         return self._camera
 
     @property
-    def apriltag_library(self) -> AprilTagDetector:
+    def apriltag_detector(self) -> AprilTagDetector:
         """Lazy property wrapping our instance of the apriltag detector."""
         if self._detector is None:
             size = self.camera.get_image_size()
@@ -80,7 +80,7 @@ class Vision:
 
         tokens = [
             Token.from_apriltag_detection(x, img.size, distance_model)
-            for x in self.apriltag_library.detect_tags(img)
+            for x in self.apriltag_detector.detect_tags(img)
         ]
 
         return tokens
