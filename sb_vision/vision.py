@@ -2,7 +2,7 @@
 
 from typing import List, Optional  # noqa: F401
 
-from PIL import Image
+from PIL.Image import Image
 
 from .camera_base import CameraBase
 from .cvcapture import clean_and_threshold
@@ -85,7 +85,7 @@ class Vision:
 
         return tokens
 
-    def snapshot(self) -> Image:
+    def snapshot(self) -> List[Token]:
         """
         Get a single list of tokens from one camera snapshot.
 
