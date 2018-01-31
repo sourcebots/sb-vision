@@ -2,7 +2,7 @@
 
 from typing import List, Optional  # noqa: F401
 
-from PIL.Image import Image
+from PIL import Image
 
 from .camera_base import CameraBase
 from .cvcapture import clean_and_threshold
@@ -43,7 +43,7 @@ class Vision:
 
         return self._detector
 
-    def capture_image(self) -> Image:
+    def capture_image(self) -> Image.Image:
         """
         Capture an image from the camera.
 
@@ -52,7 +52,7 @@ class Vision:
         # get the PIL image from the camera
         return self.camera.capture_image()
 
-    def threshold_image(self, img: Image) -> Image:
+    def threshold_image(self, img: Image.Image) -> Image.Image:
         """Run thresholding and preprocessing on an image."""
         as_bytes = img.convert('L').tobytes()
         cleaned_bytes = clean_and_threshold(
@@ -67,7 +67,7 @@ class Vision:
             data=cleaned_bytes,
         )
 
-    def process_image(self, img: Image) -> List[Token]:
+    def process_image(self, img: Image.Image) -> List[Token]:
         """
         Run the given image through the apriltags detection library.
 
