@@ -35,7 +35,7 @@ def _capture_and_display_image(
     for token in tokens:
         print("- {}".format(token))
         try:
-            print(token.cartesian)
+            print("  x: {0:.3f}m, y: {1:.3f}m, z: {2:.3f}m".format(*token.cartesian))
         except AttributeError:
             pass
 
