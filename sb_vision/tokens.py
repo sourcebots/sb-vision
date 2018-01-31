@@ -4,15 +4,20 @@ import functools
 import lzma
 import pickle
 from pathlib import Path
+from typing import TYPE_CHECKING, Any, List, Optional, Tuple
 
 import numpy as np
+
+if TYPE_CHECKING:
+    # Interface-only definitions
+    from .native.apriltag.types import ApriltagDetection  # noqa: F401
 
 
 def _row_mul(m, corner, col):
     return m[col, 0] * corner[0] + m[col, 1] * corner[1] + m[col, 2]
 
 
-def _homography_transform(corner, homog):
+def _homography_transform(corner: Tuple[int, int], homog) -> Tuple[int, int]:
     """
     Perform the equivalent of an OpenCV WarpPerspectiveTransform on the points.
 
@@ -37,7 +42,7 @@ def _decompose_homography(Homography, Calibration):
     pass
 
 
-def _get_pixel_corners(homog):
+def _get_pixel_corners(homog) -> List[Tuple[int, int]]:
     """
     Get the co-ordinate of the corners given the homography matrix.
 
@@ -62,7 +67,7 @@ def _get_pixel_centre(homography_matrix):
 
 
 @functools.lru_cache()
-def _get_distance_model(name, image_size):
+def _get_distance_model(name: str, image_size: Tuple[int, int]):
     if name is None:
         raise ValueError("Getting distance model of None")
 
@@ -121,8 +126,8 @@ def _apply_distance_model_component_to_homography_matrix(
 
 def _get_cartesian(
     homography_matrix,
-    image_size,
-    distance_model,
+    image_size: Tuple[int, int],
+    distance_model: str,
 ):
     calibration = _get_distance_model(distance_model, image_size)
 
@@ -142,7 +147,7 @@ def _get_cartesian(
 class Token:
     """Representation of the detection of one token."""
 
-    def __init__(self, id, certainty=0.0):
+    def __init__(self, id: int, certainty: float=0.0) -> None:
         """
         General initialiser.
 
@@ -164,10 +169,10 @@ class Token:
     @classmethod
     def from_apriltag_detection(
         cls,
-        apriltag_detection,
-        image_size,
-        distance_model
-    ):
+        apriltag_detection: 'ApriltagDetection',
+        image_size: Tuple[int, int],
+        distance_model: Optional[str],
+    ) -> 'Token':
         """Construct a Token from an April Tag detection."""
         # *************************************************************************
         # NOTE: IF YOU CHANGE THIS PLEASE ADD THEM IN THE ROBOT-API camera.py
@@ -219,13 +224,13 @@ class Token:
         # Polar co-ordinates in the 3D world, relative to the camera
         self.polar = self.cartesian_to_polar(self.cartesian)
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         """General debug representation."""
         return "Token: {}, certainty: {}".format(self.id, self.certainty)
 
     __str__ = __repr__
 
-    def __eq__(self, other):
+    def __eq__(self, other: Any) -> bool:
         """Equivalent relation partitioning by `id`."""
         if not isinstance(other, Token):
             return False
