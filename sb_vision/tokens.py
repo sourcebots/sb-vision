@@ -115,12 +115,12 @@ def _apply_distance_model_component_to_homography_matrix(
         homography_matrix_to_distance_model_input_vector(homography_matrix)
 
     biases = model_component['biases']
-    intercepts = model_component['intercept']
+    intercept = model_component['intercept']
     coefs = model_component['coefs']
 
     return (
         (biases + flattened_homography_matrix).dot(coefs) +
-        intercepts
+        intercept
     )
 
 
