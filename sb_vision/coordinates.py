@@ -6,11 +6,22 @@ from numpy import arctan2, float64, linalg
 
 AnyFloat = Union[float, float64]
 
-Cartesian = NamedTuple('Cartesian', (
+_Cartesian = NamedTuple('Cartesian', (
     ('x', AnyFloat),
     ('y', AnyFloat),
     ('z', AnyFloat),
 ))
+
+
+class Cartesian(_Cartesian):
+    """Cartesian coordinates."""
+
+    __slots__ = ()
+
+    def tolist(self):
+        """Placeholder helper to ease migration within robotd."""
+        return list(self)
+
 
 Polar = NamedTuple('Polar', (
     ('rot_x', AnyFloat),
