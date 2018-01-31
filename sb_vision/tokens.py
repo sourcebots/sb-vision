@@ -4,7 +4,7 @@ import functools
 import lzma
 import pickle
 from pathlib import Path
-from typing import TYPE_CHECKING, Any, List, Optional, Tuple
+from typing import TYPE_CHECKING, Any, Dict, List, Mapping, Optional, Tuple
 
 import numpy as np
 
@@ -67,7 +67,7 @@ def _get_pixel_centre(homography_matrix):
 
 
 @functools.lru_cache()
-def _get_distance_model(name: str, image_size: Tuple[int, int]):
+def _get_distance_model(name: str, image_size: Tuple[int, int]) -> Dict[str, Any]:
     if name is None:
         raise ValueError("Getting distance model of None")
 
@@ -108,15 +108,15 @@ def homography_matrix_to_distance_model_input_vector(homography_matrix):
 
 
 def _apply_distance_model_component_to_homography_matrix(
-    model_component,
+    model_component: Mapping[str, Any],
     homography_matrix,
-):
+) -> np.float64:
     flattened_homography_matrix = \
         homography_matrix_to_distance_model_input_vector(homography_matrix)
 
-    biases = model_component['biases']
-    intercept = model_component['intercept']
-    coefs = model_component['coefs']
+    biases = model_component['biases']  # type: np.ndarray
+    intercept = model_component['intercept']  # type: np.float64
+    coefs = model_component['coefs']  # type: np.ndarray
 
     return (
         (biases + flattened_homography_matrix).dot(coefs) +
@@ -134,12 +134,12 @@ def _get_cartesian(
     x = _apply_distance_model_component_to_homography_matrix(
         calibration['x_model'],
         homography_matrix,
-    )
+    )  # type: np.float64
     y = 0.0
     z = _apply_distance_model_component_to_homography_matrix(
         calibration['z_model'],
         homography_matrix,
-    )
+    )  # type: np.float64
 
     return np.array([x, y, z])
 
