@@ -6,13 +6,16 @@ Camera only has to serve as a source of images for further processing. A
 Camera class could, for instance, fetch images from a file.
 """
 
-from typing import Optional, Tuple  # noqa: F401
+import pathlib
+from typing import Optional, Tuple, Union  # noqa: F401
 
 from PIL import Image
 
 from sb_vision.cvcapture import CaptureDevice
 
 from .camera_base import CameraBase
+
+_PathLike = Union[str, pathlib.Path]
 
 
 class Camera(CameraBase):
@@ -72,7 +75,7 @@ class Camera(CameraBase):
 class FileCamera(CameraBase):
     """Pseudo-camera debug class, getting images from files."""
 
-    def __init__(self, file_path: str, distance_model: Optional[str]) -> None:
+    def __init__(self, file_path: _PathLike, distance_model: Optional[str]) -> None:
         """Open from a given path, with a given pseudo-focal-length."""
         super().__init__(distance_model)
         self.file_name = file_path
