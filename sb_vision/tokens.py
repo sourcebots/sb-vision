@@ -8,7 +8,11 @@ from typing import TYPE_CHECKING, Any, Dict, List, Mapping, Optional, Tuple
 
 import numpy as np
 
-from .coordinates import Cartesian, cartesian_to_polar
+from .coordinates import (
+    Cartesian,
+    cartesian_to_legacy_polar,
+    cartesian_to_spherical
+)
 
 if TYPE_CHECKING:
     # Interface-only definitions
@@ -215,7 +219,10 @@ class Token:
         )
 
         # Polar co-ordinates in the 3D world, relative to the camera
-        self.polar = cartesian_to_polar(self.cartesian)
+        self.polar = cartesian_to_legacy_polar(self.cartesian)
+        self.legacy_polar = cartesian_to_legacy_polar(self.cartesian)
+
+        self.spherical = cartesian_to_spherical(self.cartesian)
 
     def __repr__(self) -> str:
         """General debug representation."""
