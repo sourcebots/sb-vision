@@ -8,6 +8,12 @@ from typing import TYPE_CHECKING, Any, Dict, List, Mapping, Optional, Tuple
 
 import numpy as np
 
+from .coordinates import (
+    Cartesian,
+    cartesian_to_legacy_polar,
+    cartesian_to_spherical,
+)
+
 if TYPE_CHECKING:
     # Interface-only definitions
     from .native.apriltag.types import ApriltagDetection  # noqa: F401
@@ -128,7 +134,7 @@ def _get_cartesian(
     homography_matrix,
     image_size: Tuple[int, int],
     distance_model: str,
-):
+) -> Cartesian:
     calibration = _get_distance_model(distance_model, image_size)
 
     x = _apply_distance_model_component_to_homography_matrix(
@@ -141,7 +147,7 @@ def _get_cartesian(
         homography_matrix,
     )  # type: np.float64
 
-    return np.array([x, y, z])
+    return Cartesian(x, y, z)
 
 
 class Token:
@@ -156,15 +162,6 @@ class Token:
         """
         self.id = id
         self.certainty = certainty
-
-    @staticmethod
-    def cartesian_to_polar(cartesian):
-        """Convert cartesian co-ordinate space to polar."""
-        cart_x, cart_y, cart_z = tuple(cartesian)
-        polar_dist = np.linalg.norm(cartesian)
-        polar_x = np.arctan2(cart_z, cart_x)
-        polar_y = np.arctan2(cart_z, cart_y)
-        return polar_x, polar_y, polar_dist
 
     @classmethod
     def from_apriltag_detection(
@@ -222,7 +219,10 @@ class Token:
         )
 
         # Polar co-ordinates in the 3D world, relative to the camera
-        self.polar = self.cartesian_to_polar(self.cartesian)
+        self.polar = cartesian_to_legacy_polar(self.cartesian)
+        self.legacy_polar = cartesian_to_legacy_polar(self.cartesian)
+
+        self.spherical = cartesian_to_spherical(self.cartesian)
 
     def __repr__(self) -> str:
         """General debug representation."""
