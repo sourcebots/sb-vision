@@ -12,6 +12,17 @@ installed from the system. On Ubuntu this means installing the `python3-dev` and
 `libopencv-dev` packages. You'll also need a C++ compiler to build the native
 components.
 
+### Useful commands
+
+The `sb_vision` module is runnable and provides commands useful for
+debugging the library as well as for some simple use-cases. Full details are in the `--help` output, though some useful commands are:
+
+- `debug`: simple usage of the library for easy debugging. Supports both loading
+  from a file and capturing from a camera.
+- `summarise`: summarise the markers found in a directory of images. Output is
+  in the same format as the YAML files needed for calibration (this can be
+  useful to see more detail about how good a calibration is).
+
 
 ## Testing
 
