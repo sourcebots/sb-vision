@@ -11,7 +11,7 @@ import numpy as np
 from .coordinates import (
     Cartesian,
     cartesian_to_legacy_polar,
-    cartesian_to_spherical
+    cartesian_to_spherical,
 )
 
 if TYPE_CHECKING:
