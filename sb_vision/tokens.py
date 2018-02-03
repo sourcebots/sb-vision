@@ -8,13 +8,13 @@ from typing import TYPE_CHECKING, Any, Dict, List, Mapping, Optional, Tuple
 
 import numpy as np
 
-from .game_specific import MARKER_SIZES
-
 from .coordinates import (
     Cartesian,
     cartesian_to_legacy_polar,
     cartesian_to_spherical,
 )
+
+from .game_specific import MARKER_SIZES
 
 if TYPE_CHECKING:
     # Interface-only definitions
@@ -158,13 +158,11 @@ def _get_cartesian(
     )  # type: np.float64
 
     # The ratio between the calibrated size and the actual size
-    size_ratio = marker_size[0]/CALIBRATED_MARKER_SIZE[0]
+    size_ratio = marker_size[0] / CALIBRATED_MARKER_SIZE[0]
     x = in_x * size_ratio
     z = in_z * size_ratio
 
     return Cartesian(x, y, z)
-
-
 
 
 class Token:
