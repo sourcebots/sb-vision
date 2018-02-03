@@ -1,2 +1,4 @@
 include	sb_vision/c270.pkl.xz
+include	sb_vision/tecknet_10cm.pkl.xz
+include	sb_vision/tecknet_25cm.pkl.xz
 
