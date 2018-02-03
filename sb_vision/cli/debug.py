@@ -38,9 +38,9 @@ def _capture_and_display_image(
         try:
             print("  x: {0:.3f}m, y: {1:.3f}m, z: {2:.3f}m".format(*token.cartesian))
             print("  rot_x: {0:.3f}°, rot_y: {1:.3f}°, dist: {2:.3f}m".format(
-                math.degrees(token.polar.rot_x),
-                math.degrees(token.polar.rot_y),
-                token.polar.dist,
+                math.degrees(token.spherical.rot_x),
+                math.degrees(token.spherical.rot_y),
+                token.spherical.dist,
             ))
         except AttributeError:
             pass
