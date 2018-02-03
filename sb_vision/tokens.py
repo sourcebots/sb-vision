@@ -8,7 +8,7 @@ from typing import TYPE_CHECKING, Any, Dict, List, Mapping, Optional, Tuple
 
 import numpy as np
 
-from sb_vision.game_specific import MARKER_SIZES
+from .game_specific import MARKER_SIZES
 
 from .coordinates import (
     Cartesian,
