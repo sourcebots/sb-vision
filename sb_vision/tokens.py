@@ -8,6 +8,8 @@ from typing import TYPE_CHECKING, Any, Dict, List, Mapping, Optional, Tuple
 
 import numpy as np
 
+from sb_vision.game_specific import MARKER_SIZES
+
 from .coordinates import (
     Cartesian,
     cartesian_to_legacy_polar,
@@ -134,18 +136,27 @@ def _get_cartesian(
     homography_matrix,
     image_size: Tuple[int, int],
     distance_model: str,
+    marker_size: Tuple[float, float],
 ) -> Cartesian:
+    if marker_size[0] != marker_size[1]:
+        raise ValueError("Non-square markers are not supported!")
+
     calibration = _get_distance_model(distance_model, image_size)
 
-    x = _apply_distance_model_component_to_homography_matrix(
+    in_x = _apply_distance_model_component_to_homography_matrix(
         calibration['x_model'],
         homography_matrix,
     )  # type: np.float64
     y = 0.0
-    z = _apply_distance_model_component_to_homography_matrix(
+    in_z = _apply_distance_model_component_to_homography_matrix(
         calibration['z_model'],
         homography_matrix,
     )  # type: np.float64
+
+    # The ratio between the calibrated size and the actual size
+    size_ratio = marker_size[0]/0.25
+    x = in_x * size_ratio
+    z = in_z * size_ratio
 
     return Cartesian(x, y, z)
 
@@ -172,7 +183,7 @@ class Token:
     ) -> 'Token':
         """Construct a Token from an April Tag detection."""
         # *************************************************************************
-        # NOTE: IF YOU CHANGE THIS PLEASE ADD THEM IN THE ROBOT-API camera.py
+        # NOTE: IF YOU CHANGE THIS, THEN CHANGE ROBOT-API camera.py
         # *************************************************************************
 
         instance = cls(
@@ -187,6 +198,7 @@ class Token:
             homography_matrix=homography,
             distance_model=distance_model,
             image_size=image_size,
+            marker_size=MARKER_SIZES[apriltag_detection.id]
         )
         return instance
 
@@ -196,7 +208,8 @@ class Token:
         *,
         homography_matrix,
         distance_model,
-        image_size
+        image_size,
+        marker_size
     ):
         """Infer coordinate information from a homography matrix."""
         # pixel coordinates of the corners of the marker
@@ -216,6 +229,7 @@ class Token:
             homography_matrix,
             image_size,
             distance_model,
+            marker_size
         )
 
         # Polar co-ordinates in the 3D world, relative to the camera
