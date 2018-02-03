@@ -132,6 +132,10 @@ def _apply_distance_model_component_to_homography_matrix(
     )
 
 
+# TODO: Don't hard-code this
+CALIBRATED_MARKER_SIZE = (0.25, 0.25)
+
+
 def _get_cartesian(
     homography_matrix,
     image_size: Tuple[int, int],
@@ -154,11 +158,13 @@ def _get_cartesian(
     )  # type: np.float64
 
     # The ratio between the calibrated size and the actual size
-    size_ratio = marker_size[0]/0.25
+    size_ratio = marker_size[0]/CALIBRATED_MARKER_SIZE[0]
     x = in_x * size_ratio
     z = in_z * size_ratio
 
     return Cartesian(x, y, z)
+
+
 
 
 class Token:
@@ -194,11 +200,12 @@ class Token:
         arr = [apriltag_detection.H.data[x] for x in range(9)]
         homography = np.reshape(arr, (3, 3))
 
+        id = apriltag_detection.id
         instance.infer_location_from_homography_matrix(
             homography_matrix=homography,
             distance_model=distance_model,
             image_size=image_size,
-            marker_size=MARKER_SIZES[apriltag_detection.id]
+            marker_size=MARKER_SIZES[id] if id in MARKER_SIZES else CALIBRATED_MARKER_SIZE
         )
         return instance
 
