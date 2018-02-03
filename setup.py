@@ -10,6 +10,7 @@ setup(
     include_package_data=True,
     setup_requires=[
         'cffi>=1.4.0',
+        'pytest-runner',
     ],
     cffi_modules=[
         'sb_vision/native/cvcapture_build.py:ffibuilder',
@@ -20,6 +21,9 @@ setup(
         'numpy',
         'scipy',
         "cffi>=1.4.0",
+    ],
+    tests_require=[
+        'pytest',
     ],
     extras_require={
         'calibration': [
