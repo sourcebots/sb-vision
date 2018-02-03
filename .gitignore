@@ -9,6 +9,7 @@ build
 .eggs
 venv
 .cache
+.mypy_cache
 
 # VSCode project files
 /.vscode

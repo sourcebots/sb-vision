@@ -1,5 +1,7 @@
 """Main vision driver."""
 
+from typing import List, Optional  # noqa: F401
+
 from PIL import Image
 
 from .camera_base import CameraBase
@@ -11,15 +13,15 @@ from .tokens import Token
 class Vision:
     """Class that handles the vision library and the camera."""
 
-    def __init__(self, camera: CameraBase):
+    def __init__(self, camera: CameraBase) -> None:
         """General initialiser."""
         self._camera = camera
         self._camera_ready = False
 
-        self._detector = None
+        self._detector = None  # type: Optional[AprilTagDetector]
 
     @property
-    def camera(self):
+    def camera(self) -> CameraBase:
         """
         Property wrapping our 'camera' instance.
 
@@ -33,7 +35,7 @@ class Vision:
         return self._camera
 
     @property
-    def apriltag_library(self):
+    def apriltag_detector(self) -> AprilTagDetector:
         """Lazy property wrapping our instance of the apriltag detector."""
         if self._detector is None:
             size = self.camera.get_image_size()
@@ -41,7 +43,7 @@ class Vision:
 
         return self._detector
 
-    def capture_image(self):
+    def capture_image(self) -> Image.Image:
         """
         Capture an image from the camera.
 
@@ -50,7 +52,7 @@ class Vision:
         # get the PIL image from the camera
         return self.camera.capture_image()
 
-    def threshold_image(self, img):
+    def threshold_image(self, img: Image.Image) -> Image.Image:
         """Run thresholding and preprocessing on an image."""
         as_bytes = img.convert('L').tobytes()
         cleaned_bytes = clean_and_threshold(
@@ -65,7 +67,7 @@ class Vision:
             data=cleaned_bytes,
         )
 
-    def process_image(self, img):
+    def process_image(self, img: Image.Image) -> List[Token]:
         """
         Run the given image through the apriltags detection library.
 
@@ -78,12 +80,12 @@ class Vision:
 
         tokens = [
             Token.from_apriltag_detection(x, img.size, distance_model)
-            for x in self.apriltag_library.detect_tags(img)
+            for x in self.apriltag_detector.detect_tags(img)
         ]
 
         return tokens
 
-    def snapshot(self):
+    def snapshot(self) -> List[Token]:
         """
         Get a single list of tokens from one camera snapshot.
 

@@ -4,15 +4,26 @@ import functools
 import lzma
 import pickle
 from pathlib import Path
+from typing import TYPE_CHECKING, Any, Dict, List, Mapping, Optional, Tuple
 
 import numpy as np
+
+from .coordinates import (
+    Cartesian,
+    cartesian_to_legacy_polar,
+    cartesian_to_spherical,
+)
+
+if TYPE_CHECKING:
+    # Interface-only definitions
+    from .native.apriltag.types import ApriltagDetection  # noqa: F401
 
 
 def _row_mul(m, corner, col):
     return m[col, 0] * corner[0] + m[col, 1] * corner[1] + m[col, 2]
 
 
-def _homography_transform(corner, homog):
+def _homography_transform(corner: Tuple[int, int], homog) -> Tuple[int, int]:
     """
     Perform the equivalent of an OpenCV WarpPerspectiveTransform on the points.
 
@@ -37,7 +48,7 @@ def _decompose_homography(Homography, Calibration):
     pass
 
 
-def _get_pixel_corners(homog):
+def _get_pixel_corners(homog) -> List[Tuple[int, int]]:
     """
     Get the co-ordinate of the corners given the homography matrix.
 
@@ -62,7 +73,7 @@ def _get_pixel_centre(homography_matrix):
 
 
 @functools.lru_cache()
-def _get_distance_model(name, image_size):
+def _get_distance_model(name: str, image_size: Tuple[int, int]) -> Dict[str, Any]:
     if name is None:
         raise ValueError("Getting distance model of None")
 
@@ -103,46 +114,46 @@ def homography_matrix_to_distance_model_input_vector(homography_matrix):
 
 
 def _apply_distance_model_component_to_homography_matrix(
-    model_component,
+    model_component: Mapping[str, Any],
     homography_matrix,
-):
+) -> np.float64:
     flattened_homography_matrix = \
         homography_matrix_to_distance_model_input_vector(homography_matrix)
 
-    biases = model_component['biases']
-    intercepts = model_component['intercept']
-    coefs = model_component['coefs']
+    biases = model_component['biases']  # type: np.ndarray
+    intercept = model_component['intercept']  # type: np.float64
+    coefs = model_component['coefs']  # type: np.ndarray
 
     return (
         (biases + flattened_homography_matrix).dot(coefs) +
-        intercepts
+        intercept
     )
 
 
 def _get_cartesian(
     homography_matrix,
-    image_size,
-    distance_model,
-):
+    image_size: Tuple[int, int],
+    distance_model: str,
+) -> Cartesian:
     calibration = _get_distance_model(distance_model, image_size)
 
     x = _apply_distance_model_component_to_homography_matrix(
         calibration['x_model'],
         homography_matrix,
-    )
+    )  # type: np.float64
     y = 0.0
     z = _apply_distance_model_component_to_homography_matrix(
         calibration['z_model'],
         homography_matrix,
-    )
+    )  # type: np.float64
 
-    return np.array([x, y, z])
+    return Cartesian(x, y, z)
 
 
 class Token:
     """Representation of the detection of one token."""
 
-    def __init__(self, id, certainty=0.0):
+    def __init__(self, id: int, certainty: float=0.0) -> None:
         """
         General initialiser.
 
@@ -152,22 +163,13 @@ class Token:
         self.id = id
         self.certainty = certainty
 
-    @staticmethod
-    def cartesian_to_polar(cartesian):
-        """Convert cartesian co-ordinate space to polar."""
-        cart_x, cart_y, cart_z = tuple(cartesian)
-        polar_dist = np.linalg.norm(cartesian)
-        polar_x = np.arctan2(cart_z, cart_x)
-        polar_y = np.arctan2(cart_z, cart_y)
-        return polar_x, polar_y, polar_dist
-
     @classmethod
     def from_apriltag_detection(
         cls,
-        apriltag_detection,
-        image_size,
-        distance_model
-    ):
+        apriltag_detection: 'ApriltagDetection',
+        image_size: Tuple[int, int],
+        distance_model: Optional[str],
+    ) -> 'Token':
         """Construct a Token from an April Tag detection."""
         # *************************************************************************
         # NOTE: IF YOU CHANGE THIS PLEASE ADD THEM IN THE ROBOT-API camera.py
@@ -217,15 +219,18 @@ class Token:
         )
 
         # Polar co-ordinates in the 3D world, relative to the camera
-        self.polar = self.cartesian_to_polar(self.cartesian)
+        self.polar = cartesian_to_legacy_polar(self.cartesian)
+        self.legacy_polar = cartesian_to_legacy_polar(self.cartesian)
 
-    def __repr__(self):
+        self.spherical = cartesian_to_spherical(self.cartesian)
+
+    def __repr__(self) -> str:
         """General debug representation."""
         return "Token: {}, certainty: {}".format(self.id, self.certainty)
 
     __str__ = __repr__
 
-    def __eq__(self, other):
+    def __eq__(self, other: Any) -> bool:
         """Equivalent relation partitioning by `id`."""
         if not isinstance(other, Token):
             return False
