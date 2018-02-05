@@ -6,10 +6,9 @@ import pickle
 import sys
 from pathlib import Path
 
-import yaml
-
 from .fit import fit
 from .training_example import TrainingExample
+from .utils import load_calibrations, CalibrationReference
 
 
 def argument_parser():
@@ -41,22 +40,15 @@ def main(args=None):
 
     options = argument_parser().parse_args(args)
 
-    with (options.directory / 'files.yaml').open('r') as f:
-        config_data = yaml.load(f)
-        config_version = config_data['version']
-        if config_version > 1:
-            raise SystemExit("Cannot handle config versions >1")
-        files = config_data['files']
-
     training_examples = []
 
-    for entry in files:
+    for calibration_reference in load_calibrations(options.directory):
         try:
             training_examples.append(
                 TrainingExample(
-                    image_file=options.directory / entry['image'],
-                    z_distance=entry['z'],
-                    x_offset_right=entry.get('x', 0.0),
+                    image_file=calibration_reference.image_file,
+                    z_distance=calibration_reference.z_distance,
+                    x_offset_right=calibration_reference.x_offset_right,
                 ),
             )
         except RuntimeError as e:

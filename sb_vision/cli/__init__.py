@@ -3,6 +3,7 @@
 import argparse
 import sys
 
+from . import compare
 from . import debug
 from . import summarise
 
@@ -24,6 +25,7 @@ def argument_parser():
 
     subparsers = parser.add_subparsers()
 
+    add_subparser(subparsers, compare)
     add_subparser(subparsers, debug)
     add_subparser(subparsers, summarise)
 
