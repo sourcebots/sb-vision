@@ -8,7 +8,7 @@ from pathlib import Path
 
 from .fit import fit
 from .training_example import TrainingExample
-from .utils import load_calibrations, CalibrationReference
+from .utils import load_calibrations
 
 
 def argument_parser():
