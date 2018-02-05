@@ -4,21 +4,22 @@ import argparse
 import contextlib
 import pathlib
 import sys
-from typing import TextIO
+from typing import Sequence, TextIO
 
 from ..camera import FileCamera
 from ..vision import Vision
 
 
-def mean_absolute_error(series):
+def mean_absolute_error(series: Sequence[float]) -> float:
+    """Calculate the mean absolute error of a series."""
     return sum(abs(x) for x in series) / len(series)
 
 
 def main(directory: pathlib.Path, distance_model: str, output: TextIO, verbose: bool):
+    """Execute this command."""
     # ensure the transitive dependency on PyYAML remains optional via lazy import
     from ..calibration.utils import load_calibrations
 
-    """Execute this command."""
     with contextlib.suppress(KeyboardInterrupt):
         x_errors = []
         z_errors = []

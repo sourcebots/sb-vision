@@ -1,7 +1,7 @@
 """Utilities related to calibrating a camera."""
 
 import pathlib
-from typing import NamedTuple
+from typing import List, NamedTuple
 
 import yaml
 
@@ -12,7 +12,8 @@ CalibrationReference = NamedTuple('CalibrationReference', (
 ))
 
 
-def load_calibrations(directory: pathlib.Path):
+def load_calibrations(directory: pathlib.Path) -> List[CalibrationReference]:
+    """Load calibration data from the given directory."""
     with (directory / 'files.yaml').open('r') as f:
         config_data = yaml.load(f)
         config_version = config_data['version']
