@@ -3,6 +3,8 @@
 # ******************************************************************************
 # Try to put all game specific code in here
 
+"""Game specific constants"""
+
 WALL = set(range(0, 28))  # 0 - 27
 
 # Currently for SB2018
