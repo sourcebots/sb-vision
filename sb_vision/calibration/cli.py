@@ -44,8 +44,8 @@ def main(args=None):
     with (options.directory / 'files.yaml').open('r') as f:
         config_data = yaml.load(f)
         config_version = config_data['version']
-        if config_version > 1:
-            raise SystemExit("Cannot handle config versions >1")
+        if config_version > 2:
+            raise SystemExit("Cannot handle config versions >2")
         files = config_data['files']
 
     training_examples = []
@@ -64,8 +64,7 @@ def main(args=None):
 
     calibration = fit(training_examples)
 
-    if 'marker_size' in config_data:
-        calibration['marker_size'] = config_data['marker_size']
+    calibration['marker_size'] = config_data['marker_size']
 
     print(calibration)
 
