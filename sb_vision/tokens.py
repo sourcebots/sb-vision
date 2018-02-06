@@ -214,7 +214,7 @@ class Token:
         homography_matrix,
         distance_model,
         image_size,
-        marker_size
+        marker_size,
     ):
         """Infer coordinate information from a homography matrix."""
         # pixel coordinates of the corners of the marker
