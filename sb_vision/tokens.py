@@ -198,12 +198,12 @@ class Token:
         arr = [apriltag_detection.H.data[x] for x in range(9)]
         homography = np.reshape(arr, (3, 3))
 
-        id = apriltag_detection.id
+        marker_id = apriltag_detection.id
         instance.infer_location_from_homography_matrix(
             homography_matrix=homography,
             distance_model=distance_model,
             image_size=image_size,
-            marker_size=MARKER_SIZES[id] if id in MARKER_SIZES else CALIBRATED_MARKER_SIZE
+            marker_size=MARKER_SIZES[marker_id] if marker_id in MARKER_SIZES else CALIBRATED_MARKER_SIZE
         )
         return instance
 
