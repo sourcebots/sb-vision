@@ -64,6 +64,9 @@ def main(args=None):
 
     calibration = fit(training_examples)
 
+    if 'marker_size' in config_data:
+        calibration['marker_size'] = config_data['marker_size']
+
     print(calibration)
 
     if options.output:
