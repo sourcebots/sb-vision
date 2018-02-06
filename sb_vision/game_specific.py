@@ -1,5 +1,5 @@
 # ******************************************************************************
-#   NOTICE: IF YOU CHANGE THIS FILE PLEASE CHANGE ITS COUNTERPART IN SB_VISION
+#   NOTICE: IF YOU CHANGE THIS FILE PLEASE CHANGE ITS COUNTERPART IN ROBOT-API
 # ******************************************************************************
 # Try to put all game specific code in here
 
