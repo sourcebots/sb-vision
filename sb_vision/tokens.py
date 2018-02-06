@@ -13,7 +13,6 @@ from .coordinates import (
     cartesian_to_legacy_polar,
     cartesian_to_spherical,
 )
-
 from .game_specific import MARKER_SIZES
 
 if TYPE_CHECKING:
@@ -96,11 +95,10 @@ def _get_distance_model(name: str, image_size: Tuple[int, int]) -> Dict[str, Any
         )
 
     if 'marker_size' not in calibration:
-        raise ValueError(
-            "Calibrations must have a marker_size field"
-        )
+        raise ValueError("Calibrations must have a marker_size field")
 
     return calibration
+
 
 def homography_matrix_to_distance_model_input_vector(homography_matrix):
     """Convert a 3x3 homography matrix to a vector for distance models."""
@@ -207,7 +205,7 @@ class Token:
             homography_matrix=homography,
             distance_model=distance_model,
             image_size=image_size,
-            marker_size=MARKER_SIZES[marker_id] if marker_id in MARKER_SIZES else None
+            marker_size=MARKER_SIZES[marker_id] if marker_id in MARKER_SIZES else None,
         )
         return instance
 
@@ -238,7 +236,7 @@ class Token:
             homography_matrix,
             image_size,
             distance_model,
-            marker_size
+            marker_size,
         )
 
         # Polar co-ordinates in the 3D world, relative to the camera
