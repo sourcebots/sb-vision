@@ -95,8 +95,12 @@ def _get_distance_model(name: str, image_size: Tuple[int, int]) -> Dict[str, Any
             ),
         )
 
-    return calibration
+    if 'marker_size' not in calibration:
+        raise ValueError(
+            "Calibrations must have a marker_size field"
+        )
 
+    return calibration
 
 def homography_matrix_to_distance_model_input_vector(homography_matrix):
     """Convert a 3x3 homography matrix to a vector for distance models."""
@@ -132,20 +136,22 @@ def _apply_distance_model_component_to_homography_matrix(
     )
 
 
-# TODO: Don't hard-code this
-CALIBRATED_MARKER_SIZE = (0.25, 0.25)
-
-
 def _get_cartesian(
     homography_matrix,
     image_size: Tuple[int, int],
     distance_model: str,
-    marker_size: Tuple[float, float],
+    marker_size: Tuple[float, float]=None,
 ) -> Cartesian:
-    if marker_size[0] != marker_size[1]:
-        raise ValueError("Non-square markers are not supported!")
-
     calibration = _get_distance_model(distance_model, image_size)
+    calibrated_marker_size = calibration['marker_size']
+
+    if marker_size is None:
+        size_ratio = 1
+    else:
+        if marker_size[0] != marker_size[1]:
+            raise ValueError("Non-square markers are not supported")
+        # The ratio between the calibrated size and the actual size
+        size_ratio = marker_size[0] / calibrated_marker_size
 
     in_x = _apply_distance_model_component_to_homography_matrix(
         calibration['x_model'],
@@ -157,8 +163,6 @@ def _get_cartesian(
         homography_matrix,
     )  # type: np.float64
 
-    # The ratio between the calibrated size and the actual size
-    size_ratio = marker_size[0] / CALIBRATED_MARKER_SIZE[0]
     x = in_x * size_ratio
     z = in_z * size_ratio
 
@@ -203,7 +207,7 @@ class Token:
             homography_matrix=homography,
             distance_model=distance_model,
             image_size=image_size,
-            marker_size=MARKER_SIZES[marker_id] if marker_id in MARKER_SIZES else CALIBRATED_MARKER_SIZE
+            marker_size=MARKER_SIZES[marker_id] if marker_id in MARKER_SIZES else None
         )
         return instance
 
