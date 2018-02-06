@@ -62,3 +62,4 @@ files:
 - {image: 5.0z1.0x.jpg, x: 1.0, z: 5.0}
 - {image: 5.0z1.5x.jpg, x: 1.5, z: 5.0}
 version: 1
+marker_size: 0.25

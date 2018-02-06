@@ -155,3 +155,4 @@ files:
    z: 5.0
  - image: 50cmM.jpg
    z: 0.5
+marker_size: 0.25
