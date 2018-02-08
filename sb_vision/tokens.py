@@ -138,7 +138,7 @@ def _get_cartesian(
     homography_matrix,
     image_size: Tuple[int, int],
     distance_model: str,
-    marker_size: Tuple[float, float]=None,
+    marker_size: Optional[Tuple[float, float]],
 ) -> Cartesian:
     calibration = _get_distance_model(distance_model, image_size)
     calibrated_marker_size = calibration['marker_size']
@@ -216,7 +216,7 @@ class Token:
         homography_matrix,
         distance_model,
         image_size,
-        marker_size
+        marker_size: Optional[Tuple[float, float]]
     ):
         """Infer coordinate information from a homography matrix."""
         # pixel coordinates of the corners of the marker
