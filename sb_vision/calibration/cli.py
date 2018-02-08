@@ -46,6 +46,8 @@ def main(args=None):
         config_version = config_data['version']
         if config_version > 2:
             raise SystemExit("Cannot handle config versions >2")
+        if config_version < 2:
+            raise SystemExit("Cannot handle version 1, please add a marker_size attribute.")
         files = config_data['files']
 
     training_examples = []
