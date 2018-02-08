@@ -205,7 +205,7 @@ class Token:
             homography_matrix=homography,
             distance_model=distance_model,
             image_size=image_size,
-            marker_size=MARKER_SIZES[marker_id] if marker_id in MARKER_SIZES else None,
+            marker_size=MARKER_SIZES.get(marker_id),
         )
         return instance
 
