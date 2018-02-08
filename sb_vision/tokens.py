@@ -95,7 +95,7 @@ def _get_distance_model(name: str, image_size: Tuple[int, int]) -> Dict[str, Any
         )
 
     if 'marker_size' not in calibration:
-        raise ValueError("Calibrations must have a marker_size field")
+        raise ValueError("Calibrations must have a marker_size")
 
     return calibration
 
