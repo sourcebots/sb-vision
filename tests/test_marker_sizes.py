@@ -12,7 +12,7 @@ homography_from_camera = np.array([
     [1.08272961e-02, 7.11294182e-01, 2.64415168e+00],
     [2.14327973e-05, 7.37441645e-06, 7.25640594e-03],
 ])
-distance_model = 'tecknet'
+distance_model = 'c270'
 image_resolution = (1280, 720)
 
 
@@ -46,3 +46,5 @@ def test_marker_size():
     assert big_x == small_x * ratio, "Wrong x-coordinate"
     assert big_y == small_y * ratio, "Wrong y-coordinate"
     assert big_z == small_z * ratio, "Wrong z-coordinate"
+
+
