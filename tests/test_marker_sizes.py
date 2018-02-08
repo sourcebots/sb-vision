@@ -43,8 +43,8 @@ def test_marker_size():
     big_x, big_y, big_z = big_token.cartesian
     small_x, small_y, small_z = small_token.cartesian
 
-    assert big_x == small_x * ratio, "Wrong x-coordinate"
-    assert big_y == small_y * ratio, "Wrong y-coordinate"
-    assert big_z == small_z * ratio, "Wrong z-coordinate"
+    assert round(big_x,5) == round(small_x * ratio,5), "Wrong x-coordinate"
+    assert round(big_y,5) == round(small_y * ratio,5), "Wrong y-coordinate"
+    assert round(big_z,5) == round(small_z * ratio,5), "Wrong z-coordinate"
 
 
