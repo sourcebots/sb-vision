@@ -64,6 +64,7 @@ def assertMarkerDistance(
     marker_sizes: Dict[int, Tuple[float, float]],
     expected_distance: float
 ):
+    """Assert that the processed distance is as expected for a marker size."""
     vision = Vision(camera)
 
     with mock.patch('sb_vision.tokens.MARKER_SIZES', marker_sizes):
@@ -74,6 +75,7 @@ def assertMarkerDistance(
 
 
 def test_unknown_marker_size():
+    """Test an unknown marker size defaults to the trained size."""
     # The c270 model is trained on 25cm markers; so it assume that all markers
     # are that size unless told otherwise.
     assertMarkerDistance(
@@ -84,6 +86,7 @@ def test_unknown_marker_size():
 
 
 def test_large_marker_large_size():
+    """Test a marker matching the trained size has the right distance."""
     assertMarkerDistance(
         FileCamera(TEST_DATA / 'tecknet-25cm-at-2.5m.jpg', distance_model='c270'),
         marker_sizes={23: (0.25, 0.25)},
@@ -92,6 +95,9 @@ def test_large_marker_large_size():
 
 
 def test_large_marker_small_size():
+    """
+    Test image with large marker gives small distance when configured for a small marker.
+    """
     assertMarkerDistance(
         FileCamera(TEST_DATA / 'tecknet-25cm-at-2.5m.jpg', distance_model='c270'),
         marker_sizes={23: (0.1, 0.1)},
@@ -100,6 +106,9 @@ def test_large_marker_small_size():
 
 
 def test_small_marker_large_size():
+    """
+    Test image with small marker gives large distance when configured for a large marker.
+    """
     assertMarkerDistance(
         FileCamera(TEST_DATA / 'tecknet-10cm-at-1m.jpg', distance_model='c270'),
         marker_sizes={44: (0.25, 0.25)},
@@ -108,6 +117,9 @@ def test_small_marker_large_size():
 
 
 def test_small_marker_small_size():
+    """
+    Test image with small marker gives small distance when configured for a small marker.
+    """
     assertMarkerDistance(
         FileCamera(TEST_DATA / 'tecknet-10cm-at-1m.jpg', distance_model='c270'),
         marker_sizes={44: (0.1, 0.1)},
