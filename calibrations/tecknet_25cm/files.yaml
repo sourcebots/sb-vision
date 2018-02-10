@@ -5,19 +5,18 @@ files:
 - {image: 1.0z-0.2x.jpg, x: -0.2, z: 1.0}
 - {image: 1.0z0.1x.jpg, x: 0.1, z: 1.0}
 - {image: 1.0z0.2x.jpg, x: 0.2, z: 1.0}
-# - {image: 1.5z0.0x.jpg, x: 0.0, z: 1.5}
-# - {image: 1.5z0.1x.jpg, x: 0.1, z: 1.5}
-# - {image: 1.5z0.2x.jpg, x: 0.2, z: 1.5}
-# - {image: 1.5z0.3x.jpg, x: 0.3, z: 1.5}
-# - {image: 1.5z0.4x.jpg, x: 0.4, z: 1.5}
+- {image: 1.5z0.0x.jpg, x: 0.0, z: 1.5}
+- {image: 1.5z0.1x.jpg, x: 0.1, z: 1.5}
+- {image: 1.5z0.2x.jpg, x: 0.2, z: 1.5}
+- {image: 1.5z0.3x.jpg, x: 0.3, z: 1.5}
+- {image: 1.5z0.4x.jpg, x: 0.4, z: 1.5}
 - {image: 1.5z-0.1x.jpg, x: -0.1, z: 1.5}
 - {image: 1.5z-0.2x.jpg, x: -0.2, z: 1.5}
 - {image: 1.5z-0.3x.jpg, x: -0.3, z: 1.5}
 - {image: 1.5z-0.4x.jpg, x: -0.4, z: 1.5}
-# - {image: 2.0z0.0x.jpg, x: 0.0, z: 2.0}
+- {image: 2.0z0.0x.jpg, x: 0.0, z: 2.0}
 - {image: 2.0z-0.1x.jpg, x: -0.1, z: 2.0}
 - {image: 2.0z-0.2x.jpg, x: -0.2, z: 2.0}
-# - {image: 2.0z-0.3x.jpg, x: -0.3, z: 2.0}
 - {image: 2.0z-0.4x.jpg, x: -0.4, z: 2.0}
 - {image: 2.0z-0.5x.jpg, x: -0.5, z: 2.0}
 - {image: 2.0z-0.6x.jpg, x: -0.6, z: 2.0}
@@ -27,7 +26,7 @@ files:
 - {image: 2.0z0.4x.jpg, x: 0.4, z: 2.0}
 - {image: 2.0z0.5x.jpg, x: 0.5, z: 2.0}
 - {image: 2.0z0.6x.jpg, x: 0.6, z: 2.0}
-# - {image: 2.5z0.0x.jpg, x: 0.0, z: 2.5}
+- {image: 2.5z0.0x.jpg, x: 0.0, z: 2.5}
 - {image: 2.5z-0.2x.jpg, x: -0.2, z: 2.5}
 - {image: 2.5z-0.4x.jpg, x: -0.4, z: 2.5}
 - {image: 2.5z-0.6x.jpg, x: -0.6, z: 2.5}
@@ -37,7 +36,7 @@ files:
 - {image: 2.5z0.6x.jpg, x: 0.6, z: 2.5}
 - {image: 2.5z0.8x.jpg, x: 0.8, z: 2.5}
 - {image: 3.0z0.0x.jpg, x: 0.0, z: 3.0}
-# - {image: 3.0z-0.2x.jpg, x: -0.2, z: 3.0}
+- {image: 3.0z-0.2x.jpg, x: -0.2, z: 3.0}
 - {image: 3.0z-0.4x.jpg, x: -0.4, z: 3.0}
 - {image: 3.0z-0.6x.jpg, x: -0.6, z: 3.0}
 - {image: 3.0z-0.8x.jpg, x: -0.8, z: 3.0}
@@ -49,12 +48,12 @@ files:
 - {image: 3.0z1.0x.jpg, x: 1.0, z: 3.0}
 - {image: 4.0z0.0x.jpg, x: 0.0, z: 4.0}
 - {image: 4.0z-0.4x.jpg, x: -0.4, z: 4.0}
-# - {image: 4.0z-0.8x.jpg, x: -0.8, z: 4.0}
+- {image: 4.0z-0.8x.jpg, x: -0.8, z: 4.0}
 - {image: 4.0z-1.2x.jpg, x: -1.2, z: 4.0}
 - {image: 4.0z0.4x.jpg, x: 0.4, z: 4.0}
 - {image: 4.0z0.8x.jpg, x: 0.8, z: 4.0}
 - {image: 4.0z1.2x.jpg, x: 1.2, z: 4.0}
-# - {image: 5.0z0.0x.jpg, x: 0.0, z: 5.0}
+- {image: 5.0z0.0x.jpg, x: 0.0, z: 5.0}
 - {image: 5.0z-0.5x.jpg, x: -0.5, z: 5.0}
 - {image: 5.0z-1.0x.jpg, x: -1.0, z: 5.0}
 - {image: 5.0z-1.5x.jpg, x: -1.5, z: 5.0}
