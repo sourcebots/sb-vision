@@ -6,7 +6,7 @@ This builds upon some functionality sneaked in here from OpenCV.
 
 import threading
 
-from sb_vision.native import _cvcapture
+from sb_vision.native import _cvcapture  # type: ignore
 
 
 class CvCaptureError(RuntimeError):
@@ -18,7 +18,7 @@ class CvCaptureError(RuntimeError):
 class DeviceOpenError(CvCaptureError):
     """An error when OpenCV cannot open a device."""
 
-    def __init__(self, device_id):
+    def __init__(self, device_id: int) -> None:
         """Initialise the exception."""
         super().__init__("Unable to open capture device {}".format(device_id))
 
@@ -26,7 +26,7 @@ class DeviceOpenError(CvCaptureError):
 class DeviceClosedError(CvCaptureError):
     """An error when OpenCV cannot close a device."""
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialise the exception."""
         super().__init__("capture device is closed")
 
@@ -34,7 +34,7 @@ class DeviceClosedError(CvCaptureError):
 class ImageCaptureError(CvCaptureError):
     """An error when OpenCV cannot capture an image."""
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialise the exception."""
         super().__init__("cvcapture() failed")
 
@@ -42,7 +42,7 @@ class ImageCaptureError(CvCaptureError):
 class CaptureDevice(object):
     """A single device for capturing images."""
 
-    def __init__(self, device_id):
+    def __init__(self, device_id: int) -> None:
         """
         Initialise the capture device.
 
@@ -54,7 +54,7 @@ class CaptureDevice(object):
         if self.instance == _cvcapture.ffi.NULL:
             raise DeviceOpenError(device_id)
 
-    def capture(self, width, height):
+    def capture(self, width: int, height: int) -> bytes:
         """Capture a single image with the given width and height."""
         if self.instance is None:
             raise DeviceClosedError()
@@ -76,7 +76,7 @@ class CaptureDevice(object):
 
         return bytes(_cvcapture.ffi.buffer(capture_buffer))
 
-    def __enter__(self):
+    def __enter__(self) -> 'CaptureDevice':
         """Context manager protocol. Automatically closes on exit."""
         return self
 
@@ -84,7 +84,7 @@ class CaptureDevice(object):
         """Context manager protocol. Automatically closes on exit."""
         self.close()
 
-    def close(self):
+    def close(self) -> None:
         """
         Close the device for further access.
 
@@ -99,7 +99,7 @@ class CaptureDevice(object):
     __del__ = close
 
 
-def clean_and_threshold(image, width, height):
+def clean_and_threshold(image: bytes, width: int, height: int) -> bytes:
     """Prepare an image (as bytes) with thresholding/filtering."""
     if len(image) != width * height:
         raise ValueError("image has the wrong length")

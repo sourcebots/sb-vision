@@ -1,9 +1,10 @@
 """Debug code, load the first video device seen and capture an image."""
 
 import contextlib
+import math
 import pathlib
 
-from ..camera import Camera, FileCamera
+from ..camera import Camera, CameraBase, FileCamera  # noqa: F401
 from ..token_display import display_tokens
 from ..vision import Vision
 
@@ -35,7 +36,12 @@ def _capture_and_display_image(
     for token in tokens:
         print("- {}".format(token))
         try:
-            print(token.cartesian)
+            print("  x: {0:.3f}m, y: {1:.3f}m, z: {2:.3f}m".format(*token.cartesian))
+            print("  rot_x: {0:.3f}°, rot_y: {1:.3f}°, dist: {2:.3f}m".format(
+                math.degrees(token.spherical.rot_x),
+                math.degrees(token.spherical.rot_y),
+                token.spherical.dist,
+            ))
         except AttributeError:
             pass
 
@@ -45,7 +51,11 @@ def main(input_file, device_id, distance_model, **options):
     with contextlib.suppress(KeyboardInterrupt):
         if device_id is not None:
             CAM_IMAGE_SIZE = (1280, 720)
-            camera = Camera(device_id, CAM_IMAGE_SIZE, distance_model)
+            camera = Camera(
+                device_id,
+                CAM_IMAGE_SIZE,
+                distance_model,
+            )  # type: CameraBase
 
             def should_continue():
                 return input(

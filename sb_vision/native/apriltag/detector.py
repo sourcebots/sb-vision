@@ -1,14 +1,20 @@
 """AprilTag detector wrapper."""
 
+from typing import TYPE_CHECKING, Any, Iterator, Tuple
+
 from PIL import Image
 
 from ._apriltag import ffi, lib
+
+if TYPE_CHECKING:
+    # Interface-only definitions
+    from .types import ApriltagDetection  # noqa: F401
 
 
 class AprilTagDetector:
     """Wrapper for the AprilTag tag detector."""
 
-    def __init__(self, image_size):
+    def __init__(self, image_size: Tuple[int, int]) -> None:
         """
         Initialise the AprilTag tag detector.
 
@@ -45,19 +51,19 @@ class AprilTagDetector:
             image_size[0],
         )
 
-    def __enter__(self):
+    def __enter__(self) -> 'AprilTagDetector':
         """Start using the detector as a context manager."""
         return self
 
-    def __exit__(self, exc_type, exc_value, traceback):
+    def __exit__(self, exc_type: Any, exc_value: Any, traceback: Any) -> None:
         """Close the detector at the end of a managed context."""
         self.close()
 
-    def __del__(self):
+    def __del__(self) -> None:
         """Deinitialise the detector."""
         self.close()
 
-    def close(self):
+    def close(self) -> None:
         """Deinitialise the detector."""
         if self._detector is not None:
             lib.apriltag_detector_destroy(self._detector)
@@ -67,17 +73,17 @@ class AprilTagDetector:
             lib.image_u8_destroy(self._working_image)
             self._working_image = None
 
-    def _raise_if_already_closed(self):
+    def _raise_if_already_closed(self) -> None:
         """Check whether the detector is closed and raise if so."""
         if self._detector is None or self._working_image is None:
             raise ValueError("This detector has already been closed")
 
     @property
-    def image_size(self):
+    def image_size(self) -> Tuple[int, int]:
         """The configured image size, as a tuple of (width, height)."""
         return self._image_size
 
-    def detect_tags(self, img: Image):
+    def detect_tags(self, img: Image) -> Iterator['ApriltagDetection']:
         """
         Run the given image through the apriltags detection routines.
 

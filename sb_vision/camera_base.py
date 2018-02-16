@@ -5,34 +5,33 @@ A camera is an arbitrary source of images.
 """
 
 import abc
+from typing import Optional, Tuple
+
+import PIL
 
 
 class CameraBase(metaclass=abc.ABCMeta):
     """Base class for all cameras."""
 
-    def __init__(self):
+    def __init__(self, distance_model: Optional[str]) -> None:
         """Basic, general initialisation."""
-        self.initialised = False
+        self.distance_model = distance_model
 
-    def init(self):
+    def init(self) -> None:
         """
         Initialise the camera.
 
-        This is guaranteed to only be called once, and after it is called
-        the values for `distance_model` and `cam_image_size` must be set.
+        This is guaranteed to only be called once.
         """
-        self.initialised = True
-
-    def get_image_size(self):
-        """Get the size of images captured by the camera."""
-        if not self.initialised:
-            raise RuntimeError(
-                "Must Initialise camera before getting image size",
-            )
-        return self.cam_image_size
+        pass
 
     @abc.abstractmethod
-    def capture_image(self):
+    def get_image_size(self) -> Tuple[int, int]:
+        """Get the size of images captured by the camera."""
+        raise NotImplementedError()
+
+    @abc.abstractmethod
+    def capture_image(self) -> PIL.Image:
         """
         Capture a single image from this camera.
 

@@ -11,8 +11,13 @@ jobs:
       - run: venv/bin/pip install .
       - run: venv/bin/pip install pytest
       - run: venv/bin/pip install -r script/linting/requirements.txt
+      - run: venv/bin/pip install -r script/typing/requirements.txt
       - run: venv/bin/py.test tests
       - run:
           command: script/linting/lint
           environment:
             FLAKE8: venv/bin/flake8
+      - run:
+          command: script/typing/check
+          environment:
+            MYPY: venv/bin/mypy

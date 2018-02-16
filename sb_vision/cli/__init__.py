@@ -4,6 +4,7 @@ import argparse
 import sys
 
 from . import debug
+from . import summarise
 
 __all__ = ['main']
 
@@ -24,6 +25,7 @@ def argument_parser():
     subparsers = parser.add_subparsers()
 
     add_subparser(subparsers, debug)
+    add_subparser(subparsers, summarise)
 
     return parser
 
