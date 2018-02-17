@@ -19,9 +19,6 @@ def _capture_and_display_image(
     img = vision.capture_image()
     tokens = vision.process_image(img)
 
-    if after_thresholding:
-        img = vision.threshold_image(img)
-
     if draw_tokens:
         img = display_tokens(tokens, img)
 

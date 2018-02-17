@@ -5,7 +5,6 @@ from typing import List, Optional  # noqa: F401
 from PIL import Image
 
 from .camera_base import CameraBase
-from .cvcapture import clean_and_threshold
 from .native.apriltag import AprilTagDetector
 from .tokens import Token
 
@@ -52,21 +51,6 @@ class Vision:
         # get the PIL image from the camera
         return self.camera.capture_image()
 
-    def threshold_image(self, img: Image.Image) -> Image.Image:
-        """Run thresholding and preprocessing on an image."""
-        as_bytes = img.convert('L').tobytes()
-        cleaned_bytes = clean_and_threshold(
-            as_bytes,
-            img.size[0],
-            img.size[1],
-        )
-
-        return Image.frombytes(
-            mode='L',
-            size=img.size,
-            data=cleaned_bytes,
-        )
-
     def process_image(self, img: Image.Image) -> List[Token]:
         """
         Run the given image through the apriltags detection library.
@@ -74,7 +58,6 @@ class Vision:
         :param img: PIL Luminosity image to be processed
         :return: python list of Token objects.
         """
-        img = self.threshold_image(img)
 
         distance_model = self.camera.distance_model
 
