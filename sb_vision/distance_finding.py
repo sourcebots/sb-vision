@@ -17,7 +17,7 @@ from lxml import etree
 Coordinate = NamedTuple('PixelCoordinate', [('x', float), ('y', float)])
 
 
-def _get_text(element: etree.Element) -> List[str]:
+def _get_values_from_xml_element(element: etree.Element) -> List[str]:
     """Parse an xml tag with space-separated variables."""
     text = []  # type: List[str]
     for e in element.itertext():
@@ -44,7 +44,7 @@ def get_calibration(file_name: Path) -> Dict[str, Any]:
                 rows, cols = int(element.find('rows').text), int(
                     element.find('cols').text)
                 data_type = element.find('dt').text
-                values = _get_text(element.find('data'))
+                values = _get_values_from_xml_element(element.find('data'))
                 if data_type == 'd':  # doubles
                     data = np.reshape([float(v) for v in values],
                                       (rows, cols)).tolist()
@@ -52,13 +52,13 @@ def get_calibration(file_name: Path) -> Dict[str, Any]:
                     raise ValueError('Invalid data type in xml')
             # Integer tag names
             elif element.tag in ['framesCount', 'cameraResolution']:
-                values = _get_text(element)
+                values = _get_values_from_xml_element(element)
                 data = [int(v) for v in values]
             elif element.tag in ['avg_reprojection_error']:
-                values = _get_text(element)
+                values = _get_values_from_xml_element(element)
                 data = [float(v) for v in values]
             else:
-                data = _get_text(element)
+                data = _get_values_from_xml_element(element)
             calibrations[element.tag] = data
     return calibrations
 
