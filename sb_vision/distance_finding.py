@@ -95,16 +95,16 @@ def calculate_transforms(
     :param distance_coefficients: distance calibration for the camera
     :return: translation and orientation of the marker
     """
-    x, y = marker_size
-    x /= 2
-    y /= 2
+    w, h = marker_size
+    width_from_centre = w / 2
+    height_from_centre = h / 2
 
     # create the rectangle representing the marker in 3D
     object_points = np.array([
-        [x, y, 0],
-        [x, -y, 0],
-        [-x, -y, 0],
-        [-x, y, 0],
+        [width_from_centre, height_from_centre, 0],
+        [width_from_centre, -height_from_centre, 0],
+        [-width_from_centre, -height_from_centre, 0],
+        [-width_from_centre, height_from_centre, 0],
     ])
 
     _, orientation_vector, translation_vector = cv2.solvePnP(
