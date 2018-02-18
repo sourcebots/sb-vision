@@ -51,7 +51,7 @@ def cartesian_to_legacy_polar(cartesian: Cartesian) -> LegacyPolar:
     """
     Convert cartesian co-ordinate space to the legacy "polar" space.
 
-    This is kept for compatibilty only.
+    This is kept for compatibility only.
     """
     cart_x, cart_y, cart_z = tuple(cartesian)
     polar_dist = np.linalg.norm(cartesian)
