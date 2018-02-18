@@ -22,11 +22,11 @@ class Token:
     """Representation of the detection of one token."""
 
     def __init__(
-            self,
-            id: int,
-            certainty=0,
-            pixel_coords: Iterable[Tuple[float, float]] = (),
-            pixel_centre: Tuple[float, float] = (0, 0)
+        self,
+        id: int,
+        certainty=0,
+        pixel_coords: Iterable[Tuple[float, float]] = (),
+        pixel_centre: Tuple[float, float] = (0, 0)
     ) -> None:
         """
         General initialiser.
@@ -41,9 +41,9 @@ class Token:
 
     @classmethod
     def from_apriltag_detection(
-            cls,
-            apriltag_detection: 'ApriltagDetection',
-            camera_model: Optional[str],
+        cls,
+        apriltag_detection: 'ApriltagDetection',
+        camera_model: Optional[str],
     ) -> 'Token':
         """Construct a Token from an April Tag detection."""
 
@@ -90,10 +90,10 @@ class Token:
 
     # noinspection PyAttributeOutsideInit
     def infer_location_from_transforms(
-            self,
-            *,
-            orientation: Tuple[float, float, float],
-            translation: Tuple[float, float, float]
+        self,
+        *,
+        orientation: Tuple[float, float, float],
+        translation: Tuple[float, float, float]
     ):
         """Infer coordinate information from a homography matrix."""
         # Cartesian Co-ordinates in the 3D World, relative to the camera
