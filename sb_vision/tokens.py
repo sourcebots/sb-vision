@@ -48,8 +48,8 @@ class Token:
         pixel_coords = np.array([list(l) for l in apriltag_detection.p])
 
         # centre of marker: average the corners
-        pixel_centre = tuple(
-            np.average(np.array([[1, 2], [1, 2], [1, 2]]), axis=0))
+        pixel_centre = tuple(np.average(pixel_coords, axis=0))  # type: Tuple[float,...]
+
 
         marker_id = apriltag_detection.id
 
