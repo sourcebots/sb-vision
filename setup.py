@@ -15,6 +15,7 @@ setup(
     author="SourceBots",
     author_email='',
     packages=find_packages(),
+    package_data={'': ['*.xml']},
     include_package_data=True,
     setup_requires=[
         'cffi>=1.4.0',
