@@ -25,7 +25,7 @@ class Token:
                  id: int,
                  certainty=0,
                  pixel_coords: Iterable[Tuple[float, float]] = (),
-                 pixel_centre: Tuple[float, float] = (0, 0)) -> None:
+                 pixel_centre: Tuple[float, ...] = (0, 0)) -> None:
         """
         General initialiser.
 
