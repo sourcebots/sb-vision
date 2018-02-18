@@ -24,10 +24,10 @@ def assertWithinToleranceRatio(val, expected, tolerance, error_msg=""):
 
 
 def assertMarkerDistance(
-        camera: CameraBase,
-        *,
-        marker_sizes: Dict[int, Tuple[float, float]],
-        expected_distance: float
+    camera: CameraBase,
+    *,
+    marker_sizes: Dict[int, Tuple[float, float]],
+    expected_distance: float
 ) -> None:
     """Assert that the processed distance is as expected for a marker size."""
     vision = Vision(camera)
