@@ -68,9 +68,12 @@ def test_image_coordinates(photo, expected_cartesian, expected_polar, expected_s
     assert y == approx(expected_cartesian.y, abs=tolerance), "Wrong y-coordinate"
     assert z == approx(expected_cartesian.z, abs=tolerance), "Wrong z-coordinate"
 
-    assert polar_x == approx(expected_polar.polar_x, abs=tolerance), "Wrong polar_x coordinate"
-    assert polar_y == approx(expected_polar.polar_y, abs=tolerance), "Wrong polar_y coordinate"
-    assert polar_dist == approx(expected_polar.dist, abs=tolerance), "Wrong polar_dist coordinate"
+    assert polar_x == approx(expected_polar.polar_x, abs=tolerance), \
+        "Wrong polar_x coordinate"
+    assert polar_y == approx(expected_polar.polar_y, abs=tolerance), \
+        "Wrong polar_y coordinate"
+    assert polar_dist == approx(expected_polar.dist, abs=tolerance), \
+        "Wrong polar_dist coordinate"
 
     assert rot_x == approx(expected_spherical.rot_x, abs=tolerance), "Wrong x-coordinate"
     assert rot_y == approx(expected_spherical.rot_y, abs=tolerance), "Wrong y-coordinate"
