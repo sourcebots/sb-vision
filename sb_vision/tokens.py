@@ -13,6 +13,7 @@ from .coordinates import (
     cartesian_to_legacy_polar,
     cartesian_to_spherical,
 )
+from .game_specific import MARKER_SIZES
 
 if TYPE_CHECKING:
     # Interface-only definitions
@@ -93,6 +94,9 @@ def _get_distance_model(name: str, image_size: Tuple[int, int]) -> Dict[str, Any
             ),
         )
 
+    if 'marker_size' not in calibration:
+        raise ValueError("Calibrations must have a marker_size")
+
     return calibration
 
 
@@ -134,18 +138,31 @@ def _get_cartesian(
     homography_matrix,
     image_size: Tuple[int, int],
     distance_model: str,
+    marker_size: Optional[Tuple[float, float]],
 ) -> Cartesian:
     calibration = _get_distance_model(distance_model, image_size)
+    calibrated_marker_size = calibration['marker_size']
 
-    x = _apply_distance_model_component_to_homography_matrix(
+    if marker_size is None:
+        size_ratio = 1
+    else:
+        if marker_size[0] != marker_size[1]:
+            raise ValueError("Non-square markers are not supported")
+        # The ratio between the calibrated size and the actual size
+        size_ratio = marker_size[0] / calibrated_marker_size
+
+    in_x = _apply_distance_model_component_to_homography_matrix(
         calibration['x_model'],
         homography_matrix,
     )  # type: np.float64
     y = 0.0
-    z = _apply_distance_model_component_to_homography_matrix(
+    in_z = _apply_distance_model_component_to_homography_matrix(
         calibration['z_model'],
         homography_matrix,
     )  # type: np.float64
+
+    x = in_x * size_ratio
+    z = in_z * size_ratio
 
     return Cartesian(x, y, z)
 
@@ -172,7 +189,7 @@ class Token:
     ) -> 'Token':
         """Construct a Token from an April Tag detection."""
         # *************************************************************************
-        # NOTE: IF YOU CHANGE THIS PLEASE ADD THEM IN THE ROBOT-API camera.py
+        # NOTE: IF YOU CHANGE THIS, THEN CHANGE ROBOT-API camera.py
         # *************************************************************************
 
         instance = cls(
@@ -183,10 +200,12 @@ class Token:
         arr = [apriltag_detection.H.data[x] for x in range(9)]
         homography = np.reshape(arr, (3, 3))
 
+        marker_id = apriltag_detection.id
         instance.infer_location_from_homography_matrix(
             homography_matrix=homography,
             distance_model=distance_model,
             image_size=image_size,
+            marker_size=MARKER_SIZES.get(marker_id),
         )
         return instance
 
@@ -196,7 +215,8 @@ class Token:
         *,
         homography_matrix,
         distance_model,
-        image_size
+        image_size,
+        marker_size: Optional[Tuple[float, float]]
     ):
         """Infer coordinate information from a homography matrix."""
         # pixel coordinates of the corners of the marker
@@ -216,6 +236,7 @@ class Token:
             homography_matrix,
             image_size,
             distance_model,
+            marker_size,
         )
 
         # Polar co-ordinates in the 3D world, relative to the camera

@@ -44,8 +44,12 @@ def main(args=None):
     with (options.directory / 'files.yaml').open('r') as f:
         config_data = yaml.load(f)
         config_version = config_data['version']
-        if config_version > 1:
-            raise SystemExit("Cannot handle config versions >1")
+        if config_version > 2:
+            raise SystemExit("Cannot handle config versions >2")
+        if config_version < 2:
+            raise SystemExit("Cannot handle version 1, please add a "
+                             "marker_size attribute and increase the "
+                             "version number to 2.")
         files = config_data['files']
 
     training_examples = []
@@ -63,6 +67,8 @@ def main(args=None):
             print(str(e))
 
     calibration = fit(training_examples)
+
+    calibration['marker_size'] = config_data['marker_size']
 
     print(calibration)
 
