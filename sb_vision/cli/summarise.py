@@ -11,14 +11,14 @@ from ..camera import FileCamera
 from ..vision import Vision
 
 
-def main(files: Sequence[pathlib.Path], distance_model: str, output: TextIO):
+def main(files: Sequence[pathlib.Path], camera_model: str, output: TextIO):
     """Execute this command."""
     with contextlib.suppress(KeyboardInterrupt):
         print('version: 1', file=output)
         print('files:', file=output)
 
         for image_file in sorted(files):
-            camera = FileCamera(image_file, distance_model)
+            camera = FileCamera(image_file, camera_model)
             tokens = Vision(camera).snapshot()
 
             if len(tokens) != 1:
@@ -52,9 +52,9 @@ def add_arguments(parser):
     )
     parser.add_argument(
         '-m',
-        '--distance-model',
+        '--camera-model',
         type=pathlib.Path,
-        help="Distance model to use.",
+        help="Model of the camera to use calibrations for.",
     )
     parser.add_argument(
         '-o',

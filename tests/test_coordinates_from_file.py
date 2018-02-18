@@ -47,7 +47,7 @@ TEST_IMAGES = [
 )
 def test_image_coordinates(photo, expected_cartesian, expected_polar, expected_spherical):
     """Make sure that this particular file gives these particular tokens."""
-    camera = FileCamera(CALIBRATIONS / photo, distance_model='c270')
+    camera = FileCamera(CALIBRATIONS / photo, camera_model='C016')
     vision = Vision(camera)
     token, = vision.snapshot()
 
