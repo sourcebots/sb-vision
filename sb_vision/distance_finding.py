@@ -44,8 +44,8 @@ def get_calibration(file_name: Path) -> Dict[str, Any]:
                 data_type = element.find('dt').text
                 values = _get_text(element.find('data'))
                 if data_type == 'd':  # doubles
-                    data = np.reshape(np.array([float(v) for v in values]),
-                                      (rows, cols))
+                    data = np.reshape([float(v) for v in values],
+                                      (rows, cols)).tolist()
                 else:
                     raise ValueError('Invalid data type in xml')
             # Integer tag names
@@ -62,7 +62,7 @@ def get_calibration(file_name: Path) -> Dict[str, Any]:
 
 
 @functools.lru_cache()
-def load_camera_calibrations(file_name: Path) -> Tuple[np.ndarray, np.ndarray]:
+def load_camera_calibrations(file_name: Path) -> Tuple[List[List[float]], List[List[float]]]:
     """
     Load camera calibrations from a file.
 
@@ -78,8 +78,8 @@ def load_camera_calibrations(file_name: Path) -> Tuple[np.ndarray, np.ndarray]:
 def calculate_transforms(
         marker_size: Tuple[float, float],
         pixel_coords: np.ndarray,
-        camera_matrix: np.ndarray,
-        distance_coefficients: np.ndarray):
+        camera_matrix: List[List[float]],
+        distance_coefficients: List[List[float]]):
     """
     Calculate the position of a marker.
 
@@ -108,8 +108,8 @@ def calculate_transforms(
     _, orientation_vector, translation_vector = cv2.solvePnP(
         object_points,
         pixel_coords,
-        camera_matrix,
-        distance_coefficients,
+        np.array([np.array(xi) for xi in camera_matrix]),
+        np.array([np.array(xi) for xi in distance_coefficients]),
     )
     translation_vector = tuple(v[0] for v in translation_vector)
     orientation_vector = tuple(v[0] for v in orientation_vector)
