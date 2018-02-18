@@ -73,7 +73,8 @@ class Token:
         if camera_model:
             builtin_models_dir = Path(__file__).parent
             model_file = builtin_models_dir / '{}_calibration.xml'.format(
-                camera_model)
+                camera_model,
+            )
             camera_matrix, distance_coefficents = load_camera_calibrations(
                 model_file,
             )
