@@ -8,11 +8,13 @@ location finding function.
 import functools
 import re
 from pathlib import Path
-from typing import Any, Dict, List, Tuple
+from typing import Any, Dict, List, NamedTuple, Tuple
 
 import cv2
 import numpy as np
 from lxml import etree
+
+Coordinate = NamedTuple('PixelCoordinate', [('x', float), ('y', float)])
 
 
 def _get_text(element: etree.Element) -> List[str]:
@@ -78,7 +80,7 @@ def load_camera_calibrations(file_name: Path) -> Tuple[List[List[float]],
 
 def calculate_transforms(
     marker_size: Tuple[float, float],
-    pixel_coords: List[Tuple[float, float]],
+    pixel_coords: List[Coordinate],
     camera_matrix: List[List[float]],
     distance_coefficients: List[List[float]]
 ):
@@ -109,7 +111,7 @@ def calculate_transforms(
 
     _, orientation_vector, translation_vector = cv2.solvePnP(
         object_points,
-        pixel_coords,
+        np.array(pixel_coords),
         np.array([np.array(xi) for xi in camera_matrix]),
         np.array([np.array(xi) for xi in distance_coefficients]),
     )

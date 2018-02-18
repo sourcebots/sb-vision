@@ -1,7 +1,7 @@
 """Tokens detections, and the utilities to manipulate them."""
 
 from pathlib import Path
-from typing import TYPE_CHECKING, Any, Iterable, List, Optional, Tuple, cast
+from typing import TYPE_CHECKING, Any, Iterable, NamedTuple, Optional, Tuple
 
 import numpy as np
 
@@ -10,7 +10,11 @@ from .coordinates import (
     cartesian_to_legacy_polar,
     cartesian_to_spherical,
 )
-from .distance_finding import calculate_transforms, load_camera_calibrations
+from .distance_finding import (
+    Coordinate,
+    calculate_transforms,
+    load_camera_calibrations,
+)
 from .game_specific import MARKER_SIZE_DEFAULT, MARKER_SIZES
 
 if TYPE_CHECKING:
@@ -47,11 +51,10 @@ class Token:
     ) -> 'Token':
         """Construct a Token from an April Tag detection."""
 
-        pixel_coords = cast(List[Tuple[float, float]],
-                            [tuple(l) for l in apriltag_detection.p])
+        pixel_coords = [Coordinate(*l) for l in apriltag_detection.p]
 
         # centre of marker: average the corners
-        pixel_centre = cast(Tuple[float, float], tuple(np.average(pixel_coords, axis=0)))
+        pixel_centre = Coordinate(*np.average(pixel_coords, axis=0))
 
         marker_id = apriltag_detection.id
 
