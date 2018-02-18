@@ -21,8 +21,8 @@ TEST_IMAGES = [
         Cartesian(x=-0.1, y=0, z=1),
         Spherical(
             rot_x=0,
-            rot_y=math.atan(-0.1),
-            dist=(0.1 + 1) ** 0.5,
+            rot_y=math.atan(-0.1),  # or -0.09966865249116204 radians
+            dist=(0.1**2 + 1**2) ** 0.5,  # or 1.004987562112089
         ),
     ),
     (
@@ -30,8 +30,8 @@ TEST_IMAGES = [
         Cartesian(x=1, y=0, z=3),
         Spherical(
             rot_x=0,
-            rot_y=math.atan(1 / 3),
-            dist=(1 + 9) ** 0.5,
+            rot_y=math.atan(1 / 3), # or 0.3217505543966422 radians
+            dist=(1**2 + 3**2) ** 0.5, # or 3.1622776601683795
         ),
     ),
 ]
