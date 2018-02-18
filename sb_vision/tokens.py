@@ -1,7 +1,7 @@
 """Tokens detections, and the utilities to manipulate them."""
 
 from pathlib import Path
-from typing import TYPE_CHECKING, Any, Iterable, Optional, Tuple
+from typing import TYPE_CHECKING, Any, Iterable, Optional, Tuple, cast
 
 import numpy as np
 
@@ -25,7 +25,7 @@ class Token:
                  id: int,
                  certainty=0,
                  pixel_coords: Iterable[Tuple[float, float]] = (),
-                 pixel_centre: Tuple[float, ...] = (0, 0)) -> None:
+                 pixel_centre: Tuple[float, float] = (0, 0)) -> None:
         """
         General initialiser.
 
@@ -48,8 +48,7 @@ class Token:
         pixel_coords = np.array([list(l) for l in apriltag_detection.p])
 
         # centre of marker: average the corners
-        pixel_centre = tuple(np.average(pixel_coords, axis=0))  # type: Tuple[float,...]
-
+        pixel_centre = cast(Tuple[float, float], tuple(np.average(pixel_coords, axis=0)))
 
         marker_id = apriltag_detection.id
 
