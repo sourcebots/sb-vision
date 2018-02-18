@@ -4,6 +4,7 @@ import math
 from pathlib import Path
 
 import pytest
+from pytest import approx
 
 from sb_vision import Cartesian, FileCamera, Spherical, Vision
 
@@ -37,11 +38,6 @@ TEST_IMAGES = [
 ]
 
 
-def assertWithinTolerance(val, expected, tolerance, error_msg=""):
-    """Assert that the value is within a certain tolerance value."""
-    assert (expected - tolerance) < val < (expected + tolerance), error_msg
-
-
 @pytest.mark.parametrize(
     "photo, expected_cartesian, expected_spherical",
     TEST_IMAGES,
@@ -57,16 +53,10 @@ def test_image_coordinates(photo, expected_cartesian, expected_spherical):
 
     tolerance = dist * DIST_PERCENT_TOLERANCE
 
-    assertWithinTolerance(x, expected_cartesian.x, tolerance,
-                          "Wrong x-coordinate")
-    assertWithinTolerance(y, expected_cartesian.y, tolerance,
-                          "Wrong y-coordinate")
-    assertWithinTolerance(z, expected_cartesian.z, tolerance,
-                          "Wrong z-coordinate")
+    assert x == approx(expected_cartesian.x, abs=tolerance), "Wrong x-coordinate"
+    assert y == approx(expected_cartesian.y, abs=tolerance), "Wrong y-coordinate"
+    assert z == approx(expected_cartesian.z, abs=tolerance), "Wrong z-coordinate"
 
-    assertWithinTolerance(rot_x, expected_spherical.rot_x, ROTATION_TOLERANCE,
-                          "Wrong x rotation")
-    assertWithinTolerance(rot_y, expected_spherical.rot_y, ROTATION_TOLERANCE,
-                          "Wrong y rotation")
-    assertWithinTolerance(dist, expected_spherical.dist, tolerance,
-                          "Wrong distance")
+    assert rot_x == approx(expected_spherical.rot_x, abs=tolerance), "Wrong x-coordinate"
+    assert rot_y == approx(expected_spherical.rot_y, abs=tolerance), "Wrong y-coordinate"
+    assert dist == approx(expected_spherical.dist, abs=tolerance), "Wrong distance"

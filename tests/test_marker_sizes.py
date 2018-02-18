@@ -4,6 +4,8 @@ from pathlib import Path
 from typing import Dict, Tuple
 from unittest import mock
 
+from pytest import approx
+
 from sb_vision import FileCamera, Vision
 from sb_vision.camera_base import CameraBase
 
@@ -34,7 +36,7 @@ def assertMarkerDistance(
         token, = vision.snapshot()
 
     dist = token.spherical.dist
-    assertWithinToleranceRatio(dist, expected_distance, EXPECTED_TOLERANCE)
+    assert dist == approx(expected_distance, rel=EXPECTED_TOLERANCE)
 
 
 def test_unknown_marker_size():
