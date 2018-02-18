@@ -35,6 +35,7 @@ def main(files: Sequence[pathlib.Path], distance_model: str, output: TextIO):
             info = {
                 'image': str(image_file),
                 'x': round(token.cartesian[0], 4),
+                'y': round(token.cartesian[1], 4),
                 'z': round(token.cartesian[2], 4),
             }
             print(' - {}'.format(json.dumps(info, sort_keys=True)), file=output)

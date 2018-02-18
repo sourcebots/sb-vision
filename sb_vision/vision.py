@@ -76,11 +76,12 @@ class Vision:
         """
         img = self.threshold_image(img)
 
-        distance_model = self.camera.distance_model
+        camera_model = self.camera.camera_model
+        detections = list(self.apriltag_detector.detect_tags(img))
 
         tokens = [
-            Token.from_apriltag_detection(x, img.size, distance_model)
-            for x in self.apriltag_detector.detect_tags(img)
+            Token.from_apriltag_detection(x, camera_model)
+            for x in detections
         ]
 
         return tokens
