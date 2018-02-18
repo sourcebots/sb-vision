@@ -99,7 +99,7 @@ class Token:
         orientation: Tuple[float, float, float],
         translation: Tuple[float, float, float]
     ):
-        """Infer coordinate information from a homography matrix."""
+        """Infer coordinate information from the given transformations."""
         # Cartesian Co-ordinates in the 3D World, relative to the camera
         self.cartesian = Cartesian(*translation)
 
