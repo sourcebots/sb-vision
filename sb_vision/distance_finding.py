@@ -77,10 +77,11 @@ def load_camera_calibrations(file_name: Path) -> Tuple[List[List[float]],
 
 
 def calculate_transforms(
-        marker_size: Tuple[float, float],
-        pixel_coords: List[Tuple[float, float]],
-        camera_matrix: List[List[float]],
-        distance_coefficients: List[List[float]]):
+    marker_size: Tuple[float, float],
+    pixel_coords: List[Tuple[float, float]],
+    camera_matrix: List[List[float]],
+    distance_coefficients: List[List[float]]
+):
     """
     Calculate the position of a marker.
 
