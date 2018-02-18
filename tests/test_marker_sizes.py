@@ -9,17 +9,22 @@ from sb_vision.camera_base import CameraBase
 
 TEST_DATA = Path(__file__).parent / 'test_data'
 
-# We're using TeckNet images with the c270 model, so these are expected to be a
-# bit off; note that they still preserve the ratio of 1:2.5 (0.7 : 1.75 then rounded)
-EXPECTED_LARGE_DISTANCE = 1.8
-EXPECTED_SMALL_DISTANCE = 0.7
+# The expected error for the distances of markers should be within tolerances
+EXPECTED_LARGE_DISTANCE = 2.5
+EXPECTED_SMALL_DISTANCE = 1
+EXPECTED_TOLERANCE = 0.15
+
+
+def assertWithinToleranceRatio(val, expected, tolerance, error_msg=""):
+    assert expected * (1 - tolerance) < val < expected * (1 + tolerance), \
+        error_msg
 
 
 def assertMarkerDistance(
-    camera: CameraBase,
-    *,
-    marker_sizes: Dict[int, Tuple[float, float]],
-    expected_distance: float
+        camera: CameraBase,
+        *,
+        marker_sizes: Dict[int, Tuple[float, float]],
+        expected_distance: float
 ) -> None:
     """Assert that the processed distance is as expected for a marker size."""
     vision = Vision(camera)
@@ -28,7 +33,7 @@ def assertMarkerDistance(
         token, = vision.snapshot()
 
     dist = token.spherical.dist
-    assert round(dist, 1) == expected_distance
+    assertWithinToleranceRatio(dist, expected_distance, EXPECTED_TOLERANCE)
 
 
 def test_unknown_marker_size():
