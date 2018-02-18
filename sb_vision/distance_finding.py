@@ -82,7 +82,7 @@ def calculate_transforms(
     marker_size: Tuple[float, float],
     pixel_coords: List[Coordinate],
     camera_matrix: List[List[float]],
-    distance_coefficients: List[List[float]]
+    distance_coefficients: List[List[float]],
 ):
     """
     Calculate the position of a marker.

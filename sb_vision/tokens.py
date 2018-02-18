@@ -1,7 +1,7 @@
 """Tokens detections, and the utilities to manipulate them."""
 
 from pathlib import Path
-from typing import TYPE_CHECKING, Any, Iterable, NamedTuple, Optional, Tuple
+from typing import TYPE_CHECKING, Any, Iterable, Optional, Tuple
 
 import numpy as np
 
@@ -30,7 +30,7 @@ class Token:
         id: int,
         certainty=0,
         pixel_coords: Iterable[Tuple[float, float]] = (),
-        pixel_centre: Tuple[float, float] = (0, 0)
+        pixel_centre: Tuple[float, float] = (0, 0),
     ) -> None:
         """
         General initialiser.
