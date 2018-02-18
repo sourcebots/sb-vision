@@ -63,7 +63,7 @@ class Token:
             id=apriltag_detection.id,
             certainty=apriltag_detection.goodness,
             pixel_coords=pixel_coords,
-            pixel_centre=pixel_centre
+            pixel_centre=pixel_centre,
         )
 
         # We don't set coordinates in the absence of a
@@ -94,7 +94,7 @@ class Token:
             self,
             *,
             orientation: Tuple[float, float, float],
-            translation: Tuple[float, float, float],
+            translation: Tuple[float, float, float]
     ):
         """Infer coordinate information from a homography matrix."""
         # Cartesian Co-ordinates in the 3D World, relative to the camera
