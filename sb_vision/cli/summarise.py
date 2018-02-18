@@ -37,9 +37,6 @@ def main(files: Sequence[pathlib.Path], camera_model: str, output: TextIO):
                 'x': round(token.cartesian[0], 4),
                 'y': round(token.cartesian[1], 4),
                 'z': round(token.cartesian[2], 4),
-                'legacy.polar_x': round(token.polar.polar_x, 4),
-                'legacy.polar_y': round(token.polar.polar_y, 4),
-                'legacy.dist': round(token.polar.dist, 4),
             }
             print(' - {}'.format(json.dumps(info, sort_keys=True)), file=output)
 
