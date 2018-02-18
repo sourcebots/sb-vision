@@ -1,7 +1,7 @@
 """Tokens detections, and the utilities to manipulate them."""
 
 from pathlib import Path
-from typing import TYPE_CHECKING, Any, Iterable, Optional, Tuple, cast
+from typing import TYPE_CHECKING, Any, Iterable, List, Optional, Tuple, cast
 
 import numpy as np
 
@@ -45,7 +45,8 @@ class Token:
     ) -> 'Token':
         """Construct a Token from an April Tag detection."""
 
-        pixel_coords = np.array([list(l) for l in apriltag_detection.p])
+        pixel_coords = cast(List[Tuple[float, float]],
+                            [tuple(l) for l in apriltag_detection.p])
 
         # centre of marker: average the corners
         pixel_centre = cast(Tuple[float, float], tuple(np.average(pixel_coords, axis=0)))
