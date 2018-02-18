@@ -38,6 +38,7 @@ TEST_IMAGES = [
 
 
 def assertWithinTolerance(val, expected, tolerance, error_msg=""):
+    """Assert that the value is within a certain tolerance value."""
     assert (expected - tolerance) < val < (expected + tolerance), error_msg
 
 

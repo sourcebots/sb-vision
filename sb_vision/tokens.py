@@ -1,20 +1,17 @@
 """Tokens detections, and the utilities to manipulate them."""
 
-import functools
 from pathlib import Path
-from typing import TYPE_CHECKING, Any, Dict, List, Mapping, Optional, Tuple, \
-    Iterable
+from typing import TYPE_CHECKING, Any, Iterable, Optional, Tuple
 
 import numpy as np
 
-from sb_vision.distance_finding import calculate_transforms, \
-    load_camera_calibrations
 from .coordinates import (
     Cartesian,
     cartesian_to_legacy_polar,
     cartesian_to_spherical,
 )
-from .game_specific import MARKER_SIZES, MARKER_SIZE_DEFAULT
+from .distance_finding import calculate_transforms, load_camera_calibrations
+from .game_specific import MARKER_SIZE_DEFAULT, MARKER_SIZES
 
 if TYPE_CHECKING:
     # Interface-only definitions
@@ -73,14 +70,14 @@ class Token:
             model_file = builtin_models_dir / '{}_calibration.xml'.format(
                 camera_model)
             camera_matrix, distance_coefficents = load_camera_calibrations(
-                model_file
+                model_file,
             )
 
             translation, orientation = calculate_transforms(
                 MARKER_SIZES.get(marker_id, MARKER_SIZE_DEFAULT),
                 pixel_coords,
                 camera_matrix,
-                distance_coefficents
+                distance_coefficents,
             )
 
             instance.infer_location_from_transforms(
