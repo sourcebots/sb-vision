@@ -34,11 +34,5 @@ setup(
     tests_require=[
         'pytest',
     ],
-    extras_require={
-        'calibration': [
-            'pyyaml',
-            'scikit-learn',
-        ],
-    },
     zip_safe=False,
 )
