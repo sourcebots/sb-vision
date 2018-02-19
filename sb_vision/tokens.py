@@ -67,8 +67,7 @@ class Token:
             pixel_centre=pixel_centre,
         )
 
-        # We don't set coordinates in the absence of a
-        # camera model.
+        # We don't set coordinates in the absence of a camera model.
         if camera_model:
             camera_matrix, distance_coefficents = load_camera_calibrations(
                 camera_model,
