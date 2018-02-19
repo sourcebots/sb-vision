@@ -61,7 +61,7 @@ class Token:
         # NOTE: IF YOU CHANGE THIS, THEN CHANGE ROBOT-API camera.py
         # *************************************************************************
         instance = cls(
-            id=apriltag_detection.id,
+            id=marker_id,
             certainty=apriltag_detection.goodness,
             pixel_corners=pixel_corners,
             pixel_centre=pixel_centre,
