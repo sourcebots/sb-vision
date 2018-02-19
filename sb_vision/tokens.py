@@ -1,6 +1,6 @@
 """Tokens detections, and the utilities to manipulate them."""
 
-from typing import TYPE_CHECKING, Any, Iterable, Optional, Tuple
+from typing import TYPE_CHECKING, Any, List, Optional, Tuple
 
 import numpy as np
 
@@ -28,7 +28,7 @@ class Token:
         self,
         id: int,
         certainty=0,
-        pixel_corners: Iterable[Tuple[float, float]] = (),
+        pixel_corners: List[Tuple[float, float]] = (),
         pixel_centre: Tuple[float, float] = (0, 0),
     ) -> None:
         """
