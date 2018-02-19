@@ -93,6 +93,7 @@ class Token:
     ):
         """Calculate 3D coordinate information from the given transformations."""
         # Cartesian Co-ordinates in the 3D World, relative to the camera
+        # (as opposed to somehow being compass-aligned)
         self.cartesian = translation
 
         # Polar co-ordinates in the 3D world, relative to the camera
