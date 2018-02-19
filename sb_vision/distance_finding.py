@@ -66,7 +66,7 @@ def get_calibration(file_name: Path) -> Dict[str, Any]:
 
 @functools.lru_cache()
 def load_camera_calibrations(camera_model: str) -> Tuple[List[List[float]],
-                                                      List[List[float]]]:
+                                                         List[List[float]]]:
     """
     Load camera calibrations from a file.
 
@@ -85,7 +85,7 @@ def load_camera_calibrations(camera_model: str) -> Tuple[List[List[float]],
 
 def calculate_transforms(
     marker_size: Tuple[float, float],
-    pixel_coords: List[PixelCoordinate],
+    pixel_corners: List[PixelCoordinate],
     camera_matrix: List[List[float]],
     distance_coefficients: List[List[float]],
 ):
@@ -116,7 +116,7 @@ def calculate_transforms(
 
     _, orientation_vector, translation_vector = cv2.solvePnP(
         object_points,
-        np.array(pixel_coords),
+        np.array(pixel_corners),
         np.array([np.array(xi) for xi in camera_matrix]),
         np.array([np.array(xi) for xi in distance_coefficients]),
     )

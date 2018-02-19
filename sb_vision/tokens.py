@@ -28,7 +28,7 @@ class Token:
         self,
         id: int,
         certainty=0,
-        pixel_coords: Iterable[Tuple[float, float]] = (),
+        pixel_corners: Iterable[Tuple[float, float]] = (),
         pixel_centre: Tuple[float, float] = (0, 0),
     ) -> None:
         """
@@ -39,7 +39,7 @@ class Token:
         """
         self.id = id
         self.certainty = certainty
-        self.pixel_coords = pixel_coords
+        self.pixel_corners = pixel_corners
         self.pixel_centre = pixel_centre
 
     @classmethod
@@ -50,10 +50,10 @@ class Token:
     ) -> 'Token':
         """Construct a Token from an April Tag detection."""
 
-        pixel_coords = [PixelCoordinate(*l) for l in apriltag_detection.p]
+        pixel_corners = [PixelCoordinate(*l) for l in apriltag_detection.p]
 
         # centre of marker: average the corners
-        pixel_centre = PixelCoordinate(*np.average(pixel_coords, axis=0))
+        pixel_centre = PixelCoordinate(*np.average(pixel_corners, axis=0))
 
         marker_id = apriltag_detection.id
 
@@ -63,7 +63,7 @@ class Token:
         instance = cls(
             id=apriltag_detection.id,
             certainty=apriltag_detection.goodness,
-            pixel_coords=pixel_coords,
+            pixel_corners=pixel_corners,
             pixel_centre=pixel_centre,
         )
 
@@ -76,7 +76,7 @@ class Token:
 
             translation, orientation = calculate_transforms(
                 MARKER_SIZES.get(marker_id, MARKER_SIZE_DEFAULT),
-                pixel_coords,
+                pixel_corners,
                 camera_matrix,
                 distance_coefficents,
             )
