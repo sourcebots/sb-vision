@@ -41,7 +41,7 @@ TEST_IMAGES = [
         ),
         Spherical(
             rot_x=0,
-            rot_y=math.atan(1 / 3),  # or 0.3217505543966422 radians
+            rot_y=math.atan(1 / 3),  # or 18.43494882296774 degrees
             dist=(1**2 + 3**2) ** 0.5,  # or 3.1622776601683795
         ),
     ),
