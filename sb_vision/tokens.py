@@ -81,7 +81,6 @@ class Token:
             )
 
             instance.update_3D_transforms(
-                orientation=orientation,
                 translation=translation,
             )
         return instance
@@ -90,7 +89,6 @@ class Token:
     def update_3D_transforms(
         self,
         *,
-        orientation: Tuple[float, float, float],
         translation: Cartesian,
     ):
         """Calculate 3D coordinate information from the given transformations."""
