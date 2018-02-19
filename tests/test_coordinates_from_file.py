@@ -21,14 +21,14 @@ TEST_IMAGES = [
         '1.0z-0.1x.jpg',
         Cartesian(x=-0.1, y=0, z=1),
         LegacyPolar(
-            polar_x=1.6697,
-            polar_y=1.5740,
-            dist=(0.1**2 + 1**2) ** 0.5,  # or 1.004987562112089
+            polar_x=1.6704649792860642,
+            polar_y=1.5707963267948966,
+            dist=1.004987562112089,
         ),
         Spherical(
             rot_x=0,
-            rot_y=math.atan(-0.1),  # or -0.09966865249116204 radians
-            dist=(0.1**2 + 1**2) ** 0.5,  # or 1.004987562112089
+            rot_y=math.atan(-0.1),  # or -5.710593137499643 degrees
+            dist=(0.01 + 1)**0.5,  # or 1.004987562112089
         ),
     ),
     (
@@ -37,7 +37,7 @@ TEST_IMAGES = [
         LegacyPolar(
             polar_x=1.1922,
             polar_y=1.6032,
-            dist=(1**2 + 3**2) ** 0.5,  # or 3.1622776601683795
+            dist=(1 + 9)**0.5,  # or 3.1622776601683795
         ),
         Spherical(
             rot_x=0,
