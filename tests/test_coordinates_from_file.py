@@ -11,7 +11,7 @@ from sb_vision import Cartesian, FileCamera, LegacyPolar, Spherical, Vision
 # Ensure all distance values are within this tolerance
 # (as a percentage of the total distance)
 DIST_PERCENT_TOLERANCE = 0.15
-# Rotation tolerance is independent of distance
+# Rotation tolerance in radians
 ROTATION_TOLERANCE = 0.075
 
 CALIBRATIONS = Path(__file__).parent.parent / 'calibrations' / 'tecknet_25cm'
@@ -58,25 +58,26 @@ def test_image_coordinates(photo, expected_cartesian, expected_polar, expected_s
     vision = Vision(camera)
     token, = vision.snapshot()
 
+    def approx_dist(expected):
+        return approx(expected, abs=expected_spherical.dist * DIST_PERCENT_TOLERANCE)
+
+    def approx_ang(expected):
+        return approx(expected, abs=ROTATION_TOLERANCE)
+
     x, y, z = token.cartesian
 
-    tolerance = expected_spherical.dist * DIST_PERCENT_TOLERANCE
-
-    assert x == approx(expected_cartesian.x, abs=tolerance), "Wrong x-coordinate"
-    assert y == approx(expected_cartesian.y, abs=tolerance), "Wrong y-coordinate"
-    assert z == approx(expected_cartesian.z, abs=tolerance), "Wrong z-coordinate"
+    assert x == approx_dist(expected_cartesian.x), "Wrong x-coordinate"
+    assert y == approx_dist(expected_cartesian.y), "Wrong y-coordinate"
+    assert z == approx_dist(expected_cartesian.z), "Wrong z-coordinate"
 
     polar_x, polar_y, polar_dist = token.legacy_polar
 
-    assert polar_x == approx(expected_polar.polar_x, abs=tolerance), \
-        "Wrong polar_x coordinate"
-    assert polar_y == approx(expected_polar.polar_y, abs=tolerance), \
-        "Wrong polar_y coordinate"
-    assert polar_dist == approx(expected_polar.dist, abs=tolerance), \
-        "Wrong polar_dist coordinate"
+    assert polar_x == approx_ang(expected_polar.polar_x), "Wrong polar_x coordinate"
+    assert polar_y == approx_ang(expected_polar.polar_y), "Wrong polar_y coordinate"
+    assert polar_dist == approx_dist(expected_polar.dist), "Wrong polar_dist coordinate"
 
     rot_x, rot_y, dist = token.spherical
 
-    assert rot_x == approx(expected_spherical.rot_x, abs=tolerance), "Wrong x-coordinate"
-    assert rot_y == approx(expected_spherical.rot_y, abs=tolerance), "Wrong y-coordinate"
-    assert dist == approx(expected_spherical.dist, abs=tolerance), "Wrong distance"
+    assert rot_x == approx_ang(expected_spherical.rot_x), "Wrong x-coordinate"
+    assert rot_y == approx_ang(expected_spherical.rot_y), "Wrong y-coordinate"
+    assert dist == approx_dist(expected_spherical.dist), "Wrong distance"
