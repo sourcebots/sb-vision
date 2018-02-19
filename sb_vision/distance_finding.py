@@ -40,26 +40,24 @@ def get_calibration(file_name: Path) -> Dict[str, Any]:
         tree = etree.parse(file)
         root = tree.getroot()
         for element in root:
-            if 'type_id' in element.attrib and element.attrib[
-               'type_id'] == 'opencv-matrix':
-                rows, cols = int(element.find('rows').text), int(
-                    element.find('cols').text)
-                data_type = element.find('dt').text
-                values = _get_values_from_xml_element(element.find('data'))
-                if data_type == 'd':  # doubles
-                    data = np.reshape([float(v) for v in values],
-                                      (rows, cols)).tolist()
+            if element.tag in ['dist_coeffs', 'CameraMatrix']:
+                if 'type_id' in element.attrib and element.attrib[
+                   'type_id'] == 'opencv-matrix':
+                    rows, cols = int(element.find('rows').text), int(
+                        element.find('cols').text)
+                    data_type = element.find('dt').text
+                    values = _get_values_from_xml_element(element.find('data'))
+                    if data_type == 'd':  # doubles
+                        data = np.reshape([float(v) for v in values],
+                                          (rows, cols)).tolist()
+                    else:
+                        raise ValueError('Invalid data type in xml file {}'.format(
+                            file_name,
+                        ))
                 else:
-                    raise ValueError('Invalid data type in xml')
-            # Integer tag names
-            elif element.tag in ['framesCount', 'cameraResolution']:
-                values = _get_values_from_xml_element(element)
-                data = [int(v) for v in values]
-            elif element.tag in ['avg_reprojection_error']:
-                values = _get_values_from_xml_element(element)
-                data = [float(v) for v in values]
-            else:
-                data = _get_values_from_xml_element(element)
+                    raise ValueError('Unexpected type of tag in xml file {}'.format(
+                        file_name,
+                    ))
             calibrations[element.tag] = data
     return calibrations
 
