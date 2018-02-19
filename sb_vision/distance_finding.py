@@ -40,24 +40,27 @@ def get_calibration(file_name: Path) -> Dict[str, Any]:
         tree = etree.parse(file)
         root = tree.getroot()
         for element in root:
-            if element.tag in ['dist_coeffs', 'CameraMatrix']:
+            if element.tag in ['dist_coeffs', 'cameraMatrix']:
                 if element.attrib.get('type_id') == 'opencv-matrix':
-                    rows, cols = int(element.find('rows').text), int(
-                        element.find('cols').text)
                     data_type = element.find('dt').text
-                    values = _get_values_from_xml_element(element.find('data'))
-                    if data_type == 'd':  # doubles
-                        data = np.reshape([float(v) for v in values],
-                                          (rows, cols)).tolist()
-                    else:
+                    if data_type != 'd':  # doubles
                         raise ValueError('Invalid data type in xml file {}'.format(
                             file_name,
                         ))
+                    rows = int(element.find('rows').text)
+                    cols = int(element.find('cols').text)
+
+                    values = _get_values_from_xml_element(element.find('data'))
+                    data = np.reshape(
+                        [float(v) for v in values],
+                        (rows, cols),
+                    ).tolist()
+                    calibrations[element.tag] = data
+
                 else:
                     raise ValueError('Unexpected type of tag in xml file {}'.format(
                         file_name,
                     ))
-            calibrations[element.tag] = data
     return calibrations
 
 
