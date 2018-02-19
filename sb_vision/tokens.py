@@ -91,11 +91,11 @@ class Token:
         self,
         *,
         orientation: Tuple[float, float, float],
-        translation: Tuple[float, float, float]
+        translation: Cartesian,
     ):
         """Calculate 3D coordinate information from the given transformations."""
         # Cartesian Co-ordinates in the 3D World, relative to the camera
-        self.cartesian = Cartesian(*translation)
+        self.cartesian = translation
 
         # Polar co-ordinates in the 3D world, relative to the camera
         self.polar = cartesian_to_legacy_polar(self.cartesian)
