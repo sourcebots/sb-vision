@@ -41,8 +41,7 @@ def get_calibration(file_name: Path) -> Dict[str, Any]:
         root = tree.getroot()
         for element in root:
             if element.tag in ['dist_coeffs', 'CameraMatrix']:
-                if 'type_id' in element.attrib and element.attrib[
-                   'type_id'] == 'opencv-matrix':
+                if element.attrib.get('type_id') == 'opencv-matrix':
                     rows, cols = int(element.find('rows').text), int(
                         element.find('cols').text)
                     data_type = element.find('dt').text
