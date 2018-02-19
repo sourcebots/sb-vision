@@ -80,20 +80,20 @@ class Token:
                 distance_coefficients,
             )
 
-            instance.infer_location_from_transforms(
+            instance.update_3D_transforms(
                 orientation=orientation,
                 translation=translation,
             )
         return instance
 
     # noinspection PyAttributeOutsideInit
-    def infer_location_from_transforms(
+    def update_3D_transforms(
         self,
         *,
         orientation: Tuple[float, float, float],
         translation: Tuple[float, float, float]
     ):
-        """Infer coordinate information from the given transformations."""
+        """Calculate 3D coordinate information from the given transformations."""
         # Cartesian Co-ordinates in the 3D World, relative to the camera
         self.cartesian = Cartesian(*translation)
 
