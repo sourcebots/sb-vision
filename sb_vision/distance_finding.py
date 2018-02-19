@@ -21,8 +21,9 @@ def _get_values_from_xml_element(element: etree.Element) -> List[str]:
     """Parse an xml tag with space-separated variables."""
     text = []  # type: List[str]
     for e in element.itertext():
-        if e.strip():
-            text += re.split('\s+', re.sub('\n', '', e.strip()))
+        e = e.strip()
+        if e:
+            text += re.split(r'\s+', e.replace('\n', ''))
     return text
 
 
