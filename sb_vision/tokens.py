@@ -28,7 +28,7 @@ class Token:
         self,
         id: int,
         certainty=0,
-        pixel_corners: List[Tuple[float, float]] = (),
+        pixel_corners: List[PixelCoordinate] = None,
         pixel_centre: Tuple[float, float] = (0, 0),
     ) -> None:
         """
