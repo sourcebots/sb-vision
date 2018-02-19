@@ -97,7 +97,7 @@ def calculate_transforms(
 
     :param marker_size: size of the marker
     :param pixel_corners: pixel co-ordinates of the corners of the marker
-        (clockwise around the marker)
+        (clockwise around the marker from the top-left corner)
     :param camera_matrix: calibration matrix for the camera
     :param distance_coefficients: distance calibration for the camera
     :return: translation and orientation of the marker
