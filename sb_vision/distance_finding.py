@@ -8,13 +8,13 @@ location finding function.
 import functools
 import re
 from pathlib import Path
-from typing import Any, Dict, List, NamedTuple, Tuple
+from typing import Any, Dict, List, Tuple
 
 import cv2
 import numpy as np
 from lxml import etree
 
-Coordinate = NamedTuple('PixelCoordinate', [('x', float), ('y', float)])
+from sb_vision.coordinates import PixelCoordinate
 
 
 def _get_values_from_xml_element(element: etree.Element) -> List[str]:
@@ -80,7 +80,7 @@ def load_camera_calibrations(file_name: Path) -> Tuple[List[List[float]],
 
 def calculate_transforms(
     marker_size: Tuple[float, float],
-    pixel_coords: List[Coordinate],
+    pixel_coords: List[PixelCoordinate],
     camera_matrix: List[List[float]],
     distance_coefficients: List[List[float]],
 ):

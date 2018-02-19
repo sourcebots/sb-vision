@@ -11,7 +11,7 @@ from .coordinates import (
     cartesian_to_spherical,
 )
 from .distance_finding import (
-    Coordinate,
+    PixelCoordinate,
     calculate_transforms,
     load_camera_calibrations,
 )
@@ -51,10 +51,10 @@ class Token:
     ) -> 'Token':
         """Construct a Token from an April Tag detection."""
 
-        pixel_coords = [Coordinate(*l) for l in apriltag_detection.p]
+        pixel_coords = [PixelCoordinate(*l) for l in apriltag_detection.p]
 
         # centre of marker: average the corners
-        pixel_centre = Coordinate(*np.average(pixel_coords, axis=0))
+        pixel_centre = PixelCoordinate(*np.average(pixel_coords, axis=0))
 
         marker_id = apriltag_detection.id
 
