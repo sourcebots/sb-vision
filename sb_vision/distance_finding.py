@@ -70,7 +70,7 @@ def load_camera_calibrations(camera_model: str) -> Tuple[List[List[float]],
     """
     Load camera calibrations from a file.
 
-    :param file_name: file to load
+    :param camera_model: file to load
     :return: camera calibrations
     """
     builtin_models_dir = Path(__file__).parent
@@ -96,7 +96,7 @@ def calculate_transforms(
     of the camera.
 
     :param marker_size: size of the marker
-    :param pixel_coords: pixel co-ordinates of the corners of the marker
+    :param pixel_corners: pixel co-ordinates of the corners of the marker
         (clockwise around the marker)
     :param camera_matrix: calibration matrix for the camera
     :param distance_coefficients: distance calibration for the camera
