@@ -17,12 +17,6 @@ EXPECTED_SMALL_DISTANCE = 1
 EXPECTED_TOLERANCE = 0.15
 
 
-def assertWithinToleranceRatio(val, expected, tolerance, error_msg=""):
-    """Assert that the value is within a certain percent tolerance."""
-    assert expected * (1 - tolerance) < val < expected * (1 + tolerance), \
-        error_msg
-
-
 def assertMarkerDistance(
     camera: CameraBase,
     *,
