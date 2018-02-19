@@ -92,7 +92,7 @@ def calculate_transforms(
     """
     Calculate the position of a marker.
 
-    given the pixel co-ordinates of the corners and the calibrations
+    Given the pixel co-ordinates of the corners and the calibrations
     of the camera.
 
     :param marker_size: size of the marker
