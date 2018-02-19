@@ -59,14 +59,14 @@ def test_image_coordinates(photo, expected_cartesian, expected_polar, expected_s
     token, = vision.snapshot()
 
     x, y, z = token.cartesian
-    rot_x, rot_y, dist = token.spherical
-    polar_x, polar_y, polar_dist = token.legacy_polar
 
-    tolerance = dist * DIST_PERCENT_TOLERANCE
+    tolerance = expected_spherical.dist * DIST_PERCENT_TOLERANCE
 
     assert x == approx(expected_cartesian.x, abs=tolerance), "Wrong x-coordinate"
     assert y == approx(expected_cartesian.y, abs=tolerance), "Wrong y-coordinate"
     assert z == approx(expected_cartesian.z, abs=tolerance), "Wrong z-coordinate"
+
+    polar_x, polar_y, polar_dist = token.legacy_polar
 
     assert polar_x == approx(expected_polar.polar_x, abs=tolerance), \
         "Wrong polar_x coordinate"
@@ -74,6 +74,8 @@ def test_image_coordinates(photo, expected_cartesian, expected_polar, expected_s
         "Wrong polar_y coordinate"
     assert polar_dist == approx(expected_polar.dist, abs=tolerance), \
         "Wrong polar_dist coordinate"
+
+    rot_x, rot_y, dist = token.spherical
 
     assert rot_x == approx(expected_spherical.rot_x, abs=tolerance), "Wrong x-coordinate"
     assert rot_y == approx(expected_spherical.rot_y, abs=tolerance), "Wrong y-coordinate"
