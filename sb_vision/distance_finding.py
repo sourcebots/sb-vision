@@ -78,8 +78,8 @@ def load_camera_calibrations(camera_model: str) -> Tuple[List[List[float]],
         camera_model,
     )
 
-    camera_matrix, distance_coefficents = get_calibration(model_file)
-    return camera_matrix, distance_coefficents
+    camera_matrix, distance_coefficients = get_calibration(model_file)
+    return camera_matrix, distance_coefficients
 
 
 def calculate_transforms(
