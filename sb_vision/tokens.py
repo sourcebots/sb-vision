@@ -1,6 +1,5 @@
 """Tokens detections, and the utilities to manipulate them."""
 
-from pathlib import Path
 from typing import TYPE_CHECKING, Any, Iterable, Optional, Tuple
 
 import numpy as np
@@ -71,12 +70,8 @@ class Token:
         # We don't set coordinates in the absence of a
         # camera model.
         if camera_model:
-            builtin_models_dir = Path(__file__).parent
-            model_file = builtin_models_dir / '{}_calibration.xml'.format(
-                camera_model,
-            )
             camera_matrix, distance_coefficents = load_camera_calibrations(
-                model_file,
+                camera_model,
             )
 
             translation, orientation = calculate_transforms(

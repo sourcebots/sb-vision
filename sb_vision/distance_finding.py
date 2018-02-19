@@ -65,15 +65,19 @@ def get_calibration(file_name: Path) -> Dict[str, Any]:
 
 
 @functools.lru_cache()
-def load_camera_calibrations(file_name: Path) -> Tuple[List[List[float]],
-                                                       List[List[float]]]:
+def load_camera_calibrations(camera_model: str) -> Tuple[List[List[float]],
+                                                      List[List[float]]]:
     """
     Load camera calibrations from a file.
 
     :param file_name: file to load
     :return: camera calibrations
     """
-    calibrations = get_calibration(file_name)
+    builtin_models_dir = Path(__file__).parent
+    model_file = builtin_models_dir / '{}_calibration.xml'.format(
+        camera_model,
+    )
+    calibrations = get_calibration(model_file)
     camera_matrix = calibrations['cameraMatrix']
     distance_coefficents = calibrations['dist_coeffs']
     return camera_matrix, distance_coefficents
