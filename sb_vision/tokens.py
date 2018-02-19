@@ -69,7 +69,7 @@ class Token:
 
         # We don't set coordinates in the absence of a camera model.
         if camera_model:
-            camera_matrix, distance_coefficents = load_camera_calibrations(
+            camera_matrix, distance_coefficients = load_camera_calibrations(
                 camera_model,
             )
 
@@ -77,7 +77,7 @@ class Token:
                 MARKER_SIZES.get(marker_id, MARKER_SIZE_DEFAULT),
                 pixel_corners,
                 camera_matrix,
-                distance_coefficents,
+                distance_coefficients,
             )
 
             instance.infer_location_from_transforms(
