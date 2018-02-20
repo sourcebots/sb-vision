@@ -123,6 +123,13 @@ def calculate_transforms(
         raise ValueError("cv2.solvePnP returned false".format(return_value))
 
     translation_vector = Cartesian(*(v[0] for v in translation_vector))
+    # OpenCV returns co-ordinates where a positive Y is downwards
+    translation_vector = Cartesian(
+        translation_vector.x,
+        -translation_vector.y,
+        translation_vector.z,
+    )
+
     orientation_vector = cast(
         Tuple[float, float, float],
         tuple(v[0] for v in orientation_vector),
