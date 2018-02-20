@@ -104,3 +104,13 @@ class FileCamera(CameraBase):
         if self.image is None:
             raise RuntimeError("init() not called")
         return self.image
+
+
+class VirtualFileCamera(FileCamera):
+    def __init__(self, image: Image, camera_model: Optional[str]):
+        super().__init__("", camera_model)
+        self.image = image.convert('L')
+
+    def init(self):
+        pass
+
