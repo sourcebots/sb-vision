@@ -1,5 +1,3 @@
-import tempfile
-
 from PIL import Image
 from pathlib import Path
 
@@ -33,7 +31,7 @@ def test_marker_rotation_invariant():
     Thus, the centre is in the middle of the marker.
     """
     pos = None
-    for rot in range(0, 360, 45):
+    for rot in [358, 19, 337, 236, 159, 271, 90]:
         image = gen_location_rotation('marker_cropped.png', (150, 150), rot)
         vision = Vision(VirtualFileCamera(image, camera_model='C016'))
         snap = vision.process_image(image)[0]

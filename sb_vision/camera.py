@@ -113,4 +113,3 @@ class VirtualFileCamera(FileCamera):
 
     def init(self):
         pass
-
