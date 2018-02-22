@@ -117,8 +117,8 @@ def calculate_transforms(
     return_value, orientation_vector, translation_vector = cv2.solvePnP(
         object_points,
         np.array(pixel_corners),
-        np.array([np.array(xi) for xi in camera_matrix]),
-        np.array([np.array(xi) for xi in distance_coefficients]),
+        np.array(camera_matrix),
+        np.array(distance_coefficients),
     )
     if not return_value:
         raise ValueError("cv2.solvePnP returned false".format(return_value))
