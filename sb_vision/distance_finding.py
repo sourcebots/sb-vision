@@ -23,7 +23,7 @@ def _get_values_from_xml_element(element: etree.Element) -> List[str]:
     for e in element.itertext():
         e = e.strip()
         if e:
-            text += re.split(r'\s+', e.replace('\n', ''))
+            text += re.split(r'\s+', e)
     return text
 
 
