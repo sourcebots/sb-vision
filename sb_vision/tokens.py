@@ -1,6 +1,6 @@
 """Tokens detections, and the utilities to manipulate them."""
 
-from typing import TYPE_CHECKING, Any, List, Optional, Tuple
+from typing import TYPE_CHECKING, Any, List, Optional
 
 import numpy as np
 
@@ -29,7 +29,7 @@ class Token:
         id: int,
         certainty=0,
         pixel_corners: List[PixelCoordinate] = None,
-        pixel_centre: Tuple[float, float] = (0, 0),
+        pixel_centre: PixelCoordinate = PixelCoordinate(0.0, 0.0),
     ) -> None:
         """
         General initialiser.

@@ -37,7 +37,7 @@ LegacyPolar = NamedTuple('LegacyPolar', (
 ))
 
 
-PixelCoordinate = NamedTuple('PixelCoordinate', [('x', float), ('y', float)])
+PixelCoordinate = NamedTuple('PixelCoordinate', [('x', AnyFloat), ('y', AnyFloat)])
 
 
 def cartesian_to_spherical(cartesian: Cartesian) -> Spherical:
