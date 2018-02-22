@@ -8,7 +8,7 @@ location finding function.
 import functools
 import re
 from pathlib import Path
-from typing import List, Tuple
+from typing import List, Tuple, cast
 
 import cv2
 import numpy as np
