@@ -61,9 +61,10 @@ class Token:
         # NOTE: IF YOU CHANGE THIS, THEN CHANGE ROBOT-API camera.py
         # *************************************************************************
 
-        # The pixel_corners value we expose has the first one in the bottom left.
-        # Apriltags returns the first one in the top left. thus we need to rotate
-        # the values by one to get the correct ordering.
+        # The pixel_corners value we expose is in clockwise order starting with
+        # the bottom left corner of the marker (if it weren't rotated).
+        # AprilTags returns an array with the first being the top left. thus we need to
+        # shift the ordering of the values by one to match our output.
         offset_pixel_corners = [pixel_corners[3]] + pixel_corners[:3]
 
         instance = cls(
