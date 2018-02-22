@@ -108,10 +108,10 @@ def calculate_transforms(
 
     # create the rectangle representing the marker in 3D
     object_points = np.array([
+        [-width_from_centre, height_from_centre, 0],
         [width_from_centre, height_from_centre, 0],
         [width_from_centre, -height_from_centre, 0],
         [-width_from_centre, -height_from_centre, 0],
-        [-width_from_centre, height_from_centre, 0],
     ])
 
     return_value, orientation_vector, translation_vector = cv2.solvePnP(
