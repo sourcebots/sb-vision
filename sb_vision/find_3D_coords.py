@@ -8,13 +8,13 @@ location finding function.
 import functools
 import re
 from pathlib import Path
-from typing import List, Tuple, cast
+from typing import List, Tuple
 
 import cv2
 import numpy as np
 from lxml import etree
 
-from sb_vision.coordinates import Cartesian, PixelCoordinate
+from sb_vision.coordinates import Cartesian, Orientation, PixelCoordinate
 
 
 def _get_values_from_xml_element(element: etree.Element) -> List[str]:
@@ -88,7 +88,7 @@ def calculate_transforms(
     pixel_corners: List[PixelCoordinate],
     camera_matrix: List[List[float]],
     distance_coefficients: List[List[float]],
-) -> Tuple[Cartesian, Tuple[float, float, float]]:
+) -> Tuple[Cartesian, Orientation]:
     """
     Calculate the position of a marker.
 
@@ -131,9 +131,6 @@ def calculate_transforms(
         translation_vector.z,
     )
 
-    orientation_vector = cast(
-        Tuple[float, float, float],
-        tuple(v[0] for v in orientation_vector),
-    )
+    orientation_vector = Orientation(*(v[0] for v in orientation_vector))
 
     return translation_vector, orientation_vector
