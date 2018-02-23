@@ -9,7 +9,7 @@ from .coordinates import (
     cartesian_to_legacy_polar,
     cartesian_to_spherical,
 )
-from .distance_finding import (
+from .find_3D_coords import (
     PixelCoordinate,
     calculate_transforms,
     load_camera_calibrations,
