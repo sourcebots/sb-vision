@@ -121,7 +121,7 @@ def calculate_transforms(
         np.array(distance_coefficients),
     )
     if not return_value:
-        raise ValueError("cv2.solvePnP returned false".format(return_value))
+        raise ValueError("cv2.solvePnP returned false")
 
     translation_vector = Cartesian(*(v[0] for v in translation_vector))
     # OpenCV returns co-ordinates where a positive Y is downwards
