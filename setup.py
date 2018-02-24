@@ -21,6 +21,7 @@ setup(
     ] + pytest_runner,
     cffi_modules=[
         'sb_vision/native/cvcapture_build.py:ffibuilder',
+        'sb_vision/native/cv3d_build.py:ffibuilder',
         'sb_vision/native/apriltag/apriltag_build.py:ffi',
     ],
     install_requires=[
