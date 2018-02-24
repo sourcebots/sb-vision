@@ -26,7 +26,6 @@ setup(
     install_requires=[
         'Pillow',
         'numpy',
-        'scipy',
         "cffi>=1.4.0",
     ],
     tests_require=[
