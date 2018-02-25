@@ -64,16 +64,16 @@ int solve_pnp(
     double tvec[]
 ) {
     // Copy our input data into OpenCV's Mat wrapper
-    cv::Mat object_points_mat(4, 3, CV_64FC1);
+    cv::Mat object_points_mat(4, 3, cv::DataType<double>::type);
     COPY_INTO(object_points_mat, object_points);
 
-    cv::Mat image_points_mat(4, 2, CV_64FC1);
+    cv::Mat image_points_mat(4, 2, cv::DataType<double>::type);
     COPY_INTO(image_points_mat, image_points);
 
-    cv::Mat camera_matrix_mat(3, 3, CV_64FC1);
+    cv::Mat camera_matrix_mat(3, 3, cv::DataType<double>::type);
     COPY_INTO(camera_matrix_mat, camera_matrix);
 
-    cv::Mat dist_coeffs_mat(5, 1, CV_64FC1);
+    cv::Mat dist_coeffs_mat(5, 1, cv::DataType<double>::type);
     COPY_INTO(dist_coeffs_mat, dist_coeffs);
 
     // These are our output data
