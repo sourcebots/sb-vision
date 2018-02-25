@@ -85,19 +85,19 @@ int solve_pnp(
     // printf("camera_matrix_mat: "); print_mat(camera_matrix_mat);
     // printf("dist_coeffs_mat: "); print_mat(dist_coeffs_mat);
 
-    cv::Mat rvec_mat_double, tvec_mat_double;
+    cv::Mat rvec_mat, tvec_mat;
 
     bool ret = cv::solvePnP(
         object_points_mat,
         image_points_mat,
         camera_matrix_mat,
         dist_coeffs_mat,
-        rvec_mat_double,
-        tvec_mat_double
+        rvec_mat,
+        tvec_mat
     );
 
-    memcpy(rvec, rvec_mat_double.ptr(), 3 * sizeof(double));
-    memcpy(tvec, tvec_mat_double.ptr(), 3 * sizeof(double));
+    memcpy(rvec, rvec_mat.ptr(), 3 * sizeof(double));
+    memcpy(tvec, tvec_mat.ptr(), 3 * sizeof(double));
 
     // printf("rvec: "); print_array(3, 1, rvec);
     // printf("tvec: "); print_array(3, 1, tvec);
