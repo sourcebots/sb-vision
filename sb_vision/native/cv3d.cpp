@@ -85,20 +85,30 @@ int solve_pnp(
     // printf("camera_matrix_mat: "); print_mat(camera_matrix_mat);
     // printf("dist_coeffs_mat: "); print_mat(dist_coeffs_mat);
 
-    cv::Mat rvec_mat(3, 1, CV_32FC1);
-    cv::Mat tvec_mat(3, 1, CV_32FC1);
+    cv::Mat rvec_mat_double, tvec_mat_double;
 
     bool ret = cv::solvePnP(
         object_points_mat,
         image_points_mat,
         camera_matrix_mat,
         dist_coeffs_mat,
-        rvec_mat,
-        tvec_mat
+        rvec_mat_double,
+        tvec_mat_double
     );
+
+    // Convert back to floats (solvePnP gives us doubles)
+    cv::Mat rvec_mat, tvec_mat;
+    rvec_mat_double.convertTo(rvec_mat, CV_32FC1);
+    tvec_mat_double.convertTo(tvec_mat, CV_32FC1);
+
+    // printf("rvec_mat: "); print_mat(rvec_mat_double);
+    // printf("tvec_mat: "); print_mat(tvec_mat_double);
 
     memcpy(rvec, rvec_mat.ptr(), 3 * sizeof(float));
     memcpy(tvec, tvec_mat.ptr(), 3 * sizeof(float));
+
+    // printf("rvec: "); print_array(3, 1, rvec);
+    // printf("tvec: "); print_array(3, 1, tvec);
 
     // OpenCV returns the 'y' coordinate positive downwards, yet we want
     // positive meaning upwards
