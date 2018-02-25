@@ -10,11 +10,12 @@ import re
 from pathlib import Path
 from typing import List, Tuple, cast
 
-import cv2
 import numpy as np
 from lxml import etree
 
 from sb_vision.coordinates import Cartesian, PixelCoordinate
+
+from . import cv3d
 
 
 def _get_values_from_xml_element(element: etree.Element) -> List[str]:
@@ -109,33 +110,18 @@ def calculate_transforms(
     height_from_centre = h / 2
 
     # create the rectangle representing the marker in 3D
-    object_points = np.array([
+    object_points = [
         [width_from_centre, height_from_centre, 0],
         [width_from_centre, -height_from_centre, 0],
         [-width_from_centre, -height_from_centre, 0],
         [-width_from_centre, height_from_centre, 0],
-    ])
+    ]
 
-    return_value, orientation_vector, translation_vector = cv2.solvePnP(
+    translation_vector, orientation_vector = cv3d.solve_pnp(
         object_points,
-        np.array(pixel_corners),
-        np.array(camera_matrix),
-        np.array(distance_coefficients),
-    )
-    if not return_value:
-        raise ValueError("cv2.solvePnP returned false")
-
-    translation_vector = Cartesian(*(v[0] for v in translation_vector))
-    # OpenCV returns co-ordinates where a positive Y is downwards
-    translation_vector = Cartesian(
-        translation_vector.x,
-        -translation_vector.y,
-        translation_vector.z,
-    )
-
-    orientation_vector = cast(
-        Tuple[float, float, float],
-        tuple(v[0] for v in orientation_vector),
+        pixel_corners,
+        camera_matrix,
+        distance_coefficients,
     )
 
     return translation_vector, orientation_vector
