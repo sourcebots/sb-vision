@@ -27,20 +27,30 @@ def _get_values_from_xml_element(element: etree.Element) -> List[str]:
     return text
 
 
+def _find_element(root: etree.Element, descendant_name: str) -> etree.Element:
+    """
+    Finds a descendant element by name or raises an error if no descendant exists.
+    """
+    descendant = root.find(descendant_name)
+    if descendant is None:
+        raise Exception("{} has no descendant {!r}".format(root.tag, descendant_name))
+    return descendant
+
+
 def _parse_matrix_xml_element(element: etree.Element) -> List[List[np.float64]]:
     """Converts an element containing an OpenCV matrix to python lists."""
     type_id = element.attrib.get('type_id')
     if type_id != 'opencv-matrix':
         raise ValueError('Unexpected type_id of tag ({})'.format(type_id))
-    data_type = element.find('dt').text
+    data_type = _find_element(element, 'dt').text
     if data_type != 'd':  # doubles
         raise ValueError('Invalid data type in element {}'.format(
             element.tag,
         ))
-    rows = int(element.find('rows').text)
-    cols = int(element.find('cols').text)
+    rows = int(_find_element(element, 'rows').text)
+    cols = int(_find_element(element, 'cols').text)
 
-    values = _get_values_from_xml_element(element.find('data'))
+    values = _get_values_from_xml_element(_find_element(element, 'data'))
     data = cast(List[List[np.float64]], np.reshape(
         [float(v) for v in values],
         (rows, cols),
@@ -58,8 +68,13 @@ def get_calibration(file_name: Path) -> Tuple[List[List[float]], List[List[float
     """
     with file_name.open() as file:
         tree = etree.parse(file)
-        camera_matrix = _parse_matrix_xml_element(tree.find('cameraMatrix'))
-        dist_coeffs = _parse_matrix_xml_element(tree.find('dist_coeffs'))
+        root = tree.getroot()
+        camera_matrix = _parse_matrix_xml_element(
+            _find_element(root, 'cameraMatrix'),
+        )
+        dist_coeffs = _parse_matrix_xml_element(
+            _find_element(root, 'dist_coeffs'),
+        )
 
     return camera_matrix, dist_coeffs
 
