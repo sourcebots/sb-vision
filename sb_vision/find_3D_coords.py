@@ -8,13 +8,14 @@ location finding function.
 import functools
 import re
 from pathlib import Path
-from typing import List, Sequence, Tuple, cast
+from typing import List, Tuple, cast
 
 import numpy as np
 from lxml import etree
 
 from sb_vision.coordinates import Cartesian, PixelCoordinate
-from sb_vision.native import _cv3d
+
+from . import cv3d
 
 
 def _get_values_from_xml_element(element: etree.Element) -> List[str]:
@@ -83,25 +84,6 @@ def load_camera_calibrations(camera_model: str) -> Tuple[List[List[float]],
     return camera_matrix, distance_coefficients
 
 
-def ffi_float_matrix(values: Sequence[Sequence[float]]):
-    if not values:
-        raise ValueError("Refusing to create ffi matrix for empty 'values'.")
-
-    lengths = list(set(len(x) for x in values))
-    if len(lengths) != 1:
-        raise ValueError(
-            "'values' is not rectangular (got row lengths of {} and {})".format(
-                ", ".join(str(x) for x in lengths[:-1]),
-                lengths[-1],
-            ),
-        )
-
-    flattened_values = sum([tuple(x) for x in values], ())
-    count = len(values) * lengths[0]
-
-    return _cv3d.ffi.new('float[{}]'.format(count), flattened_values)
-
-
 def calculate_transforms(
     marker_size: Tuple[float, float],
     pixel_corners: List[PixelCoordinate],
@@ -126,29 +108,18 @@ def calculate_transforms(
     height_from_centre = h / 2
 
     # create the rectangle representing the marker in 3D
-    object_points = ffi_float_matrix([
+    object_points = [
         [width_from_centre, height_from_centre, 0],
         [width_from_centre, -height_from_centre, 0],
         [-width_from_centre, -height_from_centre, 0],
         [-width_from_centre, height_from_centre, 0],
-    ])
+    ]
 
-    orientation_vector = ffi_float_matrix([[0] * 3])
-    translation_vector = ffi_float_matrix([[0] * 3])
-
-    return_value = _cv3d.lib.solve_pnp(
+    translation_vector, orientation_vector = cv3d.solve_pnp(
         object_points,
-        ffi_float_matrix(pixel_corners),
-        ffi_float_matrix(camera_matrix),
-        ffi_float_matrix(distance_coefficients),
-        orientation_vector,
-        translation_vector,
+        pixel_corners,
+        camera_matrix,
+        distance_coefficients,
     )
-    if not return_value:
-        raise ValueError("cv2.solvePnP returned false")
-
-    translation_vector = Cartesian(*translation_vector)
-
-    orientation_vector = tuple(orientation_vector)
 
     return translation_vector, orientation_vector
