@@ -19,8 +19,8 @@ CV3D_DECLS = """
         const float image_points[],
         const float camera_matrix[],
         const float dist_coeffs[],
-        float rvec[],
-        float tvec[]
+        double rvec[],
+        double tvec[]
     );
 """
 

@@ -11,8 +11,8 @@ extern "C" {
         const float image_points[],
         const float camera_matrix[],
         const float dist_coeffs[],
-        float rvec[],
-        float tvec[]
+        double rvec[],
+        double tvec[]
     );
 }
 
@@ -60,8 +60,8 @@ int solve_pnp(
     const float image_points[],
     const float camera_matrix[],
     const float dist_coeffs[],
-    float rvec[],
-    float tvec[]
+    double rvec[],
+    double tvec[]
 ) {
     // printf("object_points: "); print_array(4, 3, object_points);
     // printf("image_points: "); print_array(4, 2, image_points);
@@ -96,16 +96,8 @@ int solve_pnp(
         tvec_mat_double
     );
 
-    // Convert back to floats (solvePnP gives us doubles)
-    cv::Mat rvec_mat, tvec_mat;
-    rvec_mat_double.convertTo(rvec_mat, CV_32FC1);
-    tvec_mat_double.convertTo(tvec_mat, CV_32FC1);
-
-    // printf("rvec_mat: "); print_mat(rvec_mat_double);
-    // printf("tvec_mat: "); print_mat(tvec_mat_double);
-
-    memcpy(rvec, rvec_mat.ptr(), 3 * sizeof(float));
-    memcpy(tvec, tvec_mat.ptr(), 3 * sizeof(float));
+    memcpy(rvec, rvec_mat_double.ptr(), 3 * sizeof(double));
+    memcpy(tvec, tvec_mat_double.ptr(), 3 * sizeof(double));
 
     // printf("rvec: "); print_array(3, 1, rvec);
     // printf("tvec: "); print_array(3, 1, tvec);
