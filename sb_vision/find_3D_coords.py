@@ -7,12 +7,12 @@ location finding function.
 
 import functools
 import re
+import xml.etree.ElementTree as etree
 from pathlib import Path
 from typing import List, Tuple, cast
 
 import cv2
 import numpy as np
-from lxml import etree
 
 from sb_vision.coordinates import Cartesian, PixelCoordinate
 

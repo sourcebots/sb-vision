@@ -24,7 +24,6 @@ setup(
         'sb_vision/native/apriltag/apriltag_build.py:ffi',
     ],
     install_requires=[
-        'lxml',
         'opencv-python',
         'Pillow',
         'numpy',
