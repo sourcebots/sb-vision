@@ -12,3 +12,4 @@ class ApriltagDetection:
     goodness: float
     decision_margin: float
     H: MatrixData
+    p: List[List[float]]

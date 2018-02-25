@@ -89,24 +89,17 @@ Available as a typed named tuple `Spherical` from `Token.spherical`.
 
 ## Camera support
 
-Since each camera is different, sb-vision has support for self-calibrating based
-on sample images. Calibrations are stored as LZMA compressed pickles of
-calibration data which is learned using scikit-learn. The pickles are stored
-within the `sb_vision` directory, and shipped as part of the package via
-addition to the `MANIFEST.in` file.
+Since each model of camera is different, sb-vision has support for calibrating for
+different cameras through the standard [OpenCV calibration tool](calibration-tool),
+which produces an xml calibration file. This file is placed in `sb_vision` directory.
+Any extra calibrations can be shipped as part of the package via addition to the
+`MANIFEST.in` file.
 
-To calibrate a new camera, take a number of accurately measured images of a
-single AprilTag marker from a variety of distances and positions. All images
-should feature the marker facing in the inverse parallel direction to that of
-the camera. That is, they should face "towards" the camera, though should only
-be translated between images (and not rotated).
+### Compatibility note
 
-The images should be added to a new directory under `calibrations` and a
-suitable `files.yaml` created which describes their positions in terms of `x`
-and `z` Cartesian co-ordinates. See `calibrations/exmaple/files.yaml` for an
-example of the format.
+`sb-vision` currently only has support for the TeckNet C016 camera. Since the
+only known client of this project ([`robotd`](https://github.com/sourcebots/robotd))
+has been asking for the `'c270'` model for all connected cameras, this project
+offers the C016 camera model under that name as well.
 
-To learn the calibration from the sample images, run:
-```bash
-python -m sb_vision.calibration -o sb_vision/<camera_model>.pkl.xz calibrations/<camera_model>
-```
+This behaviour is deprecated and will be removed in June 2018.
