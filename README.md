@@ -63,3 +63,12 @@ different cameras through the standard [OpenCV calibration tool](calibration-too
 which produces an xml calibration file. This file is placed in `sb_vision` directory.
 Any extra calibrations can be shipped as part of the package via addition to the
 `MANIFEST.in` file.
+
+### Compatibility note
+
+`sb-vision` currently only has support for the TeckNet C016 camera. Since the
+only known client of this project ([`robotd`](https://github.com/sourcebots/robotd))
+has been asking for the `'c270'` model for all connected cameras, this project
+offers the C016 camera model under that name as well.
+
+This behaviour is deprecated and will be removed in June 2018.
