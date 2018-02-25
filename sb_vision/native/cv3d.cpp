@@ -18,6 +18,10 @@ extern "C" {
 
 #include "opencv2/opencv.hpp"
 
+#define COPY_INTO(mat, data) \
+    memcpy(mat.ptr(), data, mat.rows * mat.cols * sizeof(float));
+
+
 int solve_pnp(
     const float object_points[],
     const float image_points[],
@@ -26,10 +30,17 @@ int solve_pnp(
     float rvec[],
     float tvec[]
 ) {
-    cv::Mat object_points_mat(4, 3, CV_32FC1, &object_points);
-    cv::Mat image_points_mat(4, 2, CV_32FC1, &image_points);
-    cv::Mat camera_matrix_mat(3, 3, CV_32FC1, &camera_matrix);
-    cv::Mat dist_coeffs_mat(5, 1, CV_32FC1, &dist_coeffs);
+    cv::Mat object_points_mat(4, 3, CV_32FC1);
+    COPY_INTO(object_points_mat, object_points);
+
+    cv::Mat image_points_mat(4, 2, CV_32FC1);
+    COPY_INTO(image_points_mat, image_points);
+
+    cv::Mat camera_matrix_mat(3, 3, CV_32FC1);
+    COPY_INTO(camera_matrix_mat, camera_matrix);
+
+    cv::Mat dist_coeffs_mat(5, 1, CV_32FC1);
+    COPY_INTO(dist_coeffs_mat, dist_coeffs);
 
     cv::Mat rvec_mat(3, 1, CV_32FC1);
     cv::Mat tvec_mat(3, 1, CV_32FC1);
