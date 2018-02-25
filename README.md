@@ -14,8 +14,9 @@ components.
 
 ### Useful commands
 
-The `sb_vision` module is runnable and provides commands useful for
-debugging the library as well as for some simple use-cases. Full details are in the `--help` output, though some useful commands are:
+The `sb_vision` module is runnable and provides commands useful for debugging
+the library as well as for some simple use-cases. Full details are in the
+`--help` output, though some useful commands are:
 
 - `debug`: simple usage of the library for easy debugging. Supports both loading
   from a file and capturing from a camera.
