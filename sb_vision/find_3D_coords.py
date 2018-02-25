@@ -73,6 +73,9 @@ def load_camera_calibrations(camera_model: str) -> Tuple[List[List[float]],
     :param camera_model: file to load
     :return: camera calibrations
     """
+    # Handle older versions of robotd asking for a c270 calibration.
+    camera_model = "C016" if camera_model == "c270" else camera_model
+
     builtin_models_dir = Path(__file__).parent
     model_file = builtin_models_dir / '{}_calibration.xml'.format(
         camera_model,
