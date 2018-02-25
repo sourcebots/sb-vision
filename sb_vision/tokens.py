@@ -6,6 +6,7 @@ import numpy as np
 
 from .coordinates import (
     Cartesian,
+    HomographyMatrix,
     cartesian_to_legacy_polar,
     cartesian_to_spherical,
 )
@@ -45,6 +46,13 @@ class Token:
 
         pixel_corners = [PixelCoordinate(*l) for l in apriltag_detection.p]
 
+        homography_matrix = HomographyMatrix(np.reshape(
+            [apriltag_detection.H.data[i] for i in range(9)],
+            (3, 3),
+        ).tolist())
+        # The homography matrix is a 2D transformation of a unit square to the
+        # co-ordinates of the marker in the image
+
         marker_id = apriltag_detection.id
 
         # *************************************************************************
@@ -55,12 +63,9 @@ class Token:
             id=marker_id,
             certainty=apriltag_detection.goodness,
         )
-        arr = [apriltag_detection.H.data[x] for x in range(9)]
-        homography = np.reshape(arr, (3, 3))
-
-        instance.update_pixel_coords(
+        instance.update_2D_transforms(
             pixel_corners=pixel_corners,
-            homography_matrix=homography,
+            homography_matrix=homography_matrix,
         )
 
         # We don't set coordinates in the absence of a camera model.
@@ -83,11 +88,11 @@ class Token:
         return instance
 
     # noinspection PyAttributeOutsideInit
-    def update_pixel_coords(
+    def update_2D_transforms(
         self,
         *,
         pixel_corners: List[PixelCoordinate],
-        homography_matrix
+        homography_matrix: HomographyMatrix
     ):
         """Set the pixel coordinate information of the Token."""
 
