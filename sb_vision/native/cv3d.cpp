@@ -68,6 +68,7 @@ int solve_pnp(
     // printf("camera_matrix: "); print_array(3, 3, camera_matrix);
     // printf("dist_coeffs: "); print_array(5, 1, dist_coeffs);
 
+    // Copy our input data into OpenCV's Mat wrapper
     cv::Mat object_points_mat(4, 3, CV_64FC1);
     COPY_INTO(object_points_mat, object_points);
 
@@ -85,6 +86,7 @@ int solve_pnp(
     // printf("camera_matrix_mat: "); print_mat(camera_matrix_mat);
     // printf("dist_coeffs_mat: "); print_mat(dist_coeffs_mat);
 
+    // These are our output data
     cv::Mat rvec_mat, tvec_mat;
 
     bool ret = cv::solvePnP(
@@ -99,6 +101,7 @@ int solve_pnp(
     // printf("rvec_mat: "); print_mat(rvec_mat);
     // printf("tvec_mat: "); print_mat(tvec_mat);
 
+    // Copy the output data out of OpenCV's wrappers
     memcpy(rvec, rvec_mat.ptr(), 3 * sizeof(double));
     memcpy(tvec, tvec_mat.ptr(), 3 * sizeof(double));
 
