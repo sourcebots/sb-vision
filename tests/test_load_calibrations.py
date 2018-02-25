@@ -24,7 +24,7 @@ def test_rejects_mismatching_resolutions():
 
 
 def test_accepts_matching_resolution():
-    """Ensure that loading a matcing calibration file works."""
+    """Ensure that loading a matching calibration file works."""
     with mock.patch(
         'pathlib.Path.open',
         return_value=(TEST_DATA / 'C016_calibration.xml').open(),
