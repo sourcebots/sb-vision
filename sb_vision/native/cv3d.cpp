@@ -96,6 +96,9 @@ int solve_pnp(
         tvec_mat
     );
 
+    // printf("rvec_mat: "); print_mat(rvec_mat);
+    // printf("tvec_mat: "); print_mat(tvec_mat);
+
     memcpy(rvec, rvec_mat.ptr(), 3 * sizeof(double));
     memcpy(tvec, tvec_mat.ptr(), 3 * sizeof(double));
 
