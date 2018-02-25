@@ -23,7 +23,7 @@ def test_rejects_mismatching_resolutions():
             load_camera_calibrations('camera-model', (100, 100))
 
 
-def test_accepts_matching_resolution():
+def test_loading_config():
     """Ensure that loading a matching calibration file works."""
     with mock.patch(
         'pathlib.Path.open',
