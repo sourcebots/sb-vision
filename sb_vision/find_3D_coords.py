@@ -30,23 +30,22 @@ def _get_values_from_xml_element(element: etree.Element) -> List[str]:
 def _parse_matrix_xml_element(element: etree.Element) -> List[List[np.float64]]:
     """Converts an element containing an OpenCV matrix to python lists."""
     type_id = element.attrib.get('type_id')
-    if type_id == 'opencv-matrix':
-        data_type = element.find('dt').text
-        if data_type != 'd':  # doubles
-            raise ValueError('Invalid data type in element {}'.format(
-                element.tag,
-            ))
-        rows = int(element.find('rows').text)
-        cols = int(element.find('cols').text)
-
-        values = _get_values_from_xml_element(element.find('data'))
-        data = cast(List[List[np.float64]], np.reshape(
-            [float(v) for v in values],
-            (rows, cols),
-        ).tolist())
-        return data
-    else:
+    if type_id != 'opencv-matrix':
         raise ValueError('Unexpected type_id of tag ({})'.format(type_id))
+    data_type = element.find('dt').text
+    if data_type != 'd':  # doubles
+        raise ValueError('Invalid data type in element {}'.format(
+            element.tag,
+        ))
+    rows = int(element.find('rows').text)
+    cols = int(element.find('cols').text)
+
+    values = _get_values_from_xml_element(element.find('data'))
+    data = cast(List[List[np.float64]], np.reshape(
+        [float(v) for v in values],
+        (rows, cols),
+    ).tolist())
+    return data
 
 
 def get_calibration(file_name: Path) -> Tuple[List[List[float]], List[List[float]]]:
