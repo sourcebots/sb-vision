@@ -24,11 +24,7 @@ if TYPE_CHECKING:
 class Token:
     """Representation of the detection of one token."""
 
-    def __init__(
-        self,
-        id: int,
-        certainty=0,
-    ) -> None:
+    def __init__(self, id: int, certainty: float=0) -> None:
         """
         General initialiser.
 
