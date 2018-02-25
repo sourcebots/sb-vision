@@ -35,6 +35,7 @@ void print_array(const int rows, const int cols, const float values[]) {
 }
 
 void print_mat(cv::Mat& mat) {
+    printf("(%d x %d = %d) ", mat.rows, mat.cols, mat.total());
     printf("[\n");
     for (int i=0; i<mat.rows; i++) {
         printf("  [");
