@@ -6,7 +6,6 @@ import numpy as np
 
 from .coordinates import (
     Cartesian,
-    HomographyMatrix,
     cartesian_to_legacy_polar,
     cartesian_to_spherical,
 )
@@ -49,13 +48,6 @@ class Token:
 
         pixel_corners = [PixelCoordinate(*l) for l in apriltag_detection.p]
 
-        homography_matrix = HomographyMatrix(np.reshape(
-            [apriltag_detection.H.data[i] for i in range(9)],
-            (3, 3),
-        ).tolist())
-        # The homography matrix is a 2D transformation of a unit square to the
-        # co-ordinates of the marker in the image
-
         marker_id = apriltag_detection.id
 
         # *************************************************************************
@@ -66,10 +58,12 @@ class Token:
             id=marker_id,
             certainty=apriltag_detection.goodness,
         )
+        arr = [apriltag_detection.H.data[x] for x in range(9)]
+        homography = np.reshape(arr, (3, 3))
 
-        instance.update_2D_transforms(
+        instance.update_pixel_coords(
             pixel_corners=pixel_corners,
-            homography_matrix=homography_matrix,
+            homography_matrix=homography,
         )
 
         # We don't set coordinates in the absence of a camera model.
@@ -91,13 +85,16 @@ class Token:
         return instance
 
     # noinspection PyAttributeOutsideInit
-    def update_2D_transforms(
+    def update_pixel_coords(
         self,
         *,
         pixel_corners: List[PixelCoordinate],
-        homography_matrix: HomographyMatrix
+        homography_matrix
     ):
         """Set the pixel coordinate information of the Token."""
+
+        self.homography_matrix = homography_matrix
+
         # The pixel_corners value we expose is in clockwise order starting with
         # the bottom left corner of the marker (if it weren't rotated).
         # AprilTags returns an array with the first being the top left. thus we need to
@@ -106,8 +103,6 @@ class Token:
 
         # centre of marker: average the corners
         self.pixel_centre = PixelCoordinate(*np.average(pixel_corners, axis=0))
-
-        self.homography_matrix = homography_matrix
 
     # noinspection PyAttributeOutsideInit
     def update_3D_transforms(
