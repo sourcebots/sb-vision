@@ -1,6 +1,6 @@
 """Types and helpers for manipulating coordinates."""
 
-from typing import NamedTuple, Union
+from typing import List, NamedTuple, Union
 
 import numpy as np
 from numpy import arctan2, float64, linalg
@@ -16,6 +16,18 @@ _Cartesian = NamedTuple('Cartesian', (
 
 class Cartesian(_Cartesian):
     """Cartesian coordinates."""
+
+    __slots__ = ()
+
+    def tolist(self):
+        """Placeholder helper to ease migration within robotd."""
+        return list(self)
+
+
+class HomographyMatrix(List[List[AnyFloat]]):
+    """
+    2D (3x3) Transformation matrix that maps the points of one image to that of another.
+    """
 
     __slots__ = ()
 
