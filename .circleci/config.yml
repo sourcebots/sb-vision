@@ -12,10 +12,8 @@ jobs:
       - run: apt-get install -y libcv-dev libopencv-photo-dev libopencv-contrib-dev
       - run: python3 -m venv venv
       - run: venv/bin/pip install .
-      - run: venv/bin/pip install pytest
-      - run: venv/bin/pip install -r script/linting/requirements.txt
-      - run: venv/bin/pip install -r script/typing/requirements.txt
-      - run: venv/bin/py.test tests
+      - run: venv/bin/pip install -r script/requirements-dev.txt
+      - run: venv/bin/python setup.py test
       - run:
           command: script/linting/lint
           environment:

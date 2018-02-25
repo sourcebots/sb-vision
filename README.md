@@ -7,15 +7,34 @@ Vision subsystem for SourceBots, built on top of AprilTags and OpenCV.
 
 ## Developing
 
+### Setting up
+
 While sb-vision vendors in the apriltags library, it expects opencv to be
 installed from the system. On Ubuntu this means installing the `python3-dev` and
 `libopencv-dev` packages. You'll also need a C++ compiler to build the native
 components.
 
+Developers are encouraged to make use of a [virtual environment](https://docs.python.org/3/tutorial/venv.html)
+to avoid conflicts with other projects or system packages.
+
+This package can be installed for development with:
+```
+pip install -e .
+```
+This command can also be re-issued to rebuild the native components when they
+are changed.
+
+The Python dependencies you'll need when developing (linters and testing tools)
+can be installed with:
+```
+pip install -r script/requirements-dev.txt
+```
+
 ### Useful commands
 
-The `sb_vision` module is runnable and provides commands useful for
-debugging the library as well as for some simple use-cases. Full details are in the `--help` output, though some useful commands are:
+The `sb_vision` module is runnable and provides commands useful for debugging
+the library as well as for some simple use-cases. Full details are in the
+`--help` output, though some useful commands are:
 
 - `debug`: simple usage of the library for easy debugging. Supports both loading
   from a file and capturing from a camera.
@@ -23,10 +42,22 @@ debugging the library as well as for some simple use-cases. Full details are in 
   in the same format as the YAML files needed for calibration (this can be
   useful to see more detail about how good a calibration is).
 
+### Style: linters & type hints
 
-## Testing
+This project uses `flake8` with various plugins for linting, `isort` for
+ordering imports and type hints checked by `mypy`. All are configured via
+`setup.cfg` and have wrapper scripts in the `script` directory. Developers are
+encouraged to enable their IDE integrations for all of these tools.
 
-Tests are implemented using `pytest`. Run them by running `pytest`.
+The code style of this project differs from PEP 8 in that it tries to lay code
+out such that diff-noise will be reduced if changes are needed. This often means
+that code requires more vertical space than might be expected, though this is an
+accepted trade-off.
+
+### Testing
+
+Tests are implemented using `pytest`.
+Run them by running `python setup.py test` (or `pytest`).
 
 
 ## Co-ordinate spaces
