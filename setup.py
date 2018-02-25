@@ -26,7 +26,6 @@ setup(
     ],
     install_requires=[
         'lxml',
-        'opencv-python',
         'Pillow',
         'numpy',
         'scipy',
