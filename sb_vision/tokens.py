@@ -1,6 +1,6 @@
 """Tokens detections, and the utilities to manipulate them."""
 
-from typing import TYPE_CHECKING, Any, List, Optional
+from typing import TYPE_CHECKING, Any, List, Optional, Tuple
 
 import numpy as np
 
@@ -38,6 +38,7 @@ class Token:
     def from_apriltag_detection(
         cls,
         apriltag_detection: 'ApriltagDetection',
+        image_size: Tuple[int, int],
         camera_model: Optional[str],
     ) -> 'Token':
         """Construct a Token from an April Tag detection."""
@@ -66,6 +67,7 @@ class Token:
         if camera_model:
             camera_matrix, distance_coefficients = load_camera_calibrations(
                 camera_model,
+                image_size,
             )
 
             translation, orientation = calculate_transforms(

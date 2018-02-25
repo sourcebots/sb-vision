@@ -79,7 +79,7 @@ class Vision:
         camera_model = self.camera.camera_model
 
         tokens = [
-            Token.from_apriltag_detection(x, camera_model)
+            Token.from_apriltag_detection(x, img.size, camera_model)
             for x in self.apriltag_detector.detect_tags(img)
         ]
 
