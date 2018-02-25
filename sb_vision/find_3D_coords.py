@@ -27,7 +27,7 @@ def _get_values_from_xml_element(element: etree.Element) -> List[str]:
     return text
 
 
-def convert(element: etree.Element) -> List[List[np.float64]]:
+def _parse_matrix_xml_element(element: etree.Element) -> List[List[np.float64]]:
     """Converts an element containing an OpenCV matrix to python lists."""
     type_id = element.attrib.get('type_id')
     if type_id == 'opencv-matrix':
@@ -59,8 +59,8 @@ def get_calibration(file_name: Path) -> Tuple[List[List[float]], List[List[float
     """
     with file_name.open() as file:
         tree = etree.parse(file)
-        camera_matrix = convert(tree.find('cameraMatrix'))
-        dist_coeffs = convert(tree.find('dist_coeffs'))
+        camera_matrix = _parse_matrix_xml_element(tree.find('cameraMatrix'))
+        dist_coeffs = _parse_matrix_xml_element(tree.find('dist_coeffs'))
 
     return camera_matrix, dist_coeffs
 
