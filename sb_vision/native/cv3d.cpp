@@ -63,11 +63,6 @@ int solve_pnp(
     double rvec[],
     double tvec[]
 ) {
-    // printf("object_points: "); print_array(4, 3, object_points);
-    // printf("image_points: "); print_array(4, 2, image_points);
-    // printf("camera_matrix: "); print_array(3, 3, camera_matrix);
-    // printf("dist_coeffs: "); print_array(5, 1, dist_coeffs);
-
     // Copy our input data into OpenCV's Mat wrapper
     cv::Mat object_points_mat(4, 3, CV_64FC1);
     COPY_INTO(object_points_mat, object_points);
@@ -81,11 +76,6 @@ int solve_pnp(
     cv::Mat dist_coeffs_mat(5, 1, CV_64FC1);
     COPY_INTO(dist_coeffs_mat, dist_coeffs);
 
-    // printf("object_points_mat: "); print_mat(object_points_mat);
-    // printf("image_points_mat: "); print_mat(image_points_mat);
-    // printf("camera_matrix_mat: "); print_mat(camera_matrix_mat);
-    // printf("dist_coeffs_mat: "); print_mat(dist_coeffs_mat);
-
     // These are our output data
     cv::Mat rvec_mat, tvec_mat;
 
@@ -98,15 +88,9 @@ int solve_pnp(
         tvec_mat
     );
 
-    // printf("rvec_mat: "); print_mat(rvec_mat);
-    // printf("tvec_mat: "); print_mat(tvec_mat);
-
     // Copy the output data out of OpenCV's wrappers
     memcpy(rvec, rvec_mat.ptr(), 3 * sizeof(double));
     memcpy(tvec, tvec_mat.ptr(), 3 * sizeof(double));
-
-    // printf("rvec: "); print_array(3, 1, rvec);
-    // printf("tvec: "); print_array(3, 1, tvec);
 
     // OpenCV returns the 'y' coordinate positive downwards, yet we want
     // positive meaning upwards
