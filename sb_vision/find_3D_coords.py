@@ -47,8 +47,10 @@ def _parse_matrix_xml_element(element: etree.Element) -> List[List[np.float64]]:
         raise ValueError('Invalid data type in element {}'.format(
             element.tag,
         ))
-    rows = int(_find_element(element, 'rows').text)
-    cols = int(_find_element(element, 'cols').text)
+    # Element.text can apparently be 'bytes' and 'SupportsInt' as well as 'str'.
+    # In our usage we only ever see 'str', so these ignores are safe.
+    rows = int(_find_element(element, 'rows').text)  # type: ignore
+    cols = int(_find_element(element, 'cols').text)  # type: ignore
 
     values = _get_values_from_xml_element(_find_element(element, 'data'))
     data = cast(List[List[np.float64]], np.reshape(
