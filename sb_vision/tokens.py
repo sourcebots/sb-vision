@@ -28,8 +28,6 @@ class Token:
         self,
         id: int,
         certainty=0,
-        pixel_corners: List[PixelCoordinate] = None,
-        pixel_centre: PixelCoordinate = PixelCoordinate(0.0, 0.0),
     ) -> None:
         """
         General initialiser.
@@ -39,8 +37,6 @@ class Token:
         """
         self.id = id
         self.certainty = certainty
-        self.pixel_corners = pixel_corners
-        self.pixel_centre = pixel_centre
 
     @classmethod
     def from_apriltag_detection(
@@ -52,27 +48,18 @@ class Token:
 
         pixel_corners = [PixelCoordinate(*l) for l in apriltag_detection.p]
 
-        # centre of marker: average the corners
-        pixel_centre = PixelCoordinate(*np.average(pixel_corners, axis=0))
-
         marker_id = apriltag_detection.id
 
         # *************************************************************************
         # NOTE: IF YOU CHANGE THIS, THEN CHANGE ROBOT-API camera.py
         # *************************************************************************
 
-        # The pixel_corners value we expose is in clockwise order starting with
-        # the bottom left corner of the marker (if it weren't rotated).
-        # AprilTags returns an array with the first being the top left. thus we need to
-        # shift the ordering of the values by one to match our output.
-        offset_pixel_corners = [pixel_corners[3]] + pixel_corners[:3]
-
         instance = cls(
             id=marker_id,
             certainty=apriltag_detection.goodness,
-            pixel_corners=offset_pixel_corners,
-            pixel_centre=pixel_centre,
         )
+
+        instance.update_pixel_coords(pixel_corners=pixel_corners)
 
         # We don't set coordinates in the absence of a camera model.
         if camera_model:
@@ -91,6 +78,22 @@ class Token:
                 translation=translation,
             )
         return instance
+
+    # noinspection PyAttributeOutsideInit
+    def update_pixel_coords(
+            self,
+            *,
+            pixel_corners: List[PixelCoordinate]
+    ):
+        """Set the pixel coordinate information of the Token."""
+        # The pixel_corners value we expose is in clockwise order starting with
+        # the bottom left corner of the marker (if it weren't rotated).
+        # AprilTags returns an array with the first being the top left. thus we need to
+        # shift the ordering of the values by one to match our output.
+        self.pixel_corners = [pixel_corners[3]] + pixel_corners[:3]
+
+        # centre of marker: average the corners
+        self.pixel_centre = PixelCoordinate(*np.average(pixel_corners, axis=0))
 
     # noinspection PyAttributeOutsideInit
     def update_3D_transforms(
