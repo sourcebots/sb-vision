@@ -15,10 +15,10 @@ ffibuilder = cffi.FFI()
 
 CV3D_DECLS = """
     int solve_pnp(
-        const float object_points[],
-        const float image_points[],
-        const float camera_matrix[],
-        const float dist_coeffs[],
+        const double object_points[],
+        const double image_points[],
+        const double camera_matrix[],
+        const double dist_coeffs[],
         double rvec[],
         double tvec[]
     );

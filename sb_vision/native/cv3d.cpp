@@ -7,10 +7,10 @@
 
 extern "C" {
     int solve_pnp(
-        const float object_points[],
-        const float image_points[],
-        const float camera_matrix[],
-        const float dist_coeffs[],
+        const double object_points[],
+        const double image_points[],
+        const double camera_matrix[],
+        const double dist_coeffs[],
         double rvec[],
         double tvec[]
     );
@@ -18,7 +18,7 @@ extern "C" {
 
 #include "opencv2/opencv.hpp"
 
-void print_array(const int rows, const int cols, const float values[]) {
+void print_array(const int rows, const int cols, const double values[]) {
     printf("[\n");
     for (int i=0; i<rows; i++) {
         printf("  [");
@@ -40,7 +40,7 @@ void print_mat(cv::Mat& mat) {
     for (int i=0; i<mat.rows; i++) {
         printf("  [");
         for (int j=0; j<mat.cols; j++) {
-            float * val = (float *)mat.ptr(i, j);
+            double * val = (double *)mat.ptr(i, j);
             printf("%f", *val);
             if (j+1 < mat.cols) {
                 printf(", ");
@@ -52,14 +52,14 @@ void print_mat(cv::Mat& mat) {
 }
 
 #define COPY_INTO(mat, data) \
-    memcpy(mat.ptr(), data, mat.rows * mat.cols * sizeof(float));
+    memcpy(mat.ptr(), data, mat.rows * mat.cols * sizeof(double));
 
 
 int solve_pnp(
-    const float object_points[],
-    const float image_points[],
-    const float camera_matrix[],
-    const float dist_coeffs[],
+    const double object_points[],
+    const double image_points[],
+    const double camera_matrix[],
+    const double dist_coeffs[],
     double rvec[],
     double tvec[]
 ) {
@@ -68,16 +68,16 @@ int solve_pnp(
     // printf("camera_matrix: "); print_array(3, 3, camera_matrix);
     // printf("dist_coeffs: "); print_array(5, 1, dist_coeffs);
 
-    cv::Mat object_points_mat(4, 3, CV_32FC1);
+    cv::Mat object_points_mat(4, 3, CV_64FC1);
     COPY_INTO(object_points_mat, object_points);
 
-    cv::Mat image_points_mat(4, 2, CV_32FC1);
+    cv::Mat image_points_mat(4, 2, CV_64FC1);
     COPY_INTO(image_points_mat, image_points);
 
-    cv::Mat camera_matrix_mat(3, 3, CV_32FC1);
+    cv::Mat camera_matrix_mat(3, 3, CV_64FC1);
     COPY_INTO(camera_matrix_mat, camera_matrix);
 
-    cv::Mat dist_coeffs_mat(5, 1, CV_32FC1);
+    cv::Mat dist_coeffs_mat(5, 1, CV_64FC1);
     COPY_INTO(dist_coeffs_mat, dist_coeffs);
 
     // printf("object_points_mat: "); print_mat(object_points_mat);

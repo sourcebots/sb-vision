@@ -31,7 +31,7 @@ def _ffi_flattened_float_array(values: Sequence[Sequence[float]]):
     flattened_values = sum([tuple(x) for x in values], ())
     count = len(values) * lengths[0]
 
-    return _cv3d.ffi.new('float[{}]'.format(count), flattened_values)
+    return _cv3d.ffi.new('double[{}]'.format(count), flattened_values)
 
 
 def solve_pnp(
