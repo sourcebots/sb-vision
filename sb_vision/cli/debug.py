@@ -11,7 +11,6 @@ from ..vision import Vision
 
 def _capture_and_display_image(
     vision,
-    after_thresholding,
     draw_tokens,
     show_image,
     output_file,
@@ -94,12 +93,6 @@ def add_arguments(parser):
         type=pathlib.Path,
         help="Distance model to use.",
     )
-
-    parser.add_argument(
-        '--after-thresholding',
-        action='store_true',
-        help="Apply thresholding to the image before output.",
-    )
     parser.add_argument(
         '--draw-tokens',
         action='store_true',
@@ -116,7 +109,7 @@ def add_arguments(parser):
         '--save-image',
         dest='output_file',
         type=pathlib.Path,
-        help="Save the processed image (useful with --after-thresholding and "
+        help="Save the processed image (useful with "
              "--draw-tokens). Beware using this with a camera as the same "
              "file name will be used for all frames.",
     )
