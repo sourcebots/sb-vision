@@ -25,10 +25,10 @@ class Camera(CameraBase):
         self,
         device_id: int,
         proposed_image_size: Tuple[int, int],
-        distance_model: Optional[str],
+        camera_model: Optional[str],
     ) -> None:
         """Initialise camera with focal length and image size."""
-        super().__init__(distance_model)
+        super().__init__(camera_model)
         self.cam_image_size = proposed_image_size
         self.device_id = device_id
         self.camera = None  # type: Optional[CaptureDevice]
@@ -75,9 +75,9 @@ class Camera(CameraBase):
 class FileCamera(CameraBase):
     """Pseudo-camera debug class, getting images from files."""
 
-    def __init__(self, file_path: _PathLike, distance_model: Optional[str]) -> None:
+    def __init__(self, file_path: _PathLike, camera_model: Optional[str]) -> None:
         """Open from a given path, with a given pseudo-focal-length."""
-        super().__init__(distance_model)
+        super().__init__(camera_model)
         self.file_name = file_path
         self.image = None  # type: Optional[Image]
 

@@ -7,15 +7,34 @@ Vision subsystem for SourceBots, built on top of AprilTags and OpenCV.
 
 ## Developing
 
+### Setting up
+
 While sb-vision vendors in the apriltags library, it expects opencv to be
 installed from the system. On Ubuntu this means installing the `python3-dev` and
 `libopencv-dev` packages. You'll also need a C++ compiler to build the native
 components.
 
+Developers are encouraged to make use of a [virtual environment](https://docs.python.org/3/tutorial/venv.html)
+to avoid conflicts with other projects or system packages.
+
+This package can be installed for development with:
+```
+pip install -e .
+```
+This command can also be re-issued to rebuild the native components when they
+are changed.
+
+The Python dependencies you'll need when developing (linters and testing tools)
+can be installed with:
+```
+pip install -r script/requirements-dev.txt
+```
+
 ### Useful commands
 
-The `sb_vision` module is runnable and provides commands useful for
-debugging the library as well as for some simple use-cases. Full details are in the `--help` output, though some useful commands are:
+The `sb_vision` module is runnable and provides commands useful for debugging
+the library as well as for some simple use-cases. Full details are in the
+`--help` output, though some useful commands are:
 
 - `debug`: simple usage of the library for easy debugging. Supports both loading
   from a file and capturing from a camera.
@@ -23,10 +42,22 @@ debugging the library as well as for some simple use-cases. Full details are in 
   in the same format as the YAML files needed for calibration (this can be
   useful to see more detail about how good a calibration is).
 
+### Style: linters & type hints
 
-## Testing
+This project uses `flake8` with various plugins for linting, `isort` for
+ordering imports and type hints checked by `mypy`. All are configured via
+`setup.cfg` and have wrapper scripts in the `script` directory. Developers are
+encouraged to enable their IDE integrations for all of these tools.
 
-Tests are implemented using `pytest`. Run them by running `pytest`.
+The code style of this project differs from PEP 8 in that it tries to lay code
+out such that diff-noise will be reduced if changes are needed. This often means
+that code requires more vertical space than might be expected, though this is an
+accepted trade-off.
+
+### Testing
+
+Tests are implemented using `pytest`.
+Run them by running `python setup.py test` (or `pytest`).
 
 
 ## Co-ordinate spaces
@@ -58,24 +89,17 @@ Available as a typed named tuple `Spherical` from `Token.spherical`.
 
 ## Camera support
 
-Since each camera is different, sb-vision has support for self-calibrating based
-on sample images. Calibrations are stored as LZMA compressed pickles of
-calibration data which is learned using scikit-learn. The pickles are stored
-within the `sb_vision` directory, and shipped as part of the package via
-addition to the `MANIFEST.in` file.
+Since each model of camera is different, sb-vision has support for calibrating for
+different cameras through the standard [OpenCV calibration tool](calibration-tool),
+which produces an xml calibration file. This file is placed in `sb_vision` directory.
+Any extra calibrations can be shipped as part of the package via addition to the
+`MANIFEST.in` file.
 
-To calibrate a new camera, take a number of accurately measured images of a
-single AprilTag marker from a variety of distances and positions. All images
-should feature the marker facing in the inverse parallel direction to that of
-the camera. That is, they should face "towards" the camera, though should only
-be translated between images (and not rotated).
+### Compatibility note
 
-The images should be added to a new directory under `calibrations` and a
-suitable `files.yaml` created which describes their positions in terms of `x`
-and `z` Cartesian co-ordinates. See `calibrations/exmaple/files.yaml` for an
-example of the format.
+`sb-vision` currently only has support for the TeckNet C016 camera. Since the
+only known client of this project ([`robotd`](https://github.com/sourcebots/robotd))
+has been asking for the `'c270'` model for all connected cameras, this project
+offers the C016 camera model under that name as well.
 
-To learn the calibration from the sample images, run:
-```bash
-python -m sb_vision.calibration -o sb_vision/<camera_model>.pkl.xz calibrations/<camera_model>
-```
+This behaviour is deprecated and will be removed in June 2018.
