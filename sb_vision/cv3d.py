@@ -6,7 +6,7 @@ from typing import Sequence, Tuple
 
 from sb_vision.native import _cv3d  # type: ignore
 
-from .coordinates import Cartesian, PixelCoordinate, Orientation
+from .coordinates import Cartesian, Orientation, PixelCoordinate
 
 
 class Cv3dError(RuntimeError):
