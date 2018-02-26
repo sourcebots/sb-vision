@@ -6,7 +6,7 @@ from typing import Sequence, Tuple
 
 from sb_vision.native import _cv3d  # type: ignore
 
-from .coordinates import Cartesian, PixelCoordinate
+from .coordinates import Cartesian, PixelCoordinate, Orientation
 
 
 class Cv3dError(RuntimeError):
@@ -39,7 +39,7 @@ def solve_pnp(
     pixel_corners: Sequence[PixelCoordinate],
     camera_matrix: Sequence[Sequence[float]],
     distance_coefficients: Sequence[Sequence[float]],
-) -> Tuple[Cartesian, Tuple[float, float, float]]:
+) -> Tuple[Cartesian, Orientation]:
     """
     Wrapper around OpenCV solvePnP.
 
@@ -64,9 +64,5 @@ def solve_pnp(
 
     return (
         Cartesian(*translation_vector),
-        (
-            float(orientation_vector[0]),
-            float(orientation_vector[1]),
-            float(orientation_vector[2]),
-        ),
+        Orientation(*orientation_vector),
     )
