@@ -171,10 +171,10 @@ def calculate_transforms(
 
     # create the rectangle representing the marker in 3D
     object_points = [
+        [-width_from_centre, height_from_centre, 0],
         [width_from_centre, height_from_centre, 0],
         [width_from_centre, -height_from_centre, 0],
         [-width_from_centre, -height_from_centre, 0],
-        [-width_from_centre, height_from_centre, 0],
     ]
 
     translation_vector, orientation_vector = cv3d.solve_pnp(
