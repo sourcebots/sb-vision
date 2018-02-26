@@ -8,13 +8,6 @@ extern "C" {
     void* cvopen(const int device_id);
     void cvclose(void* context);
     int cvcapture(void* context, void* buffer, size_t width, size_t height);
-
-    void cvthreshold(
-        const void* src_buffer,
-        void* dst_buffer,
-        size_t width,
-        size_t height
-    );
 }
 
 #include "opencv2/opencv.hpp"
@@ -127,47 +120,4 @@ int cvcapture(void* context, void* buffer, size_t width, size_t height) {
         width * height
     );
     return 1;
-}
-
-void cvthreshold(
-    const void* src_buffer,
-    void* dst_buffer,
-    size_t width,
-    size_t height
-) {
-    cv::Mat src(
-        static_cast<int>(height),
-        static_cast<int>(width),
-        CV_8UC1
-    );
-    cv::Mat denoised;
-    cv::Mat thresholded;
-
-    memcpy(
-        src.ptr(),
-        src_buffer,
-        width * height
-    );
-
-    cv::medianBlur(src, denoised, 3);
-
-    size_t kernel_size = (width < height) ? width : height;
-    kernel_size /= 2;
-    kernel_size |= 1;
-
-    cv::adaptiveThreshold(
-        denoised,
-        thresholded,
-        255.0,
-        CV_ADAPTIVE_THRESH_MEAN_C,
-        CV_THRESH_BINARY,
-        kernel_size,
-        0.0
-    );
-
-    memcpy(
-        dst_buffer,
-        thresholded.ptr(),
-        width * height
-    );
 }
