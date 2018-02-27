@@ -109,7 +109,7 @@ def add_arguments(parser):
         '--save-image',
         dest='output_file',
         type=pathlib.Path,
-        help="Save the processed image (useful with "
-             "--draw-tokens). Beware using this with a camera as the same "
-             "file name will be used for all frames.",
+        help="Save the processed image (useful with --draw-tokens). "
+             "Beware using this with a camera as the same file name "
+             "will be used for all frames.",
     )
