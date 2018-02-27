@@ -41,7 +41,7 @@ TEST_IMAGES = [
     (
         '-90rot_z.png',
         False,
-        Orientation(rot_x=0, rot_y=0, rot_z=math.radians(270)),
+        Orientation(rot_x=0, rot_y=0, rot_z=math.radians(-90)),
     ),
     (
         '90rot_z.png',
