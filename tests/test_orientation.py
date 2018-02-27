@@ -66,13 +66,13 @@ def test_image_coordinates(photo, expected_orientation):
     vision = Vision(camera)
     token, = vision.snapshot()
 
-    def approx_ang(expected):
-        return approx(expected, abs=ROTATION_TOLERANCE_DEGREES)
+    def approx_ang(expected_degrees):
+        return approx(expected_degrees, abs=ROTATION_TOLERANCE_DEGREES)
 
-    def assert_angle(angle, expected, message):
-        expected = approx_ang(math.degrees(expected))
+    def assert_angle(angle_radians, expected_degrees, message):
+        expected_degrees = approx_ang(math.degrees(expected_degrees))
         # Check both +0 and +360 so approx can cover the jump between -180 and 180
-        assert math.degrees(angle) == expected or math.degrees(angle) + 360 == expected, \
+        assert math.degrees(angle_radians) == expected_degrees or math.degrees(angle_radians) + 360 == expected_degrees, \
             message
 
     rot_x, rot_y, rot_z = token.orientation
