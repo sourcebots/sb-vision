@@ -1,0 +1,3 @@
+-r linting/requirements.txt
+-r typing/requirements.txt
+pytest

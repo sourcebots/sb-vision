@@ -42,7 +42,7 @@ def _capture_and_display_image(
             pass
 
 
-def main(input_file, device_id, distance_model, **options):
+def main(input_file, device_id, camera_model, **options):
     """Execute this command."""
     with contextlib.suppress(KeyboardInterrupt):
         if device_id is not None:
@@ -50,7 +50,7 @@ def main(input_file, device_id, distance_model, **options):
             camera = Camera(
                 device_id,
                 CAM_IMAGE_SIZE,
-                distance_model,
+                camera_model,
             )  # type: CameraBase
 
             def should_continue():
@@ -59,7 +59,7 @@ def main(input_file, device_id, distance_model, **options):
                 ).lower() in ('y', '')
 
         else:
-            camera = FileCamera(input_file, distance_model)
+            camera = FileCamera(input_file, camera_model)
 
             def should_continue():
                 return False
@@ -89,9 +89,9 @@ def add_arguments(parser):
     )
     parser.add_argument(
         '-m',
-        '--distance-model',
+        '--camera-model',
         type=pathlib.Path,
-        help="Distance model to use.",
+        help="Model of the camera to use calibrations for.",
     )
     parser.add_argument(
         '--draw-tokens',

@@ -21,7 +21,7 @@ TEST_IMAGES = [
 @pytest.mark.parametrize("photo, expected_tokens", TEST_IMAGES)
 def test_recognises_markers(photo, expected_tokens):
     """Make sure that this particular file gives these particular tokens."""
-    camera = FileCamera(TEST_DATA / photo, distance_model=None)
+    camera = FileCamera(TEST_DATA / photo, camera_model=None)
     vision = Vision(camera)
     snaps = vision.snapshot()
     assert snaps == expected_tokens

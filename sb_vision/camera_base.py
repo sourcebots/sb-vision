@@ -13,9 +13,9 @@ import PIL
 class CameraBase(metaclass=abc.ABCMeta):
     """Base class for all cameras."""
 
-    def __init__(self, distance_model: Optional[str]) -> None:
+    def __init__(self, camera_model: Optional[str]) -> None:
         """Basic, general initialisation."""
-        self.distance_model = distance_model
+        self.camera_model = camera_model
 
     def init(self) -> None:
         """
