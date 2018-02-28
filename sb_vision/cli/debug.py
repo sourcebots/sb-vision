@@ -11,16 +11,12 @@ from ..vision import Vision
 
 def _capture_and_display_image(
     vision,
-    after_thresholding,
     draw_tokens,
     show_image,
     output_file,
 ):
     img = vision.capture_image()
     tokens = vision.process_image(img)
-
-    if after_thresholding:
-        img = vision.threshold_image(img)
 
     if draw_tokens:
         img = display_tokens(tokens, img)
@@ -97,12 +93,6 @@ def add_arguments(parser):
         type=pathlib.Path,
         help="Model of the camera to use calibrations for.",
     )
-
-    parser.add_argument(
-        '--after-thresholding',
-        action='store_true',
-        help="Apply thresholding to the image before output.",
-    )
     parser.add_argument(
         '--draw-tokens',
         action='store_true',
@@ -119,7 +109,7 @@ def add_arguments(parser):
         '--save-image',
         dest='output_file',
         type=pathlib.Path,
-        help="Save the processed image (useful with --after-thresholding and "
-             "--draw-tokens). Beware using this with a camera as the same "
-             "file name will be used for all frames.",
+        help="Save the processed image (useful with --draw-tokens). "
+             "Beware using this with a camera as the same file name "
+             "will be used for all frames.",
     )
