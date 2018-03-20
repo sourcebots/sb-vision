@@ -90,7 +90,7 @@ Available as a typed named tuple `Spherical` from `Token.spherical`.
 ## Camera support
 
 Since each model of camera is different, sb-vision has support for calibrating for
-different cameras through the standard [OpenCV calibration tool](calibration-tool),
+different cameras through the standard [OpenCV calibration tool][calibration-tool],
 which produces an xml calibration file. This file is placed in `sb_vision` directory.
 Any extra calibrations can be shipped as part of the package via addition to the
 `MANIFEST.in` file.
@@ -103,3 +103,6 @@ has been asking for the `'c270'` model for all connected cameras, this project
 offers the C016 camera model under that name as well.
 
 This behaviour is deprecated and will be removed in June 2018.
+
+
+[calibration-tool]: https://docs.opencv.org/3.4.0/d7/d21/tutorial_interactive_calibration.html
