@@ -47,10 +47,6 @@ class Token:
 
         marker_id = apriltag_detection.id
 
-        # *************************************************************************
-        # NOTE: IF YOU CHANGE THIS, THEN CHANGE ROBOT-API camera.py
-        # *************************************************************************
-
         instance = cls(
             id=marker_id,
             certainty=apriltag_detection.goodness,
