@@ -10,7 +10,7 @@ pytest_runner = ['pytest-runner'] if needs_pytest else []
 
 setup(
     name='sb-vision',
-    version='2018.2.0',
+    version='2018.3.0',
     description="Vision system for SourceBots",
     author="SourceBots",
     author_email='',
