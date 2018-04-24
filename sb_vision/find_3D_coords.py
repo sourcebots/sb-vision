@@ -13,7 +13,7 @@ from typing import List, Tuple, cast
 
 import numpy as np
 
-from sb_vision.coordinates import Cartesian, PixelCoordinate
+from sb_vision.coordinates import Cartesian, Orientation, PixelCoordinate
 
 from . import cv3d
 
@@ -151,7 +151,7 @@ def calculate_transforms(
     pixel_corners: List[PixelCoordinate],
     camera_matrix: List[List[float]],
     distance_coefficients: List[List[float]],
-) -> Tuple[Cartesian, Tuple[float, float, float]]:
+) -> Tuple[Cartesian, Orientation]:
     """
     Calculate the position of a marker.
 
@@ -171,10 +171,10 @@ def calculate_transforms(
 
     # create the rectangle representing the marker in 3D
     object_points = [
+        [-width_from_centre, height_from_centre, 0],
         [width_from_centre, height_from_centre, 0],
         [width_from_centre, -height_from_centre, 0],
         [-width_from_centre, -height_from_centre, 0],
-        [-width_from_centre, height_from_centre, 0],
     ]
 
     translation_vector, orientation_vector = cv3d.solve_pnp(

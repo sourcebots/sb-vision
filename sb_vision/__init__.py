@@ -7,7 +7,13 @@ of AprilTags markers.
 """
 
 from .camera import Camera, FileCamera
-from .coordinates import Cartesian, LegacyPolar, Spherical, cartesian_to_spherical
+from .coordinates import (
+    Cartesian,
+    Orientation,
+    LegacyPolar,
+    Spherical,
+    cartesian_to_spherical,
+)
 from .tokens import Token
 from .vision import Vision
 
@@ -17,6 +23,7 @@ __all__ = [
     'FileCamera',
     'Token',
     'Cartesian',
+    'Orientation',
     'LegacyPolar',
     'Spherical',
     'cartesian_to_spherical',

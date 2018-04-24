@@ -36,6 +36,11 @@ LegacyPolar = NamedTuple('LegacyPolar', (
     ('dist', AnyFloat),
 ))
 
+Orientation = NamedTuple('Orientation', (
+    ('rot_x', AnyFloat),
+    ('rot_y', AnyFloat),
+    ('rot_z', AnyFloat),
+))
 
 PixelCoordinate = NamedTuple('PixelCoordinate', [('x', AnyFloat), ('y', AnyFloat)])
 

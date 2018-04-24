@@ -6,6 +6,7 @@ import numpy as np
 
 from .coordinates import (
     Cartesian,
+    Orientation,
     cartesian_to_legacy_polar,
     cartesian_to_spherical,
 )
@@ -75,6 +76,7 @@ class Token:
 
             instance.update_3D_transforms(
                 translation=translation,
+                orientation=orientation,
             )
         return instance
 
@@ -102,12 +104,15 @@ class Token:
     def update_3D_transforms(
         self,
         *,
-        translation: Cartesian
+        translation: Cartesian,
+        orientation: Orientation
     ):
         """Calculate 3D coordinate information from the given transformations."""
         # Cartesian Co-ordinates in the 3D World, relative to the camera
         # (as opposed to somehow being compass-aligned)
         self.cartesian = translation
+
+        self.orientation = orientation
 
         # Polar co-ordinates in the 3D world, relative to the camera
         self.polar = cartesian_to_legacy_polar(self.cartesian)

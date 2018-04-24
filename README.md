@@ -86,6 +86,14 @@ markers are roughly level with the observer:
 
 Available as a typed named tuple `Spherical` from `Token.spherical`.
 
+### Orientation
+
+Rotation of the marker around its centre (relative to the observer)
+ - `rot_x`: rotation about the Cartesian x-axis, positive angles represent the front going downwards.
+ - `rot_y`: rotation about the Cartesian y-axis, positive angles represent the front going leftwards.
+ - `rot_z`: rotation about the Cartesian z-axis, positive angles represent the top going rightwards.
+
+Available as a typed named tuple `Orientation` from `Token.orientation`.
 
 ## Camera support
 
