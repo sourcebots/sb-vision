@@ -89,6 +89,7 @@ class Token:
 
         self.homography_matrix = homography_matrix
 
+        # pixel corners: clockwise from the top left
         self.pixel_corners = pixel_corners
 
         # centre of marker: average the corners
