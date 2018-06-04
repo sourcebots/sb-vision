@@ -89,11 +89,7 @@ class Token:
 
         self.homography_matrix = homography_matrix
 
-        # The pixel_corners value we expose is in clockwise order starting with
-        # the bottom left corner of the marker (if it weren't rotated).
-        # AprilTags returns an array with the first being the top left. thus we need to
-        # shift the ordering of the values by one to match our output.
-        self.pixel_corners = [pixel_corners[3]] + pixel_corners[:3]
+        self.pixel_corners = pixel_corners
 
         # centre of marker: average the corners
         self.pixel_centre = PixelCoordinate(*np.average(pixel_corners, axis=0))
