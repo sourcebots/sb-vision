@@ -90,6 +90,7 @@ class Token:
         self.homography_matrix = homography_matrix
 
         # pixel corners: counter-clockwise from the bottom-left corner (relative to the marker) of the marker.
+        # For example, if the marker is upside down, the first corner coordinate will be the in the top right.
         self.pixel_corners = pixel_corners
 
         # centre of marker: average the corners
