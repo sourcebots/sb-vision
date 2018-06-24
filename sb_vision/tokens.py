@@ -2,6 +2,8 @@
 
 from typing import TYPE_CHECKING, Any, List, Optional, Tuple
 
+import numpy as np
+
 from .coordinates import Cartesian, cartesian_to_spherical
 from .find_3D_coords import (
     PixelCoordinate,
