@@ -30,13 +30,6 @@ Spherical = NamedTuple('Spherical', (
     ('dist', AnyFloat),
 ))
 
-LegacyPolar = NamedTuple('LegacyPolar', (
-    ('polar_x', AnyFloat),
-    ('polar_y', AnyFloat),
-    ('dist', AnyFloat),
-))
-
-
 PixelCoordinate = NamedTuple('PixelCoordinate', [('x', AnyFloat), ('y', AnyFloat)])
 
 
@@ -48,16 +41,3 @@ def cartesian_to_spherical(cartesian: Cartesian) -> Spherical:
         rot_y=arctan2(x, z),
         dist=linalg.norm(cartesian),
     )
-
-
-def cartesian_to_legacy_polar(cartesian: Cartesian) -> LegacyPolar:
-    """
-    Convert cartesian co-ordinate space to the legacy "polar" space.
-
-    This is kept for compatibility only.
-    """
-    cart_x, cart_y, cart_z = tuple(cartesian)
-    polar_dist = np.linalg.norm(cartesian)
-    polar_x = np.arctan2(cart_z, cart_x)
-    polar_y = np.arctan2(cart_z, cart_y)
-    return LegacyPolar(polar_x, polar_y, polar_dist)

@@ -6,7 +6,6 @@ import numpy as np
 
 from .coordinates import (
     Cartesian,
-    cartesian_to_legacy_polar,
     cartesian_to_spherical,
 )
 from .find_3D_coords import (
@@ -110,9 +109,6 @@ class Token:
         self.cartesian = translation
 
         # Polar co-ordinates in the 3D world, relative to the camera
-        self.polar = cartesian_to_legacy_polar(self.cartesian)
-        self.legacy_polar = cartesian_to_legacy_polar(self.cartesian)
-
         self.spherical = cartesian_to_spherical(self.cartesian)
 
     def __repr__(self) -> str:
