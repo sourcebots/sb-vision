@@ -63,9 +63,7 @@ Run them by running `python setup.py test` (or `pytest`).
 ## Co-ordinate spaces
 
 sb-vision describes the locations of identified markers in either Cartesian or
-spherical co-ordinate spaces. A "legacy polar" co-ordinate space exists for
-backwards compatibility but is deprecated, undocumented and will be removed in
-May 2018.
+spherical co-ordinate spaces.
 
 ### Cartesian co-ordinates
 
