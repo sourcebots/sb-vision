@@ -2,7 +2,6 @@
 
 from typing import NamedTuple, Union
 
-import numpy as np
 from numpy import arctan2, float64, linalg
 
 AnyFloat = Union[float, float64]
